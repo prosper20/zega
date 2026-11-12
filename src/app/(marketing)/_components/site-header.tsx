@@ -15,8 +15,8 @@ export function SiteHeader() {
   return (
     <header className="bg-background/80 supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 border-b backdrop-blur">
       <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4 sm:px-6">
-        <Link href="/" aria-label={`${APP_CONFIG.name} home`} className="text-foreground flex items-center">
-          <ZegaWordmark compact className="h-6 w-auto" />
+        <Link href="/" aria-label={`${APP_CONFIG.name} home`} className="flex items-center">
+          <ZegaWordmark variant="brand" compact className="h-6 w-auto" />
         </Link>
         <nav className="text-muted-foreground hidden items-center gap-6 text-sm font-medium md:flex">
           {NAV.map((item) => (
