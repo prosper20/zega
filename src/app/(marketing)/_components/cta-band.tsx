@@ -4,22 +4,41 @@ import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
+import { MEDIA } from "./media";
+
+/** Full-bleed closing call to action. Plays MEDIA.ctaBackground behind a navy overlay once a recording exists. */
 export function CtaBand() {
+  const bg = MEDIA.ctaBackground as { src?: string; poster?: string };
   return (
-    <section className="px-4 pb-20 sm:px-6">
-      <div className="bg-sidebar text-sidebar-foreground relative mx-auto max-w-7xl overflow-hidden rounded-3xl px-6 py-16 text-center sm:py-20">
-        <div
-          aria-hidden="true"
-          className="bg-sidebar-primary/30 absolute -top-24 left-1/2 size-96 -translate-x-1/2 rounded-full blur-3xl"
-        />
-        <h2 className="relative text-3xl font-bold tracking-tight text-white sm:text-5xl">
-          Something broken on campus?
-        </h2>
-        <p className="relative mx-auto mt-4 max-w-xl text-lg opacity-80">
+    <section className="bg-sidebar relative isolate overflow-hidden text-white">
+      {bg.src ? (
+        <div aria-hidden="true" className="absolute inset-0 -z-10">
+          <video
+            className="h-full w-full object-cover opacity-30"
+            src={bg.src}
+            poster={bg.poster}
+            autoPlay
+            muted
+            loop
+            playsInline
+          />
+        </div>
+      ) : (
+        <>
+          <div aria-hidden="true" className="bg-blueprint absolute inset-0 -z-10 opacity-70" />
+          <div
+            aria-hidden="true"
+            className="bg-primary/40 absolute -top-32 left-1/2 -z-10 size-[28rem] -translate-x-1/2 rounded-full blur-3xl"
+          />
+        </>
+      )}
+      <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6 sm:py-32">
+        <h2 className="text-4xl font-bold tracking-tight text-balance sm:text-6xl">Something broken on campus?</h2>
+        <p className="mx-auto mt-5 max-w-xl text-lg text-white/80">
           Report it in under a minute and follow it all the way to resolved.
         </p>
-        <div className="relative mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button asChild className="bg-sidebar-primary text-sidebar-primary-foreground h-11 px-6 text-base">
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <Button asChild className="text-primary h-12 bg-white px-6 text-base font-semibold hover:bg-white/90">
             <Link href="/auth/register">
               Get started <ArrowRight data-icon="inline-end" />
             </Link>
@@ -27,7 +46,7 @@ export function CtaBand() {
           <Button
             asChild
             variant="outline"
-            className="border-sidebar-border hover:bg-sidebar-accent h-11 bg-transparent px-6 text-base text-white hover:text-white"
+            className="h-12 border-2 border-white bg-transparent px-6 text-base font-semibold text-white hover:bg-white/10 hover:text-white"
           >
             <Link href="/auth/login">Log in</Link>
           </Button>

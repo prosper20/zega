@@ -328,3 +328,11 @@ html:has([data-landing-page]) {
     width: 100%;
   }
 }
+
+/* Faint blueprint grid for full-bleed brand bands (MaintainX-style hero). */
+@utility bg-blueprint {
+  background-image:
+    linear-gradient(to right, color-mix(in oklab, white 9%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in oklab, white 9%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+}

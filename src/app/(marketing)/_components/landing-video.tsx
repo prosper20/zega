@@ -6,22 +6,31 @@ import { cn } from "cn";
 
 import type { MediaSlot } from "./media";
 
+type Canvas = { w: number; h: number };
+
+const LANDSCAPE: Canvas = { w: 640, h: 360 };
+
 /**
- * Lazy, muted, looping product video in a browser-style frame.
- * - Loads only when scrolled into view (IntersectionObserver), pauses when off-screen.
- * - Honours prefers-reduced-motion (shows poster / fallback instead of playing).
+ * Lazy, muted, looping product video.
+ * - Loads only when scrolled into view (IntersectionObserver) and pauses when off-screen.
+ * - Honours prefers-reduced-motion (shows poster or fallback instead of playing).
  * - Falls back to an animated UI mock while no recording exists.
+ *
+ * `chrome` adds a browser title bar. `canvas` sets the mock's design size (default 640x360);
+ * pass a portrait canvas for phone frames.
  */
 export function LandingVideo({
   slot,
   fallback,
   className,
   chrome = true,
+  canvas = LANDSCAPE,
 }: {
   slot: MediaSlot;
   fallback: ReactNode;
   className?: string;
   chrome?: boolean;
+  canvas?: Canvas;
 }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [failed, setFailed] = useState(false);
@@ -49,10 +58,7 @@ export function LandingVideo({
 
   return (
     <figure
-      className={cn(
-        "bg-card relative overflow-hidden rounded-2xl border shadow-xl shadow-primary/5 ring-1 ring-black/5",
-        className,
-      )}
+      className={cn("bg-card text-card-foreground relative overflow-hidden rounded-2xl border shadow-xl", className)}
     >
       {chrome && (
         <div className="bg-muted/60 flex items-center gap-1.5 border-b px-4 py-2.5" aria-hidden="true">
@@ -65,7 +71,8 @@ export function LandingVideo({
       {showVideo ? (
         <video
           ref={ref}
-          className="block aspect-video w-full object-cover"
+          className="block w-full object-cover"
+          style={{ aspectRatio: `${canvas.w} / ${canvas.h}` }}
           muted
           loop
           playsInline
@@ -75,33 +82,38 @@ export function LandingVideo({
           onError={() => setFailed(true)}
         />
       ) : (
-        <ScaledMock label={slot.label}>{fallback}</ScaledMock>
+        <ScaledMock label={slot.label} canvas={canvas}>
+          {fallback}
+        </ScaledMock>
       )}
     </figure>
   );
 }
 
-const MOCK_W = 640;
-const MOCK_H = 360;
-
-/** Lays the mock out on a fixed 640x360 canvas and scales it to the frame, like a video would. */
-function ScaledMock({ label, children }: { label: string; children: ReactNode }) {
+/** Lays the mock out on a fixed design canvas and scales it to the frame, like a video would. */
+function ScaledMock({ label, canvas, children }: { label: string; canvas: Canvas; children: ReactNode }) {
   const ref = useRef<HTMLDivElement>(null);
   const [scale, setScale] = useState(1);
 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const ro = new ResizeObserver(([entry]) => setScale(entry.contentRect.width / MOCK_W));
+    const ro = new ResizeObserver(([entry]) => setScale(entry.contentRect.width / canvas.w));
     ro.observe(el);
     return () => ro.disconnect();
-  }, []);
+  }, [canvas.w]);
 
   return (
-    <div ref={ref} role="img" aria-label={label} className="relative aspect-video w-full overflow-hidden">
+    <div
+      ref={ref}
+      role="img"
+      aria-label={label}
+      className="relative w-full overflow-hidden"
+      style={{ aspectRatio: `${canvas.w} / ${canvas.h}` }}
+    >
       <div
         className="absolute top-0 left-0 origin-top-left"
-        style={{ width: MOCK_W, height: MOCK_H, transform: `scale(${scale})` }}
+        style={{ width: canvas.w, height: canvas.h, transform: `scale(${scale})` }}
       >
         {children}
       </div>

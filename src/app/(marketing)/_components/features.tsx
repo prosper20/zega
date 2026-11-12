@@ -57,35 +57,33 @@ const CATEGORIES = [
 
 export function Features() {
   return (
-    <section id="features" className="scroll-mt-20 py-20 sm:py-28">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+    <section id="features" className="bg-card scroll-mt-16 border-y py-20 sm:py-28">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
-          <p className="text-primary text-sm font-semibold tracking-wide uppercase">Features</p>
-          <h2 className="mt-2 text-3xl font-bold tracking-tight sm:text-5xl">Accountability built in</h2>
+          <h2 className="text-3xl font-bold tracking-tight sm:text-5xl">
+            Accountability{" "}
+            <span className="from-primary bg-gradient-to-r to-emerald-400 bg-clip-text text-transparent">built in</span>
+          </h2>
           <p className="text-muted-foreground mt-4 text-lg">
             Everything a university needs to replace manual complaints with a process people can trust.
           </p>
         </div>
-        <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="mt-14 grid gap-x-10 gap-y-12 sm:grid-cols-2 lg:grid-cols-3">
           {FEATURES.map((f) => (
-            <div key={f.title} className="bg-card rounded-2xl border p-6 transition-shadow hover:shadow-md">
-              <div className="bg-accent text-accent-foreground flex size-10 items-center justify-center rounded-lg">
-                <f.icon className="size-5" />
-              </div>
-              <h3 className="mt-4 text-lg font-semibold">{f.title}</h3>
+            <div key={f.title} className="border-t pt-6">
+              <f.icon className="text-primary size-6" />
+              <h3 className="mt-4 text-xl font-semibold tracking-tight">{f.title}</h3>
               <p className="text-muted-foreground mt-2 text-sm">{f.body}</p>
             </div>
           ))}
         </div>
         <div className="mt-20 text-center">
-          <h3 className="text-muted-foreground text-sm font-semibold tracking-wide uppercase">
-            Report anything that needs fixing
-          </h3>
+          <p className="text-primary text-xs font-bold tracking-widest uppercase">Report anything that needs fixing</p>
           <div className="mt-6 flex flex-wrap justify-center gap-3">
             {CATEGORIES.map((c) => (
               <span
                 key={c.label}
-                className="bg-card inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium"
+                className="bg-background inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium"
               >
                 <c.icon className="text-primary size-4" /> {c.label}
               </span>

@@ -130,7 +130,7 @@ export function HeroMock() {
 export function ReportMock() {
   const t = useTick(5, 1300);
   return (
-    <Shell className="items-center justify-center bg-muted/40 p-4">
+    <Shell className="bg-muted/40 items-center justify-center p-4">
       <div className="bg-card w-full max-w-[260px] space-y-2.5 rounded-xl border p-3 shadow-sm">
         <div className="flex items-center gap-2 text-[11px] font-semibold">
           <QrCode className="text-primary size-3.5" /> Report an issue
@@ -243,8 +243,8 @@ const TIMELINE = [
 export function ResolveMock() {
   const t = useTick(TIMELINE.length + 1, 1100);
   return (
-    <Shell className="gap-4 p-4">
-      <ol className="flex-1 space-y-2.5">
+    <Shell className="flex-col justify-center gap-4 p-5">
+      <ol className="space-y-2.5">
         {TIMELINE.map((step, i) => (
           <li
             key={step}
@@ -262,7 +262,7 @@ export function ResolveMock() {
           </li>
         ))}
       </ol>
-      <div className="bg-card flex w-[42%] flex-col items-center justify-center gap-1.5 rounded-lg border p-2">
+      <div className="bg-card flex flex-col items-center justify-center gap-1.5 rounded-lg border p-3">
         <div className="text-[10px] font-medium">How did we do?</div>
         <div className="flex gap-0.5">
           {[0, 1, 2, 3, 4].map((s) => (
