@@ -8,11 +8,11 @@ import { cn } from "cn";
  * The ring at the foot of the E is the fidel vowel marker that turns
  * the letter "za" into "ze".
  */
-function ZeGlyphs({ scale = 1 }: { scale?: number }) {
+function zeGlyphs(color: string, scale = 1) {
   const thin = 3.2 * scale;
   const thick = 5.6 * scale;
   return (
-    <g fill="none" stroke="currentColor" strokeLinejoin="round">
+    <g fill="none" stroke={color} strokeLinejoin="round">
       <path d="M6 13 V8.5 H23" strokeWidth={thin} />
       <path d="M22.2 9 L9.2 31" strokeWidth={thick} />
       <path d="M8 31 H25 V27" strokeWidth={thin} />
@@ -26,7 +26,7 @@ function ZeGlyphs({ scale = 1 }: { scale?: number }) {
 }
 
 /** Square app mark: ZE glyphs knocked out of a rounded brand tile. */
-export function AppLogo({ className, ...props }: SVGProps<SVGSVGElement>) {
+export function AppLogo({ className, tile = "currentColor", ...props }: SVGProps<SVGSVGElement> & { tile?: string }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -37,10 +37,8 @@ export function AppLogo({ className, ...props }: SVGProps<SVGSVGElement>) {
       className={cn("text-primary", className)}
       {...props}
     >
-      <rect width="64" height="64" rx="15" fill="currentColor" />
-      <g transform="translate(5 12.5) scale(0.9)" color="white">
-        <ZeGlyphs scale={1.1} />
-      </g>
+      <rect width="64" height="64" rx="15" fill={tile} />
+      <g transform="translate(5 12.5) scale(0.9)">{zeGlyphs("white", 1.1)}</g>
     </svg>
   );
 }
@@ -49,7 +47,7 @@ export function AppLogo({ className, ...props }: SVGProps<SVGSVGElement>) {
 export function ZeMark({ className, ...props }: SVGProps<SVGSVGElement>) {
   return (
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 40" aria-hidden="true" className={className} {...props}>
-      <ZeGlyphs />
+      {zeGlyphs("currentColor")}
     </svg>
   );
 }
