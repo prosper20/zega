@@ -57,6 +57,8 @@ const WORDMARK_VARIANTS = {
   ink: { main: "", ring: "" },
   /** Brand blue. */
   brand: { main: "text-primary", ring: "" },
+  /** Brand blue letters with a navy vowel ring. */
+  "brand-navy": { main: "text-primary", ring: "text-secondary-foreground" },
   /** Navy letters with a blue vowel ring. */
   navy: { main: "text-secondary-foreground", ring: "text-primary" },
   /** White, for navy or blue backgrounds. */
