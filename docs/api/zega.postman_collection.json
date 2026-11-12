@@ -1,0 +1,1395 @@
+{
+  "info": {
+    "name": "ZEGA API",
+    "description": "REST API for **ZEGA**, the university services and maintenance request platform. *Report it. Track it. Resolve it.*\n\n**Authentication.** Sign in with `POST /api/auth/sign-in/email`; the session cookie is then sent automatically. API clients can instead call `GET /api/auth/token` and send `Authorization: Bearer <jwt>` (EdDSA-signed, 15 minutes, keys at `/api/auth/jwks`).\n\n**Errors** use RFC 9457 Problem Details (`application/problem+json`): `401` not signed in, `403` not allowed, `404` not found or not visible to you, `409` conflicts such as invalid status changes, `422` validation errors with a per-field `errors` list. Every response carries an `X-Request-Id` header.\n\n**Pagination** on `/requests` is keyset-based: pass `pageInfo.nextCursor` back as `cursor`.\n\nDemo accounts (password `Zega@2026!`): `student@zega.test`, `staff@zega.test`, `officer@zega.test`, `admin@zega.test`.\n\nRun \"Sign in\" in the Auth folder first: Postman keeps the session cookie for the other requests.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3000"
+    }
+  ],
+  "item": [
+    {
+      "name": "System",
+      "item": [
+        {
+          "name": "Health check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Public. Confirms the API is up and the database is reachable (used to verify the deployment).",
+            "url": {
+              "raw": "{{baseUrl}}/api/health",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "health"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Who am I",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "The signed-in user and the permissions their role grants.",
+            "url": {
+              "raw": "{{baseUrl}}/api/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "me"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Requests",
+      "item": [
+        {
+          "name": "List requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Requests visible to the caller (own requests for students and staff, assigned jobs for officers, everything for admins), with full-text search, filters and keyset pagination.",
+            "url": {
+              "raw": "{{baseUrl}}/api/requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "leaking pipe",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "submitted,assigned",
+                  "disabled": true
+                },
+                {
+                  "key": "priority",
+                  "value": "high,urgent",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "plumbing",
+                  "disabled": true
+                },
+                {
+                  "key": "location",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "assignee",
+                  "value": "me",
+                  "disabled": true
+                },
+                {
+                  "key": "scope",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "sla",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "open",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "2026-10-01",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2026-11-12",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "cursor",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "20",
+                  "disabled": true
+                }
+              ],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Report an issue",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Creates a request, computes SLA due dates from the category and priority, and notifies administrators.",
+            "url": {
+              "raw": "{{baseUrl}}/api/requests",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Leaking pipe under the sink\",\n  \"description\": \"Water has been pooling on the floor since yesterday evening.\",\n  \"categoryId\": \"00000000-0000-4000-8000-000000000000\",\n  \"locationId\": \"00000000-0000-4000-8000-000000000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Find similar open requests",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Duplicate detection while reporting: open requests in the same building with a similar title (trigram similarity).",
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/similar",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                "similar"
+              ],
+              "query": [
+                {
+                  "key": "title",
+                  "value": "leaking pipe",
+                  "disabled": false
+                },
+                {
+                  "key": "locationId",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "categoryId",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Get a request",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Accepts the UUID or the reference code. Includes the actions the caller can take next.",
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Update a request",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Requesters may edit their own request before work starts; admins may also change category and priority.",
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Delete a request (admin)",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "description": "Soft delete; the row and its history stay in the audit trail.",
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Change status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Moves the request through its lifecycle. The state machine decides what is allowed for the caller; invalid moves return 409, missing notes 422.",
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/transitions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id",
+                "transitions"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"submitted\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Assign or reassign an officer (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/assignments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id",
+                "assignments"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"officerId\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Suggested officers (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Officers ranked by category specialty and current open workload.",
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/suggestions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id",
+                "suggestions"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Request timeline",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Status changes, assignments, comments and attachments in order. Internal notes only for officers and admins.",
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/timeline",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id",
+                "timeline"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "List comments",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id",
+                "comments"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Add a comment or internal note",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/comments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id",
+                "comments"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"Parts ordered, fixing tomorrow morning.\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Add a “me too” vote",
+          "request": {
+            "method": "PUT",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/vote",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id",
+                "vote"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Remove your “me too” vote",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/vote",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id",
+                "vote"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Catalog",
+      "item": [
+        {
+          "name": "List request categories with SLA targets",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "categories"
+              ],
+              "query": [
+                {
+                  "key": "archived",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Update a category (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "categories",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "7c1f5a2e-2f4b-4d0e-9a8a-1b2c3d4e5f60"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"string\",\n  \"description\": \"string\",\n  \"icon\": \"string\",\n  \"defaultPriority\": \"low\",\n  \"archived\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Set SLA targets for a category (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/categories/:id/sla",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "categories",
+                ":id",
+                "sla"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "7c1f5a2e-2f4b-4d0e-9a8a-1b2c3d4e5f60"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"policies\": [\n    {\n      \"priority\": \"low\",\n      \"responseMinutes\": 1,\n      \"resolutionMinutes\": 1\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "List campus locations",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Flat list ordered by tree path; build the tree from `parentId`.",
+            "url": {
+              "raw": "{{baseUrl}}/api/locations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "locations"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Add a location (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/locations",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "locations"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"string\",\n  \"code\": \"string\",\n  \"kind\": \"campus\",\n  \"parentId\": \"00000000-0000-4000-8000-000000000000\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Resolve a QR sticker",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Returns the location printed on a report-here QR sticker so the form can be pre-filled.",
+            "url": {
+              "raw": "{{baseUrl}}/api/locations/qr/:token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "locations",
+                "qr",
+                ":token"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "token",
+                  "value": ""
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "List users (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "role",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "offset",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Create a user (admin)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Used to add maintenance officers and administrators, who cannot self-register.",
+            "url": {
+              "raw": "{{baseUrl}}/api/users",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"string\",\n  \"email\": \"string\",\n  \"password\": \"string\",\n  \"role\": \"student\",\n  \"department\": \"string\",\n  \"phone\": \"string\",\n  \"matricOrStaffNo\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Change role or deactivate (admin)",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Role changes and deactivation sign the user out everywhere immediately.",
+            "url": {
+              "raw": "{{baseUrl}}/api/users/:id",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":id"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "usr_000001"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"string\",\n  \"role\": \"student\",\n  \"banned\": true,\n  \"banReason\": \"string\",\n  \"department\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Set an officer's specialties (admin)",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/users/:id/specialties",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "users",
+                ":id",
+                "specialties"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "usr_000001"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"categoryIds\": [\n    \"00000000-0000-4000-8000-000000000000\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "Your notifications",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "notifications"
+              ],
+              "query": [
+                {
+                  "key": "unread",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "before",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Mark notifications as read",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/notifications/read",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "notifications",
+                "read"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ids\": [\n    \"00000000-0000-4000-8000-000000000000\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Operational summary (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Volumes, SLA compliance, resolution times, satisfaction, officer workload and hotspots for a date range.",
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "reports",
+                "summary"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2026-10-13",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2026-11-12",
+                  "disabled": true
+                }
+              ],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Export requests as CSV",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Accepts the same filters as `GET /requests` and exports every matching request the caller can see (up to 5,000 rows). Opens cleanly in Excel.",
+            "url": {
+              "raw": "{{baseUrl}}/api/exports/requests.csv",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "exports",
+                "requests.csv"
+              ],
+              "query": [
+                {
+                  "key": "q",
+                  "value": "leaking pipe",
+                  "disabled": true
+                },
+                {
+                  "key": "status",
+                  "value": "submitted,assigned",
+                  "disabled": true
+                },
+                {
+                  "key": "priority",
+                  "value": "high,urgent",
+                  "disabled": true
+                },
+                {
+                  "key": "category",
+                  "value": "plumbing",
+                  "disabled": true
+                },
+                {
+                  "key": "location",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "assignee",
+                  "value": "me",
+                  "disabled": true
+                },
+                {
+                  "key": "scope",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "sla",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "open",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "from",
+                  "value": "2026-10-01",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2026-11-12",
+                  "disabled": true
+                },
+                {
+                  "key": "sort",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Audit",
+      "item": [
+        {
+          "name": "Audit trail (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Every insert, update and delete on audited tables, newest first, with the acting user and a JSON diff.",
+            "url": {
+              "raw": "{{baseUrl}}/api/audit",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "audit"
+              ],
+              "query": [
+                {
+                  "key": "table",
+                  "value": "service_requests",
+                  "disabled": true
+                },
+                {
+                  "key": "rowId",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "actor",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "before",
+                  "value": "",
+                  "disabled": true
+                },
+                {
+                  "key": "limit",
+                  "value": "",
+                  "disabled": true
+                }
+              ],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Verify audit integrity (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Recomputes the SHA-256 hash chain over the whole audit log and reports the first tampered entry, if any.",
+            "url": {
+              "raw": "{{baseUrl}}/api/audit/verify",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "audit",
+                "verify"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Register (students and staff)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "description": "Creates an account and signs in. Matric numbers look like `ZU/2023/01027`, staff IDs like `STF/0412`.",
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/sign-up/email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "sign-up",
+                "email"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Tobi Adewale\",\n  \"email\": \"tobi@example.com\",\n  \"password\": \"Passw0rd!\",\n  \"accountType\": \"student\",\n  \"matricOrStaffNo\": \"ZU/2025/01234\",\n  \"department\": \"Computer Science\",\n  \"phone\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Sign in",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/sign-in/email",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "sign-in",
+                "email"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"admin@zega.test\",\n  \"password\": \"Zega@2026!\",\n  \"rememberMe\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Sign out",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/sign-out",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "sign-out"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Current session",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/get-session",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "get-session"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Your active sessions",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/list-sessions",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "list-sessions"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Sign out one device",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/revoke-session",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "revoke-session"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"token\": \"string\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Get a JWT for API calls",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/token",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "token"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Public signing keys (JWKS)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/auth/jwks",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "jwks"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

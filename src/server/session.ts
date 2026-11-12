@@ -8,16 +8,9 @@ import { redirect } from "next/navigation";
 import type { RoleSlug } from "@/domain/constants";
 
 import { auth } from "./auth";
+import type { CurrentUser } from "./session-types";
 
-export type CurrentUser = {
-  id: string;
-  name: string;
-  email: string;
-  image: string | null;
-  role: RoleSlug;
-  department: string | null;
-  matricOrStaffNo: string | null;
-};
+export type { CurrentUser } from "./session-types";
 
 /** The signed-in user for this request (memoised per render), or null. */
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {

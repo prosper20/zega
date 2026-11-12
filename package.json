@@ -21,7 +21,8 @@
     "db:migrate": "tsx scripts/migrate.mts",
     "db:seed": "tsx scripts/seed.mts",
     "db:studio": "drizzle-kit studio",
-    "db:reset": "tsx scripts/reset.mts"
+    "db:reset": "tsx scripts/reset.mts",
+    "docs:api": "tsx scripts/export-api-docs.mts"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
