@@ -11,9 +11,7 @@ export default function Layout({ children }: Readonly<{ children: ReactNode }>) 
         <div className="bg-sidebar relative order-2 hidden h-full rounded-3xl lg:flex">
           <div className="text-sidebar-foreground absolute top-10 space-y-2 px-10">
             <AppLogo className="text-sidebar-primary size-10" />
-            <h1 className="text-2xl font-semibold tracking-tight">
-              {APP_CONFIG.name} <span className="text-sidebar-foreground/60 font-normal">{APP_CONFIG.nameGeez}</span>
-            </h1>
+            <h1 className="text-2xl font-semibold tracking-tight">{APP_CONFIG.name}</h1>
             <p className="text-sm">{APP_CONFIG.tagline}</p>
           </div>
 

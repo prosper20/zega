@@ -1,8 +1,8 @@
-# ZEGA · ዘገባ
+# ZEGA
 
 **Report it. Track it. Resolve it.**
 
-ZEGA (from the Amharic *ዘገባ*, "report") is a university services and maintenance request platform. Students and staff report faults, maintenance officers resolve them, and administrators assign, monitor and report on every request.
+ZEGA (inspired by *Zegaba*, "report") is a university services and maintenance request platform. Students and staff report faults, maintenance officers resolve them, and administrators assign, monitor and report on every request.
 
 Built for MIT 8333, Advanced Web Application Development.
 

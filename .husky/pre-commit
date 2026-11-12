@@ -1,3 +1,7 @@
 npm run generate:presets
 git add src/lib/preferences/theme.ts
+if git diff --cached --name-only -z --diff-filter=ACM | xargs -0 -r grep -l $'\xe2\x80\x94' -- 2>/dev/null | grep -v '\.pdf$'; then
+  echo "Commit blocked: em dash found in the files above. Use commas, colons or hyphens instead."
+  exit 1
+fi
 npm exec -- lint-staged

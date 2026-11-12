@@ -56,7 +56,7 @@
   --font-sans: var(--font-sans);
 }
 
-/* ZEGA brand theme — palette taken from MaintainX's public stylesheet (getmaintainx.com):
+/* ZEGA brand theme: palette taken from MaintainX's public stylesheet (getmaintainx.com):
    blue #246cff · blue-2 #6996ff · blue-3 #bed2ff · blue-4 #e8efff · blue-5 #f5f8ff
    dark-blue #001e40 · secondary-dark-blue #003161 · navy #021021 · dark-text #101828
    grey-1 #4c6177 · grey-2 #b4bbc5 · grey-3 #e5e8ec · gray-bg #f4f9fd
@@ -317,5 +317,14 @@ html:has([data-landing-page]) {
   [data-print-root] [data-print-paper] * {
     print-color-adjust: exact;
     -webkit-print-color-adjust: exact;
+  }
+}
+
+@keyframes zega-progress {
+  from {
+    width: 0%;
+  }
+  to {
+    width: 100%;
   }
 }

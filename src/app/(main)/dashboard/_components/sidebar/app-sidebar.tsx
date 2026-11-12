@@ -41,9 +41,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton asChild>
               <Link prefetch={false} href="/dashboard">
-                <AppLogo className="size-6 text-sidebar-primary" />
+                <AppLogo className="text-sidebar-primary size-6" />
                 <span className="text-base font-semibold tracking-tight">{APP_CONFIG.name}</span>
-                <span className="text-sidebar-foreground/60 text-xs">{APP_CONFIG.nameGeez}</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
