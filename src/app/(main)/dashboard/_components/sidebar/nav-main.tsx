@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 import { cn } from "cn";
-import { ChevronRight, MailIcon, PlusCircleIcon } from "lucide-react";
+import { ChevronRight, ClipboardList, PlusCircleIcon, Wrench } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -34,10 +34,20 @@ import type {
   NavMainItem,
   NavMainLinkItem,
   NavMainParentItem,
+  RoleSlug,
 } from "@/navigation/sidebar/sidebar-items";
+
+/** The one primary action shown at the top of the sidebar for each role. */
+const PRIMARY_ACTION: Record<RoleSlug, { label: string; href: string; icon: typeof PlusCircleIcon }> = {
+  student: { label: "Report an issue", href: "/dashboard/requests/new", icon: PlusCircleIcon },
+  staff: { label: "Report an issue", href: "/dashboard/requests/new", icon: PlusCircleIcon },
+  officer: { label: "My work orders", href: "/dashboard/work", icon: Wrench },
+  admin: { label: "All requests", href: "/dashboard/admin/requests", icon: ClipboardList },
+};
 
 interface NavMainProps {
   readonly items: readonly NavGroup[];
+  readonly role: RoleSlug;
 }
 interface NavItemProps {
   readonly item: NavMainItem;
@@ -82,7 +92,8 @@ function hasSubItems(item: NavMainItem): item is NavMainParentItem {
   return Boolean(item.subItems?.length);
 }
 
-export function NavMain({ items }: NavMainProps) {
+export function NavMain({ items, role }: NavMainProps) {
+  const primaryAction = PRIMARY_ACTION[role];
   const path = usePathname();
 
   const isItemActive = (item: NavMainItem) => {
@@ -106,22 +117,17 @@ export function NavMain({ items }: NavMainProps) {
       <SidebarGroup>
         <SidebarGroupContent className="flex flex-col gap-2">
           <SidebarMenu>
-            <SidebarMenuItem className="flex items-center gap-2">
+            <SidebarMenuItem>
               <SidebarMenuButton
-                tooltip="Quick Create"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+                asChild
+                tooltip={primaryAction.label}
+                className="bg-sidebar-primary text-sidebar-primary-foreground hover:bg-sidebar-primary/90 hover:text-sidebar-primary-foreground active:bg-sidebar-primary/90 active:text-sidebar-primary-foreground min-w-8 font-medium duration-200 ease-linear"
               >
-                <PlusCircleIcon />
-                <span>Quick Create</span>
+                <Link prefetch={false} href={primaryAction.href}>
+                  <primaryAction.icon />
+                  <span>{primaryAction.label}</span>
+                </Link>
               </SidebarMenuButton>
-              <Button
-                size="icon"
-                className="h-9 w-9 shrink-0 group-data-[collapsible=icon]:opacity-0"
-                variant="outline"
-              >
-                <MailIcon />
-                <span className="sr-only">Inbox</span>
-              </Button>
             </SidebarMenuItem>
           </SidebarMenu>
         </SidebarGroupContent>

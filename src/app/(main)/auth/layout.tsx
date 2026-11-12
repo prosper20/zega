@@ -1,10 +1,15 @@
 import type { ReactNode } from "react";
 
+import { redirect } from "next/navigation";
+
 import { AppLogo } from "@/components/app-logo";
 import { Separator } from "@/components/ui/separator";
 import { APP_CONFIG } from "@/config/app-config";
+import { getCurrentUser } from "@/server/session";
 
-export default function Layout({ children }: Readonly<{ children: ReactNode }>) {
+export default async function Layout({ children }: Readonly<{ children: ReactNode }>) {
+  // A real session check (not just a cookie) so expired cookies never cause a redirect loop.
+  if (await getCurrentUser()) redirect("/dashboard");
   return (
     <main>
       <div className="grid h-dvh justify-center p-2 lg:grid-cols-2">

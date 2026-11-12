@@ -14,7 +14,9 @@ import {
   Wrench,
 } from "lucide-react";
 
-export type RoleSlug = "student" | "staff" | "officer" | "admin";
+import type { RoleSlug } from "@/domain/constants";
+
+export type { RoleSlug };
 
 export type NavBadge = "new" | "updated" | "soon";
 

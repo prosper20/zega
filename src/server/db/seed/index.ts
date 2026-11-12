@@ -325,7 +325,8 @@ export async function seedDatabase(db: Database, opts: SeedOptions = {}): Promis
       const respond = Math.min(policy.responseMinutes * MIN * (late ? 1.4 : 0.2 + r.next() * 0.7), budget * 0.2);
       let t = createdAt.getTime();
       const advance = (ms: number) => {
-        t = Math.min(t + Math.max(ms, 5 * MIN), now.getTime() - 5 * MIN);
+        // Clamp into the past, but always move forward so a request's timeline is strictly ordered.
+        t = Math.max(t + 1000, Math.min(t + Math.max(ms, 5 * MIN), now.getTime() - 5 * MIN));
         return new Date(t);
       };
 
