@@ -1,0 +1,321 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+/* Theme preset styles: these override CSS variables based on the selected data-theme-preset */
+@import "../styles/presets/brutalist.css";
+@import "../styles/presets/soft-pop.css";
+@import "../styles/presets/tangerine.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --font-heading: var(--font-sans);
+  --font-sans: var(--font-sans);
+}
+
+/* ZEGA brand theme — palette taken from MaintainX's public stylesheet (getmaintainx.com):
+   blue #246cff · blue-2 #6996ff · blue-3 #bed2ff · blue-4 #e8efff · blue-5 #f5f8ff
+   dark-blue #001e40 · secondary-dark-blue #003161 · navy #021021 · dark-text #101828
+   grey-1 #4c6177 · grey-2 #b4bbc5 · grey-3 #e5e8ec · gray-bg #f4f9fd
+   green-1 #2ed888 · success #027a48 · orange #ffa945 · red-1 #f8523c · error #b42318
+   Font: Inter. Used as the default (no data-theme-preset) theme. */
+:root {
+  --radius: 0.5rem;
+  --background: #f4f9fd;
+  --foreground: #101828;
+  --card: #ffffff;
+  --card-foreground: #101828;
+  --popover: #ffffff;
+  --popover-foreground: #101828;
+  --primary: #246cff;
+  --primary-foreground: #ffffff;
+  --secondary: #e8efff;
+  --secondary-foreground: #001e40;
+  --muted: #f5f8ff;
+  --muted-foreground: #4c6177;
+  --accent: #e8efff;
+  --accent-foreground: #003161;
+  --destructive: #b42318;
+  --success: #027a48;
+  --success-foreground: #ecfdf3;
+  --warning: #ffa945;
+  --warning-foreground: #001e40;
+  --border: #e5e8ec;
+  --input: #e5e8ec;
+  --ring: #6996ff;
+  --chart-1: #246cff;
+  --chart-2: #2ed888;
+  --chart-3: #ffa945;
+  --chart-4: #f8523c;
+  --chart-5: #003161;
+  --sidebar: #001e40;
+  --sidebar-foreground: #e8efff;
+  --sidebar-primary: #246cff;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #003161;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: #003161;
+  --sidebar-ring: #6996ff;
+
+  /* fonts */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+}
+
+.dark {
+  --background: #021021;
+  --foreground: #e8efff;
+  --card: #001e40;
+  --card-foreground: #e8efff;
+  --popover: #001e40;
+  --popover-foreground: #e8efff;
+  --primary: #6996ff;
+  --primary-foreground: #021021;
+  --secondary: #003161;
+  --secondary-foreground: #e8efff;
+  --muted: #003161;
+  --muted-foreground: #b4bbc5;
+  --accent: #003161;
+  --accent-foreground: #ffffff;
+  --destructive: #f8523c;
+  --success: #2ed888;
+  --success-foreground: #021021;
+  --warning: #ffa945;
+  --warning-foreground: #021021;
+  --border: rgb(190 210 255 / 14%);
+  --input: rgb(190 210 255 / 18%);
+  --ring: #6996ff;
+  --chart-1: #6996ff;
+  --chart-2: #2ed888;
+  --chart-3: #ffa945;
+  --chart-4: #f8523c;
+  --chart-5: #bed2ff;
+  --sidebar: #021021;
+  --sidebar-foreground: #e8efff;
+  --sidebar-primary: #6996ff;
+  --sidebar-primary-foreground: #021021;
+  --sidebar-accent: #001e40;
+  --sidebar-accent-foreground: #ffffff;
+  --sidebar-border: rgb(190 210 255 / 12%);
+  --sidebar-ring: #6996ff;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans), system-ui, sans-serif;
+  }
+  html {
+    @apply font-sans;
+  }
+}
+
+@layer utilities {
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-2xs {
+    box-shadow: var(--shadow-2xs);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-xs {
+    box-shadow: var(--shadow-xs);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-sm {
+    box-shadow: var(--shadow-sm);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow {
+    box-shadow: var(--shadow);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-md {
+    box-shadow: var(--shadow-md);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-lg {
+    box-shadow: var(--shadow-lg);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-xl {
+    box-shadow: var(--shadow-xl);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-2xl {
+    box-shadow: var(--shadow-2xl);
+  }
+
+  html[data-font="inter"] body {
+    --font-sans: var(--font-inter);
+  }
+  html[data-font="notoSans"] body {
+    --font-sans: var(--font-noto-sans);
+  }
+  html[data-font="nunitoSans"] body {
+    --font-sans: var(--font-nunito-sans);
+  }
+  html[data-font="figtree"] body {
+    --font-sans: var(--font-figtree);
+  }
+  html[data-font="roboto"] body {
+    --font-sans: var(--font-roboto);
+  }
+  html[data-font="geist"] body {
+    --font-sans: var(--font-geist);
+  }
+  html[data-font="raleway"] body {
+    --font-sans: var(--font-raleway);
+  }
+  html[data-font="dmSans"] body {
+    --font-sans: var(--font-dm-sans);
+  }
+  html[data-font="publicSans"] body {
+    --font-sans: var(--font-public-sans);
+  }
+  html[data-font="outfit"] body {
+    --font-sans: var(--font-outfit);
+  }
+  html[data-font="geistMono"] body {
+    --font-sans: var(--font-geist-mono);
+  }
+  html[data-font="geistPixelSquare"] body {
+    --font-sans: var(--font-geist-pixel-square);
+  }
+  html[data-font="jetBrainsMono"] body {
+    --font-sans: var(--font-jetbrains-mono);
+  }
+  html[data-font="geistSerif"] body {
+    --font-sans: var(--font-geist-serif);
+  }
+  html[data-font="notoSerif"] body {
+    --font-sans: var(--font-noto-serif);
+  }
+  html[data-font="robotoSlab"] body {
+    --font-sans: var(--font-roboto-slab);
+  }
+  html[data-font="merriweather"] body {
+    --font-sans: var(--font-merriweather);
+  }
+  html[data-font="lora"] body {
+    --font-sans: var(--font-lora);
+  }
+  html[data-font="playfairDisplay"] body {
+    --font-sans: var(--font-playfair-display);
+  }
+
+  html body:has([data-landing-page]) {
+    --font-sans: var(--font-geist);
+  }
+}
+
+html {
+  overscroll-behavior-x: auto;
+  overscroll-behavior-y: none;
+}
+
+html:has([data-landing-page]) {
+  view-transition-name: none;
+}
+
+[data-landing-dashboard-preview] {
+  view-transition-name: landing-dashboard-preview;
+}
+
+::view-transition-group(landing-dashboard-preview) {
+  animation-duration: 360ms;
+  animation-timing-function: ease-out;
+}
+
+.disable-transitions * {
+  transition: none !important;
+}
+
+[data-print-root] {
+  display: none;
+}
+
+@media print {
+  @page {
+    size: Letter;
+    margin: 0;
+  }
+
+  html,
+  body {
+    width: 8.5in !important;
+    height: 11in !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+  }
+
+  body > *:not([data-print-root]) {
+    display: none !important;
+  }
+
+  [data-print-root] {
+    display: block !important;
+    width: 8.5in !important;
+    height: 11in !important;
+    margin: 0 !important;
+    overflow: hidden !important;
+    background: white !important;
+  }
+
+  [data-print-root] [data-print-paper] {
+    width: 8.5in !important;
+    height: 11in !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  [data-print-root] [data-print-paper],
+  [data-print-root] [data-print-paper] * {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}
