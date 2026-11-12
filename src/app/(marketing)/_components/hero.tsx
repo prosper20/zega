@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-import { ArrowRight, QrCode } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -16,13 +16,6 @@ export function Hero() {
         className="from-accent/80 via-background to-background absolute inset-0 -z-10 bg-gradient-to-b"
       />
       <div className="mx-auto max-w-7xl px-4 pt-16 pb-12 text-center sm:px-6 sm:pt-24">
-        <a
-          href="#how-it-works"
-          className="bg-card text-muted-foreground hover:text-foreground mx-auto mb-6 inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs font-medium shadow-xs"
-        >
-          <QrCode className="text-primary size-3.5" /> Scan a room's QR code and report in seconds
-          <ArrowRight className="size-3" />
-        </a>
         <h1 className="mx-auto max-w-4xl text-4xl font-bold tracking-tight text-balance sm:text-6xl">
           Campus maintenance, <span className="text-primary">reported, tracked and resolved.</span>
         </h1>
