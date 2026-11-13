@@ -2,7 +2,7 @@
 
 ## Project overview
 
-Studio Admin is a responsive admin dashboard built with Next.js 16, React 19, TypeScript, Tailwind CSS v4, and shadcn/ui.
+ZEGA is a university maintenance request platform built on the Studio Admin dashboard shell with Next.js 16, React 19, TypeScript, Tailwind CSS v4, and shadcn/ui.
 
 This repository uses the shadcn `radix-nova` style. The shadcn CLI reports `base: "radix"`, which refers to Radix UI. Always inspect the local components in `src/components/ui/` because individual wrappers may use different primitives.
 
@@ -37,10 +37,12 @@ npm run lint
 npm run format
 npm run check
 npm run check:fix
-npm run generate:presets
+npm run typecheck
+npm test
+npm run test:e2e
 ```
 
-There is currently no automated test command. Run build, lint, check, or other validation commands only when the user explicitly requests that validation.
+Run build, lint, check, tests or other validation commands only when the user explicitly requests that validation.
 
 ## Co-location-based structure
 
@@ -52,13 +54,12 @@ Keep feature code close to the route that owns it.
 - Shared application components: `src/components/`
 - Local shadcn components: `src/components/ui/`
 - Shared hooks and utilities: `src/hooks/` and `src/lib/`
-- Theme presets: `src/styles/presets/`
 
 Keep a component inside its route until it is reused by another feature. Do not move screen-specific code into a shared directory preemptively.
 
 ## Creating or extending a screen
 
-1. Inspect the closest current screen before writing code. Finance, Infrastructure, CRM, and Analytics are useful references. Do not use routes under `(legacy)` as references for new screens unless maintaining a legacy route.
+1. Inspect the closest current screen before writing code. The admin requests, users and reports screens and the officer work board are useful references.
 2. When reproducing a UI from a screenshot or image, follow its visual direction closely, including layout, hierarchy, spacing, component structure, and important details. Implement it with the project's existing components and semantic theme tokens rather than copying raw color values. If the design needs a color that is not available through the existing theme tokens, or the user explicitly requests a non-theme color, use a named color from Tailwind's default palette. Do not use arbitrary hex, RGB, HSL, or OKLCH values.
 3. Reuse the existing dashboard shell, local components, layout controls, and theme tokens.
 4. Break each new page into focused components inside the route's `_components/` directory. Keep `page.tsx` small and focused on composing those pieces.
@@ -68,7 +69,7 @@ Keep a component inside its route until it is reused by another feature. Do not 
 8. Keep the established visual rhythm where it fits: compact spacing, clear typography hierarchy, responsive action rows, and grids that collapse cleanly on smaller screens.
 9. Widget selection is not a fixed formula. Try different arrangements of cards, resource rows, meters, charts, tabs, empty states, and actions, then keep the version that communicates the content clearly and feels consistent with the project.
 10. Match nearby screens in card density, borders, radius, spacing, content width, and responsive behavior.
-11. Use semantic theme tokens so new screens work with light mode, dark mode, and the existing theme presets.
+11. Use semantic theme tokens so new screens work with light and dark mode.
 12. Handle relevant loading, empty, error, disabled, and overflow states.
 13. Keep screens accessible with semantic HTML, keyboard support, visible focus states, labels, and appropriate ARIA attributes.
 

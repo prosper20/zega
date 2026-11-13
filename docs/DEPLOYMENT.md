@@ -38,7 +38,7 @@ In the Vercel dashboard: **Project → Settings → Environment Variables**. Add
 | `CRON_SECRET` | A new secret: `openssl rand -hex 24` | Yes |
 | `RESEND_API_KEY` | From resend.com (API Keys) | Optional: email |
 | `EMAIL_FROM` | `ZEGA <onboarding@resend.dev>` (or an address on your verified domain) | Optional |
-| `NEXT_PUBLIC_APP_URL` | Leave unset: Vercel's production domain is detected automatically | Optional |
+| `NEXT_PUBLIC_APP_URL` | Your production URL, e.g. `https://zega-ms.vercel.app` (canonical links, Open Graph images, auth origin) | Recommended |
 
 Notes:
 - Use a **different** `BETTER_AUTH_SECRET` from local development.
