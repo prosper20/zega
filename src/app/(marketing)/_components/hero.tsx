@@ -1,20 +1,13 @@
 import Image from "next/image";
 import Link from "next/link";
 
-import { ArrowRight, Fingerprint, Radio, ShieldCheck, TrendingDown, TrendingUp, Webhook } from "lucide-react";
+import { ArrowRight, TrendingDown, TrendingUp } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
 import { LandingVideo } from "./landing-video";
 import { MEDIA } from "./media";
 import { HeroMock } from "./ui-mocks";
-
-const TRUST = [
-  { icon: ShieldCheck, label: "Role-based access" },
-  { icon: Fingerprint, label: "Tamper-evident audit trail" },
-  { icon: Radio, label: "Live status updates" },
-  { icon: Webhook, label: "Documented REST API" },
-];
 
 function StatCard({
   label,
@@ -71,16 +64,6 @@ export function Hero() {
               <Link href="/auth/login">Track my request</Link>
             </Button>
           </div>
-          <ul className="mt-10 grid max-w-lg grid-cols-2 gap-3">
-            {TRUST.map((t) => (
-              <li
-                key={t.label}
-                className="flex items-center gap-2 rounded-lg border border-white/25 bg-white/5 px-3 py-2 text-sm font-medium"
-              >
-                <t.icon className="size-4 shrink-0" /> {t.label}
-              </li>
-            ))}
-          </ul>
         </div>
 
         <div className="relative lg:pl-6">
