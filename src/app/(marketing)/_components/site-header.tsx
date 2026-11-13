@@ -5,9 +5,9 @@ import { Button } from "@/components/ui/button";
 import { APP_CONFIG } from "@/config/app-config";
 
 const NAV = [
-  { href: "#how-it-works", label: "How it works" },
-  { href: "#roles", label: "Who it's for" },
-  { href: "#features", label: "Features" },
+  { href: "/#how-it-works", label: "How it works" },
+  { href: "/#roles", label: "Who it's for" },
+  { href: "/#features", label: "Features" },
   { href: "/api/docs", label: "API" },
 ];
 
