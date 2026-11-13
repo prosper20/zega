@@ -8,6 +8,7 @@ import { keys } from "@/lib/queries";
 
 type Status = "connecting" | "live" | "offline";
 const LiveContext = createContext<Status>("connecting");
+/** Connection state of the live stream (available to components that want to show it). */
 export const useLiveStatus = () => useContext(LiveContext);
 
 /**
@@ -62,26 +63,4 @@ export function LiveUpdates({ children }: { children: ReactNode }) {
   }, [qc]);
 
   return <LiveContext.Provider value={status}>{children}</LiveContext.Provider>;
-}
-
-export function LiveIndicator() {
-  const status = useLiveStatus();
-  const label = status === "live" ? "Live" : status === "offline" ? "Offline" : "Connecting";
-  return (
-    <span
-      className="text-muted-foreground hidden items-center gap-1.5 text-xs sm:inline-flex"
-      title={status === "live" ? "Updates appear instantly" : "Reconnecting to live updates"}
-      aria-live="polite"
-    >
-      <span className="relative flex size-2">
-        {status === "live" && (
-          <span className="absolute inline-flex size-full animate-ping rounded-full bg-emerald-400 opacity-60" />
-        )}
-        <span
-          className={`relative inline-flex size-2 rounded-full ${status === "live" ? "bg-emerald-500" : status === "offline" ? "bg-rose-500" : "bg-amber-400"}`}
-        />
-      </span>
-      {label}
-    </span>
-  );
 }

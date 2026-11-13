@@ -5,16 +5,14 @@ import { cookies } from "next/headers";
 import { cn } from "cn";
 
 import { AppSidebar } from "@/app/(main)/dashboard/_components/sidebar/app-sidebar";
-import { LiveIndicator, LiveUpdates } from "@/components/live/live-updates";
+import { LiveUpdates } from "@/components/live/live-updates";
 import { NotificationBell } from "@/components/live/notification-bell";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { getPreference } from "@/server/server-actions";
 import { requireUser } from "@/server/session";
 
-import { LayoutControls } from "./_components/header/layout-controls";
 import { SearchDialog } from "./_components/header/search-dialog";
-import { ThemeSwitcher } from "./_components/header/theme-switcher";
 import { UserMenu } from "./_components/header/user-menu";
 import type { ShellUser } from "./_components/user-types";
 
@@ -66,10 +64,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
                 <SearchDialog role={user.role} />
               </div>
               <div className="flex items-center gap-2">
-                <LiveIndicator />
                 <NotificationBell />
-                <LayoutControls />
-                <ThemeSwitcher />
                 <UserMenu user={user} />
               </div>
             </div>

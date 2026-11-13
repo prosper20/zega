@@ -2,7 +2,7 @@
 
 **Report it. Track it. Resolve it.**
 
-ZEGA (inspired by *Zegaba*, "report") is a university services and maintenance request platform. Students and staff report faults, maintenance officers resolve them, and administrators assign, monitor and report on every request.
+ZEGA (inspired by the Amharic word *Zegaba*, "report") is a university services and maintenance request platform. Students and staff report faults, maintenance officers resolve them, and administrators assign, monitor and report on every request.
 
 Built for MIT 8333, Advanced Web Application Development.
 
@@ -52,6 +52,4 @@ All demo accounts use the password `Zega@2026!`.
 | Staff | `staff@zega.test` |
 | Student | `student@zega.test` |
 
-## Credits
 
-The UI shell is based on [Studio Admin](https://github.com/arhamkhnz/next-shadcn-admin-dashboard) (MIT). See `NOTICE`.
