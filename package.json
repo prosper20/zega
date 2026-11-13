@@ -22,7 +22,8 @@
     "db:seed": "tsx scripts/seed.mts",
     "db:studio": "drizzle-kit studio",
     "db:reset": "tsx scripts/reset.mts",
-    "docs:api": "tsx scripts/export-api-docs.mts"
+    "docs:api": "tsx scripts/export-api-docs.mts",
+    "test:report": "tsx scripts/test-report.mts"
   },
   "lint-staged": {
     "*.{js,ts,jsx,tsx}": [
@@ -103,7 +104,7 @@
     "@types/topojson-client": "^3.1.5",
     "@types/ws": "^8.18.2",
     "@vitejs/plugin-react": "^6.3.0",
-    "@vitest/coverage-v8": "^5.1.0",
+    "@vitest/coverage-v8": "^4.1.12",
     "babel-plugin-react-compiler": "^1.0.0",
     "dotenv": "^18.0.10",
     "drizzle-kit": "^0.31.11",

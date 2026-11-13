@@ -45,3 +45,4 @@ next-env.d.ts
 /Screenshot*.png
 
 /public/uploads/
+/reports/

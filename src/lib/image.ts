@@ -14,5 +14,5 @@ export async function preparePhoto(file: File): Promise<File> {
     useWebWorker: true,
     preserveExif: false,
   });
-  return new File([out], file.name.replace(/\.[^.]+$/, "") + ".jpg", { type: "image/jpeg" });
+  return new File([out], `${file.name.replace(/\.[^.]+$/, "")}.jpg`, { type: "image/jpeg" });
 }

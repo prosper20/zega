@@ -1,0 +1,101 @@
+import type { Category, LocationOption, RequestDetail } from "@/lib/queries";
+
+export const categories: Category[] = [
+  {
+    id: "c-plumbing",
+    slug: "plumbing",
+    name: "Plumbing",
+    description: "Leaks and drains",
+    icon: "droplets",
+    defaultPriority: "high",
+    archived: false,
+    sla: [],
+  },
+  {
+    id: "c-electrical",
+    slug: "electrical",
+    name: "Electrical",
+    description: "Power and lights",
+    icon: "zap",
+    defaultPriority: "high",
+    archived: false,
+    sla: [],
+  },
+];
+
+export const locations: LocationOption[] = [
+  {
+    id: "l-main",
+    parentId: null,
+    name: "Main Campus",
+    code: "MAIN",
+    kind: "campus",
+    path: "main",
+    label: "Main Campus",
+    qrToken: "q0",
+  },
+  {
+    id: "l-hall",
+    parentId: "l-main",
+    name: "Moremi Hall",
+    code: "MOREMI",
+    kind: "hostel",
+    path: "main.moremi",
+    label: "Moremi Hall",
+    qrToken: "q1",
+  },
+  {
+    id: "l-bath",
+    parentId: "l-hall",
+    name: "Shower block",
+    code: "MOREMI-BATH",
+    kind: "room",
+    path: "main.moremi.moremi_bath",
+    label: "Moremi Hall › Shower block",
+    qrToken: "q2",
+  },
+  {
+    id: "l-lib",
+    parentId: "l-main",
+    name: "Reading Room",
+    code: "LIB-01",
+    kind: "room",
+    path: "main.lib_01",
+    label: "Reading Room",
+    qrToken: "q3",
+  },
+];
+
+export function requestDetail(over: Partial<RequestDetail> = {}): RequestDetail {
+  return {
+    id: "11111111-1111-4111-8111-111111111111",
+    refCode: "ZG-26-000123",
+    title: "Leaking pipe in shower",
+    description: "Water everywhere.",
+    status: "resolved",
+    priority: "high",
+    category: { id: "c-plumbing", slug: "plumbing", name: "Plumbing", icon: "droplets" },
+    location: { id: "l-bath", name: "Shower block", code: "MOREMI-BATH", label: "Moremi Hall › Shower block" },
+    requester: { id: "u-student", name: "Tobi Adewale", role: "student" },
+    assignee: { id: "u-officer", name: "Chinedu Okeke", role: "officer" },
+    voteCount: 0,
+    createdAt: "2026-11-10T08:00:00.000Z",
+    updatedAt: "2026-11-11T08:00:00.000Z",
+    responseDueAt: "2026-11-10T09:00:00.000Z",
+    resolutionDueAt: "2026-11-11T08:00:00.000Z",
+    resolvedAt: "2026-11-11T07:00:00.000Z",
+    closedAt: null,
+    sla: { response: "met", resolution: "met" },
+    locationDetail: null,
+    firstResponseAt: "2026-11-10T08:30:00.000Z",
+    hasVoted: false,
+    rating: null,
+    attachments: [],
+    availableTransitions: [
+      { to: "closed", label: "Confirm fix", requiresNote: false, requiresAssignee: false },
+      { to: "reopened", label: "Reopen", requiresNote: true, requiresAssignee: false },
+    ],
+    can: { upload: [], edit: false, assign: false, comment: true, internalNotes: false, vote: false },
+    ...over,
+  };
+}

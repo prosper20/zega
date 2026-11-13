@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="98" failures="0" errors="0" time="58.630274482">
+    <testsuite name="src/components/live/notification-bell.test.tsx" timestamp="2026-11-13T08:19:17.420Z" hostname="PSL-TECH-DEV-03" tests="1" failures="0" errors="0" skipped="0" time="1.147980013">
+        <testcase classname="src/components/live/notification-bell.test.tsx" name="NotificationBell &gt; shows the unread count and marks everything read" time="1.12913115">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/requests/actions-panel.test.tsx" timestamp="2026-11-13T08:19:17.422Z" hostname="PSL-TECH-DEV-03" tests="4" failures="0" errors="0" skipped="0" time="2.260137477">
+        <testcase classname="src/components/requests/actions-panel.test.tsx" name="ActionsPanel &gt; offers exactly the transitions the API allows and asks the requester to confirm" time="0.58352006">
+        </testcase>
+        <testcase classname="src/components/requests/actions-panel.test.tsx" name="ActionsPanel &gt; requires a note to reopen" time="0.812573718">
+        </testcase>
+        <testcase classname="src/components/requests/actions-panel.test.tsx" name="ActionsPanel &gt; confirms the fix with a star rating" time="0.813771706">
+        </testcase>
+        <testcase classname="src/components/requests/actions-panel.test.tsx" name="ActionsPanel &gt; renders nothing when no action is available" time="0.015302937">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/components/requests/timeline.test.tsx" timestamp="2026-11-13T08:19:17.425Z" hostname="PSL-TECH-DEV-03" tests="2" failures="0" errors="0" skipped="0" time="0.333735385">
+        <testcase classname="src/components/requests/timeline.test.tsx" name="Timeline &gt; describes each kind of event, marks internal notes and attributes system actions" time="0.315049395">
+        </testcase>
+        <testcase classname="src/components/requests/timeline.test.tsx" name="Timeline &gt; shows an empty state" time="0.011048711">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/app/(marketing)/_components/how-it-works.test.tsx" timestamp="2026-11-13T08:19:17.428Z" hostname="PSL-TECH-DEV-03" tests="1" failures="0" errors="0" skipped="0" time="0.936453931">
+        <testcase classname="src/app/(marketing)/_components/how-it-works.test.tsx" name="HowItWorks &gt; starts on the first step and switches when another step is clicked" time="0.93271053">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/app/(main)/auth/_components/login-form.test.tsx" timestamp="2026-11-13T08:19:17.429Z" hostname="PSL-TECH-DEV-03" tests="4" failures="0" errors="0" skipped="0" time="2.35517432">
+        <testcase classname="src/app/(main)/auth/_components/login-form.test.tsx" name="LoginForm &gt; signs in with a one-click demo account and returns to the requested page" time="0.975595455">
+        </testcase>
+        <testcase classname="src/app/(main)/auth/_components/login-form.test.tsx" name="LoginForm &gt; shows an error for a wrong password and stays on the page" time="0.576419954">
+        </testcase>
+        <testcase classname="src/app/(main)/auth/_components/login-form.test.tsx" name="LoginForm &gt; explains rate limiting inline" time="0.305197071">
+        </testcase>
+        <testcase classname="src/app/(main)/auth/_components/login-form.test.tsx" name="LoginForm &gt; validates the email before calling the server" time="0.492975378">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/app/(main)/auth/_components/register-form.test.tsx" timestamp="2026-11-13T08:19:17.431Z" hostname="PSL-TECH-DEV-03" tests="4" failures="0" errors="0" skipped="0" time="5.134322753">
+        <testcase classname="src/app/(main)/auth/_components/register-form.test.tsx" name="RegisterForm &gt; shows validation errors and does not submit an empty form" time="1.058416993">
+        </testcase>
+        <testcase classname="src/app/(main)/auth/_components/register-form.test.tsx" name="RegisterForm &gt; switches the ID field to staff ID for staff accounts" time="0.323460655">
+        </testcase>
+        <testcase classname="src/app/(main)/auth/_components/register-form.test.tsx" name="RegisterForm &gt; submits normalised values with the account type and redirects" time="2.1061676">
+        </testcase>
+        <testcase classname="src/app/(main)/auth/_components/register-form.test.tsx" name="RegisterForm &gt; shows the server error on the right field" time="1.640060755">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/app/(main)/dashboard/work/_components/work-board.test.tsx" timestamp="2026-11-13T08:19:17.434Z" hostname="PSL-TECH-DEV-03" tests="3" failures="0" errors="0" skipped="0" time="5.449855267">
+        <testcase classname="src/app/(main)/dashboard/work/_components/work-board.test.tsx" name="WorkBoard &gt; puts jobs in their status columns" time="1.239948505">
+        </testcase>
+        <testcase classname="src/app/(main)/dashboard/work/_components/work-board.test.tsx" name="WorkBoard &gt; only offers moves the lifecycle allows, and asks for a note where required" time="3.652835839">
+        </testcase>
+        <testcase classname="src/app/(main)/dashboard/work/_components/work-board.test.tsx" name="WorkBoard &gt; moves straight away when no note is needed" time="0.534374204">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/app/(main)/dashboard/admin/audit/_components/audit-log.test.tsx" timestamp="2026-11-13T08:19:17.437Z" hostname="PSL-TECH-DEV-03" tests="2" failures="0" errors="0" skipped="0" time="1.246995811">
+        <testcase classname="src/app/(main)/dashboard/admin/audit/_components/audit-log.test.tsx" name="AuditLog &gt; shows who changed what, with a readable diff" time="0.889856931">
+        </testcase>
+        <testcase classname="src/app/(main)/dashboard/admin/audit/_components/audit-log.test.tsx" name="AuditLog &gt; reports tampering found by the integrity check" time="0.335391198">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/app/(main)/dashboard/admin/settings/_components/category-settings.test.tsx" timestamp="2026-11-13T08:19:17.439Z" hostname="PSL-TECH-DEV-03" tests="1" failures="0" errors="0" skipped="0" time="1.266469582">
+        <testcase classname="src/app/(main)/dashboard/admin/settings/_components/category-settings.test.tsx" name="CategorySettings &gt; edits SLA targets in hours and saves them in minutes" time="1.243498016">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/app/(main)/dashboard/admin/users/_components/users-manager.test.tsx" timestamp="2026-11-13T08:19:17.440Z" hostname="PSL-TECH-DEV-03" tests="3" failures="0" errors="0" skipped="0" time="3.695313388">
+        <testcase classname="src/app/(main)/dashboard/admin/users/_components/users-manager.test.tsx" name="UsersManager &gt; lists users with roles and officer specialties, and protects the current admin" time="0.958890967">
+        </testcase>
+        <testcase classname="src/app/(main)/dashboard/admin/users/_components/users-manager.test.tsx" name="UsersManager &gt; deactivates a user" time="0.96137893">
+        </testcase>
+        <testcase classname="src/app/(main)/dashboard/admin/users/_components/users-manager.test.tsx" name="UsersManager &gt; adds an officer with a generated temporary password" time="1.755679359">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/app/(main)/dashboard/requests/new/_components/report-wizard.test.tsx" timestamp="2026-11-13T08:19:17.443Z" hostname="PSL-TECH-DEV-03" tests="2" failures="0" errors="0" skipped="0" time="5.324129706">
+        <testcase classname="src/app/(main)/dashboard/requests/new/_components/report-wizard.test.tsx" name="ReportWizard &gt; guides the reporter through category, place and details, validating each step" time="4.876965915">
+        </testcase>
+        <testcase classname="src/app/(main)/dashboard/requests/new/_components/report-wizard.test.tsx" name="ReportWizard &gt; locks the location when the reporter arrived by scanning a QR sticker" time="0.429162789">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/permissions.test.ts" timestamp="2026-11-13T08:19:17.445Z" hostname="PSL-TECH-DEV-03" tests="4" failures="0" errors="0" skipped="0" time="0.02718904">
+        <testcase classname="src/domain/permissions.test.ts" name="permissions &gt; gives admins every permission" time="0.012308384">
+        </testcase>
+        <testcase classname="src/domain/permissions.test.ts" name="permissions &gt; keeps requesters away from management actions" time="0.001090681">
+        </testcase>
+        <testcase classname="src/domain/permissions.test.ts" name="permissions &gt; lets officers work assigned requests but not see everything" time="0.000370626">
+        </testcase>
+        <testcase classname="src/domain/permissions.test.ts" name="permissions &gt; only references known permissions" time="0.006361343">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/request-machine.test.ts" timestamp="2026-11-13T08:19:17.448Z" hostname="PSL-TECH-DEV-03" tests="7" failures="0" errors="0" skipped="0" time="0.033666282">
+        <testcase classname="src/domain/request-machine.test.ts" name="request state machine &gt; defines rules for every status and only terminal states have none" time="0.015716596">
+        </testcase>
+        <testcase classname="src/domain/request-machine.test.ts" name="request state machine &gt; lets the requester cancel a new request but not triage it" time="0.001193182">
+        </testcase>
+        <testcase classname="src/domain/request-machine.test.ts" name="request state machine &gt; blocks transitions that skip the lifecycle" time="0.000408431">
+        </testcase>
+        <testcase classname="src/domain/request-machine.test.ts" name="request state machine &gt; requires an assignee to assign and a note to reject" time="0.00067981">
+        </testcase>
+        <testcase classname="src/domain/request-machine.test.ts" name="request state machine &gt; only the assigned officer (or an admin) can start and resolve work" time="0.009671165">
+        </testcase>
+        <testcase classname="src/domain/request-machine.test.ts" name="request state machine &gt; lets the requester confirm or reopen a resolved request, and the system auto-close it" time="0.000680849">
+        </testcase>
+        <testcase classname="src/domain/request-machine.test.ts" name="request state machine &gt; lists only the actions a user can take" time="0.000598389">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/sla.test.ts" timestamp="2026-11-13T08:19:17.453Z" hostname="PSL-TECH-DEV-03" tests="5" failures="0" errors="0" skipped="0" time="0.029326566">
+        <testcase classname="src/domain/sla.test.ts" name="SLA engine &gt; computes due dates from the policy" time="0.005203965">
+        </testcase>
+        <testcase classname="src/domain/sla.test.ts" name="SLA engine &gt; classifies open requests as on track, at risk or breached" time="0.000842379">
+        </testcase>
+        <testcase classname="src/domain/sla.test.ts" name="SLA engine &gt; judges resolved requests by when they were resolved" time="0.012624021">
+        </testcase>
+        <testcase classname="src/domain/sla.test.ts" name="SLA engine &gt; tracks the response target separately" time="0.000533985">
+        </testcase>
+        <testcase classname="src/domain/sla.test.ts" name="SLA engine &gt; formats durations" time="0.000517678">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/server/helpers.test.ts" timestamp="2026-11-13T08:19:17.458Z" hostname="PSL-TECH-DEV-03" tests="6" failures="0" errors="0" skipped="0" time="0.043336446">
+        <testcase classname="src/server/helpers.test.ts" name="CSV export &gt; quotes special characters and neutralises spreadsheet formulas" time="0.014080421">
+        </testcase>
+        <testcase classname="src/server/helpers.test.ts" name="image sniffing &gt; identifies real images by their bytes, not their names" time="0.002899538">
+        </testcase>
+        <testcase classname="src/server/helpers.test.ts" name="live event routing &gt; delivers request events to the people involved and to admins only" time="0.003906896">
+        </testcase>
+        <testcase classname="src/server/helpers.test.ts" name="live event routing &gt; delivers notifications only to their owner and ignores junk payloads" time="0.005818372">
+        </testcase>
+        <testcase classname="src/server/helpers.test.ts" name="session labels &gt; summarises user agents and hides local addresses" time="0.004261477">
+        </testcase>
+        <testcase classname="src/server/helpers.test.ts" name="Postman export &gt; groups operations by tag and builds example bodies from the schema" time="0.0055623">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/api/migrations.test.ts" timestamp="2026-11-13T08:19:17.463Z" hostname="PSL-TECH-DEV-03" tests="4" failures="0" errors="0" skipped="0" time="6.450086779">
+        <testcase classname="tests/api/migrations.test.ts" name="database migrations &gt; derives ltree paths for nested locations and cascades on rename" time="0.053313442">
+        </testcase>
+        <testcase classname="tests/api/migrations.test.ts" name="database migrations &gt; records audited writes with the actor and an intact hash chain" time="0.022955082">
+        </testcase>
+        <testcase classname="tests/api/migrations.test.ts" name="database migrations &gt; rejects edits to the audit log" time="0.004380549">
+        </testcase>
+        <testcase classname="tests/api/migrations.test.ts" name="audit log protection &gt; blocks TRUNCATE as well as DELETE" time="0.003760461">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/api/realtime.api.test.ts" timestamp="2026-11-13T08:19:17.467Z" hostname="PSL-TECH-DEV-03" tests="6" failures="0" errors="0" skipped="0" time="8.743355178">
+        <testcase classname="tests/api/realtime.api.test.ts" name="live updates over SSE &gt; pushes a status change and a notification to the requester, and nothing to unrelated users" time="2.692450442">
+        </testcase>
+        <testcase classname="tests/api/realtime.api.test.ts" name="live updates over SSE &gt; requires authentication" time="0.000652979">
+        </testcase>
+        <testcase classname="tests/api/realtime.api.test.ts" name="background sweep &gt; claims a job window only once" time="0.002196942">
+        </testcase>
+        <testcase classname="tests/api/realtime.api.test.ts" name="background sweep &gt; escalates each SLA breach once, with a digest for admins" time="0.013594525">
+        </testcase>
+        <testcase classname="tests/api/realtime.api.test.ts" name="background sweep &gt; auto-closes resolved requests nobody confirmed within 72 hours" time="0.02360179">
+        </testcase>
+        <testcase classname="tests/api/realtime.api.test.ts" name="background sweep &gt; protects the cron endpoint with a secret" time="0.005522895">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/api/requests.api.test.ts" timestamp="2026-11-13T08:19:17.471Z" hostname="PSL-TECH-DEV-03" tests="26" failures="0" errors="0" skipped="0" time="6.832189515">
+        <testcase classname="tests/api/requests.api.test.ts" name="auth and errors &gt; rejects anonymous calls with an RFC 9457 problem" time="0.007204866">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="auth and errors &gt; reports validation errors per field" time="0.005485186">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="auth and errors &gt; is healthy and serves OpenAPI 3.1 and a Postman collection" time="0.059896199">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="listing and visibility &gt; shows students their own requests plus ones they added a me-too to" time="0.028578175">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="listing and visibility &gt; shows officers only jobs that are or were theirs" time="0.008834304">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="listing and visibility &gt; paginates with a keyset cursor without gaps or repeats" time="0.060375767">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="listing and visibility &gt; filters by status, priority and sort order" time="0.015312787">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="listing and visibility &gt; finds a request by reference code and hides other people&apos;s requests" time="0.014947286">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="request lifecycle &gt; lets a student report an issue with SLA due dates and notifies admins" time="0.025682946">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="request lifecycle &gt; detects it as similar to a new report at the same place, and accepts a me-too vote" time="0.021166902">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="request lifecycle &gt; blocks students and officers from assigning, and rejects invalid moves" time="0.011008468">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="request lifecycle &gt; ranks officers with the matching specialty first" time="0.008331658">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="request lifecycle &gt; assigns an officer, who then works and resolves the job" time="0.050630997">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="request lifecycle &gt; hides internal notes from the requester" time="0.042735029">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="request lifecycle &gt; lets the requester confirm with a rating and returns an ordered timeline" time="0.030483429">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="request lifecycle &gt; records every step on the audit trail with the right actors" time="0.016824593">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="admin features &gt; creates an officer, sets specialties, and deactivation blocks access" time="0.108667066">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="admin features &gt; validates SLA targets" time="0.002213675">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="admin features &gt; summarises operations and exports CSV safely" time="0.023811516">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="admin features &gt; resolves a QR sticker token to its location" time="0.003757619">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="photo attachments &gt; accepts evidence from the requester and shows it on the request" time="0.034587883">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="photo attachments &gt; rejects files that are not really images, whatever their name says" time="0.014778958">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="photo attachments &gt; stops requesters adding officer before/after photos" time="0.008471644">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="officer tools &gt; summarises an officer&apos;s workload and refuses other roles" time="0.004460454">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="officer tools &gt; tells each viewer which photo kinds they may upload" time="0.013108419">
+        </testcase>
+        <testcase classname="tests/api/requests.api.test.ts" name="PDF report &gt; generates a real PDF for admins only" time="0.579945483">
+        </testcase>
+    </testsuite>
+    <testsuite name="tests/api/seed.test.ts" timestamp="2026-11-13T08:19:17.491Z" hostname="PSL-TECH-DEV-03" tests="6" failures="0" errors="0" skipped="0" time="7.261100425">
+        <testcase classname="tests/api/seed.test.ts" name="seed &gt; creates the four roles and demo accounts with credential logins" time="0.005767505">
+        </testcase>
+        <testcase classname="tests/api/seed.test.ts" name="seed &gt; keeps each request&apos;s current status equal to its latest status log" time="0.003113999">
+        </testcase>
+        <testcase classname="tests/api/seed.test.ts" name="seed &gt; generates chronological reference codes" time="0.001245843">
+        </testcase>
+        <testcase classname="tests/api/seed.test.ts" name="seed &gt; assigns officers to every request that reached work" time="0.001571168">
+        </testcase>
+        <testcase classname="tests/api/seed.test.ts" name="seed &gt; records the seed on an intact audit chain, attributed to the system" time="0.021556051">
+        </testcase>
+        <testcase classname="tests/api/seed.test.ts" name="seed &gt; refuses to seed twice" time="0.005735229">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/domain/schemas/auth.test.ts" timestamp="2026-11-13T08:19:17.496Z" hostname="PSL-TECH-DEV-03" tests="5" failures="0" errors="0" skipped="0" time="0.0447285">
+        <testcase classname="src/domain/schemas/auth.test.ts" name="registration schema &gt; normalises email and matric number" time="0.033831188">
+        </testcase>
+        <testcase classname="src/domain/schemas/auth.test.ts" name="registration schema &gt; checks the ID format against the account type" time="0.002298454">
+        </testcase>
+        <testcase classname="src/domain/schemas/auth.test.ts" name="registration schema &gt; only allows student or staff self-registration" time="0.000742951">
+        </testcase>
+        <testcase classname="src/domain/schemas/auth.test.ts" name="registration schema &gt; requires matching passwords with a letter and a number" time="0.001077955">
+        </testcase>
+        <testcase classname="src/domain/schemas/auth.test.ts" name="registration schema &gt; scores password strength" time="0.000863103">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/app/(main)/auth/_components/safe-next.test.ts" timestamp="2026-11-13T08:19:17.500Z" hostname="PSL-TECH-DEV-03" tests="2" failures="0" errors="0" skipped="0" time="0.014728118">
+        <testcase classname="src/app/(main)/auth/_components/safe-next.test.ts" name="safeNext &gt; allows same-site paths" time="0.010414873">
+        </testcase>
+        <testcase classname="src/app/(main)/auth/_components/safe-next.test.ts" name="safeNext &gt; blocks open redirects" time="0.000612113">
+        </testcase>
+    </testsuite>
+</testsuites>

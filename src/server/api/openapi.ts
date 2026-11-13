@@ -171,9 +171,11 @@ function exampleFor(schema: unknown, doc: OpenApiDoc, depth = 0): unknown {
   if (sch.type === "object" || sch.properties) {
     const props = (sch.properties ?? {}) as Record<string, unknown>;
     const required = new Set((sch.required as string[]) ?? []);
+    // Required fields always; optional ones when the schema documents an example for them.
+    const hasExample = (v: unknown) => typeof v === "object" && v !== null && "example" in v;
     return Object.fromEntries(
       Object.entries(props)
-        .filter(([k]) => required.has(k) || depth === 0)
+        .filter(([k, v]) => required.has(k) || depth === 0 || hasExample(v))
         .map(([k, v]) => [k, exampleFor(v, doc, depth + 1)]),
     );
   }

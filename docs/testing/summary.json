@@ -1,0 +1,17 @@
+{
+  "generatedAt": "2026-11-13T08:19:17.678Z",
+  "vitest": {
+    "files": 54,
+    "tests": 98,
+    "passed": 98,
+    "failed": 0
+  },
+  "coverage": {
+    "lines": 65.47,
+    "statements": 65.02,
+    "functions": 56.65,
+    "branches": 53.89,
+    "branchesTrue": 100
+  },
+  "e2e": null
+}
