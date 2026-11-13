@@ -22,7 +22,6 @@ import {
   ImageRun,
   LevelFormat,
   Packer,
-  PageBreak,
   PageNumber,
   Paragraph,
   type ParagraphChild,
