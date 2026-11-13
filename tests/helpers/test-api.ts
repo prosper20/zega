@@ -5,6 +5,7 @@ import { createApi } from "@/server/api/app";
 import * as s from "@/server/db/schema";
 import { seedDatabase } from "@/server/db/seed";
 import type { Database } from "@/server/db/types";
+import { createFanout, parseEvent } from "@/server/realtime/events";
 import { memoryStorage } from "@/server/storage";
 
 import { createTestDb } from "./test-db";
@@ -19,9 +20,16 @@ export async function createTestApi() {
   const ctx = await createTestDb();
   await seedDatabase(ctx.db, { requests: 60, students: 8, now: NOW });
   const storage = memoryStorage();
+  // Real LISTEN/NOTIFY inside PGlite: the database triggers drive these events.
+  const fanout = createFanout();
+  await ctx.client.listen("zega_events", (payload) => {
+    const e = parseEvent(payload);
+    if (e) fanout.emit(e);
+  });
   const app = createApi({
     db: ctx.db,
     storage,
+    events: { subscribe: fanout.subscribe },
     authenticate: async (req) => {
       const id = req.headers.get("x-test-user");
       if (!id) return null;

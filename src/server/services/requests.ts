@@ -490,15 +490,17 @@ export async function transitionRequest(db: Database, user: CurrentUser, idOrRef
         title: `${row.refCode} is resolved`,
         body: "Please confirm the fix or reopen it if the problem is still there.",
         requestId: row.id,
+        data: { refCode: row.refCode, requestTitle: row.title },
         exclude: user.id,
       });
     } else {
       await notify(tx, {
         userIds: [row.requesterId, row.currentAssigneeId],
-        type: "request.status",
+        type: to === "rejected" ? "request.rejected" : "request.status",
         title: `${row.refCode} is now ${pretty}`,
         body: input.note || row.title,
         requestId: row.id,
+        data: { refCode: row.refCode, requestTitle: row.title },
         exclude: user.id,
       });
     }
@@ -509,6 +511,7 @@ export async function transitionRequest(db: Database, user: CurrentUser, idOrRef
         title: `${row.refCode} was reopened`,
         body: input.note ?? row.title,
         requestId: row.id,
+        data: { refCode: row.refCode, requestTitle: row.title },
         exclude: user.id,
       });
     }
@@ -572,6 +575,7 @@ export async function assignRequest(db: Database, user: CurrentUser, idOrRef: st
       title: `New job: ${row.refCode}`,
       body: row.title,
       requestId: row.id,
+      data: { refCode: row.refCode, requestTitle: row.title },
       exclude: user.id,
     });
     await notify(tx, {
@@ -580,6 +584,7 @@ export async function assignRequest(db: Database, user: CurrentUser, idOrRef: st
       title: `${row.refCode} has been assigned`,
       body: `${officer.name} will handle your request.`,
       requestId: row.id,
+      data: { refCode: row.refCode, requestTitle: row.title },
       exclude: user.id,
     });
     if (row.currentAssigneeId) {
@@ -589,6 +594,7 @@ export async function assignRequest(db: Database, user: CurrentUser, idOrRef: st
         title: `${row.refCode} was reassigned`,
         body: row.title,
         requestId: row.id,
+        data: { refCode: row.refCode, requestTitle: row.title },
         exclude: user.id,
       });
     }
@@ -644,6 +650,7 @@ export async function addComment(
       title: `New ${input.internal ? "internal note" : "comment"} on ${row.refCode}`,
       body: input.body.slice(0, 140),
       requestId: row.id,
+      data: { refCode: row.refCode, requestTitle: row.title },
       exclude: user.id,
     });
     return inserted;

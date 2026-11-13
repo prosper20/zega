@@ -1,4 +1,5 @@
 import type { Database } from "@/server/db/types";
+import type { EventBus } from "@/server/realtime/events";
 import type { CurrentUser } from "@/server/session-types";
 import type { Storage } from "@/server/storage";
 
@@ -9,12 +10,14 @@ export type ApiDeps = {
   db: Database;
   authenticate: Authenticate;
   storage: Storage;
+  events: EventBus;
 };
 
 export type AppEnv = {
   Variables: {
     db: Database;
     storage: Storage;
+    events: EventBus;
     user: CurrentUser | null;
     requestId: string;
   };

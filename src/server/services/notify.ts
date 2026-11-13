@@ -1,7 +1,12 @@
+import { createElement } from "react";
+
 import { eq, inArray } from "drizzle-orm";
 
+import { afterCommit } from "@/server/db/actor";
 import * as s from "@/server/db/schema";
 import type { DbOrTx } from "@/server/db/types";
+import { sendEmail } from "@/server/email";
+import { NotificationEmail } from "@/server/email/templates";
 
 export type NotificationInput = {
   userIds: (string | null | undefined)[];
@@ -9,14 +14,30 @@ export type NotificationInput = {
   title: string;
   body: string;
   requestId?: string;
-  data?: Record<string, unknown>;
+  data?: Record<string, unknown> & { refCode?: string; requestTitle?: string };
   /** The user who caused the event never notifies themselves. */
   exclude?: string | null;
 };
 
+/** Events important enough to also email (everything else is in-app only). */
+const EMAIL_TYPES = new Set([
+  "request.assigned",
+  "request.resolved",
+  "request.reopened",
+  "request.rejected",
+  "sla.breach",
+  "request.auto_closed",
+]);
+
+const CTA: Record<string, string> = {
+  "request.assigned": "Open the job",
+  "request.resolved": "Confirm the fix",
+  "sla.breach": "Review the request",
+};
+
 /**
- * Writes in-app notifications. An insert trigger NOTIFYs the realtime channel; email delivery
- * hooks in here too (Phase 7).
+ * Writes in-app notifications (an insert trigger NOTIFYs the realtime channel) and, for important
+ * events, emails recipients who have not opted out. Emails are sent only after the transaction commits.
  */
 export async function notify(tx: DbOrTx, n: NotificationInput) {
   const recipients = [...new Set(n.userIds.filter((u): u is string => Boolean(u) && u !== n.exclude))];
@@ -31,18 +52,40 @@ export async function notify(tx: DbOrTx, n: NotificationInput) {
       data: n.data,
     })),
   );
+
+  if (!EMAIL_TYPES.has(n.type)) return;
+  const people = await tx
+    .select({
+      id: s.users.id,
+      email: s.users.email,
+      name: s.users.name,
+      optIn: s.users.emailNotifications,
+      banned: s.users.banned,
+    })
+    .from(s.users)
+    .where(inArray(s.users.id, recipients));
+  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
+  const link = n.data?.refCode ? `${appUrl}/dashboard/requests/${n.data.refCode}` : `${appUrl}/dashboard/notifications`;
+  for (const p of people.filter((x) => x.optIn && !x.banned)) {
+    afterCommit(() =>
+      sendEmail({
+        to: p.email,
+        subject: `[ZEGA] ${n.title}`,
+        react: createElement(NotificationEmail, {
+          heading: n.title,
+          body: n.body,
+          refCode: n.data?.refCode,
+          title: n.data?.requestTitle,
+          ctaLabel: CTA[n.type] ?? "View request",
+          ctaUrl: link,
+          recipientName: p.name,
+        }),
+      }),
+    );
+  }
 }
 
 export async function adminIds(tx: DbOrTx) {
   const rows = await tx.select({ id: s.users.id }).from(s.users).where(eq(s.users.role, "admin"));
   return rows.map((r) => r.id);
-}
-
-export async function activeUserIds(tx: DbOrTx, ids: string[]) {
-  if (!ids.length) return [];
-  const rows = await tx
-    .select({ id: s.users.id, banned: s.users.banned })
-    .from(s.users)
-    .where(inArray(s.users.id, ids));
-  return rows.filter((r) => !r.banned).map((r) => r.id);
 }

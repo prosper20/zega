@@ -32,6 +32,8 @@ export const users = pgTable(
     department: text(),
     phone: text(),
     matricOrStaffNo: text().unique(),
+    /** Opt-out of email notifications (in-app notifications are always on). */
+    emailNotifications: boolean().notNull().default(true),
   },
   (t) => [index("users_role_idx").on(t.role)],
 );

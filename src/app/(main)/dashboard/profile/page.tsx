@@ -4,6 +4,7 @@ import { requireUser } from "@/server/session";
 
 import { PageHeader } from "../_components/page-header";
 import { ChangePasswordCard } from "./_components/change-password-card";
+import { EmailPreferencesCard } from "./_components/email-preferences-card";
 import { ProfileDetails } from "./_components/profile-details";
 import { SessionsCard } from "./_components/sessions-card";
 
@@ -17,6 +18,7 @@ export default async function ProfilePage() {
       <div className="grid gap-6 lg:grid-cols-[1fr_1.4fr]">
         <div className="flex flex-col gap-6">
           <ProfileDetails user={user} />
+          <EmailPreferencesCard />
           <ChangePasswordCard />
         </div>
         <SessionsCard />

@@ -8,6 +8,7 @@ import { handleError, problemResponse, zodErrors } from "./problem";
 import { auditRoutes } from "./routes/audit";
 import { catalogRoutes } from "./routes/catalog";
 import { notificationRoutes } from "./routes/notifications";
+import { realtimeRoutes } from "./routes/realtime";
 import { reportRoutes } from "./routes/reports";
 import { requestRoutes } from "./routes/requests";
 import { systemRoutes } from "./routes/system";
@@ -31,6 +32,7 @@ export function createApi(deps: ApiDeps) {
     c.set("requestId", requestId);
     c.set("db", deps.db);
     c.set("storage", deps.storage);
+    c.set("events", deps.events);
     c.set("user", await deps.authenticate(c.req.raw).catch(() => null));
     await next();
     c.header("X-Request-Id", requestId);
@@ -44,6 +46,7 @@ export function createApi(deps: ApiDeps) {
   notificationRoutes(app);
   reportRoutes(app);
   auditRoutes(app);
+  realtimeRoutes(app);
 
   registerDocs(app);
   app.doc31("/openapi.json", OPENAPI_CONFIG);

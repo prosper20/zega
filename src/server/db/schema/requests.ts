@@ -50,6 +50,8 @@ export const serviceRequests = pgTable(
     firstResponseAt: timestamp({ withTimezone: true }),
     resolvedAt: timestamp({ withTimezone: true }),
     closedAt: timestamp({ withTimezone: true }),
+    /** Set when the SLA sweep has escalated a resolution breach (so it is escalated once). */
+    slaEscalatedAt: timestamp({ withTimezone: true }),
     createdAt: timestamp({ withTimezone: true }).notNull().defaultNow(),
     updatedAt: timestamp({ withTimezone: true })
       .notNull()

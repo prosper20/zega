@@ -1,16 +1,18 @@
-import { Bell } from "lucide-react";
+import type { Metadata } from "next";
 
-import { Placeholder } from "@/app/(main)/dashboard/_components/placeholder";
+import { PageHeader } from "../_components/page-header";
+import { NotificationsList } from "./_components/notifications-list";
 
-export const metadata = { title: "Notifications | ZEGA" };
+export const metadata: Metadata = { title: "Notifications | ZEGA" };
 
 export default function NotificationsPage() {
   return (
-    <Placeholder
-      title="Notifications"
-      description="Updates on requests you are involved in."
-      icon={Bell}
-      message="You are all caught up."
-    />
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title="Notifications"
+        description="Updates on requests you are involved in. New ones appear instantly."
+      />
+      <NotificationsList />
+    </div>
   );
 }

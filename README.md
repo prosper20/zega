@@ -29,6 +29,18 @@ npm run dev
 | `npm test` | Unit, database (PGlite) and component tests |
 | `npm run test:e2e` | Playwright end-to-end tests |
 
+### Optional services
+
+| Variable | Purpose |
+| --- | --- |
+| `RESEND_API_KEY`, `EMAIL_FROM` | Email notifications via Resend (logged to the console when unset) |
+| `BLOB_READ_WRITE_TOKEN` | Photo storage on Vercel Blob (local `public/uploads` when unset) |
+| `CRON_SECRET` | Protects `/api/cron/maintenance` (Vercel Cron sends it automatically) |
+
+Live updates use Server-Sent Events backed by Postgres `LISTEN/NOTIFY`. The SLA escalation and
+auto-close sweep runs from the daily Vercel Cron and, opportunistically, at most every 5 minutes
+whenever someone is connected to live updates.
+
 ### Demo accounts
 
 All demo accounts use the password `Zega@2026!`.

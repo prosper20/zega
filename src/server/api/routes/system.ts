@@ -1,12 +1,13 @@
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
-import { sql } from "drizzle-orm";
+import { eq, sql } from "drizzle-orm";
 
 import { ROLE_SLUGS } from "@/domain/constants";
 import { ROLE_PERMISSIONS } from "@/domain/permissions";
+import * as s from "@/server/db/schema";
 
 import type { AppEnv } from "../context";
 import { authed, requireUser } from "../guard";
-import { errorResponses, json } from "../schemas/common";
+import { errorResponses, json, jsonBody } from "../schemas/common";
 
 export function systemRoutes(app: OpenAPIHono<AppEnv>) {
   app.openapi(
@@ -75,6 +76,7 @@ export function systemRoutes(app: OpenAPIHono<AppEnv>) {
               department: z.string().nullable(),
               matricOrStaffNo: z.string().nullable(),
               permissions: z.array(z.string()),
+              emailNotifications: z.boolean(),
             })
             .openapi("Me"),
           "The current user",
@@ -84,6 +86,11 @@ export function systemRoutes(app: OpenAPIHono<AppEnv>) {
     }),
     async (c) => {
       const u = requireUser(c);
+      const [prefs] = await c
+        .get("db")
+        .select({ emailNotifications: s.users.emailNotifications })
+        .from(s.users)
+        .where(eq(s.users.id, u.id));
       return c.json(
         {
           id: u.id,
@@ -93,9 +100,28 @@ export function systemRoutes(app: OpenAPIHono<AppEnv>) {
           department: u.department,
           matricOrStaffNo: u.matricOrStaffNo,
           permissions: [...ROLE_PERMISSIONS[u.role]],
+          emailNotifications: prefs?.emailNotifications ?? true,
         },
         200,
       );
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "patch",
+      path: "/me",
+      tags: ["System"],
+      summary: "Update your preferences",
+      security: authed,
+      request: { body: jsonBody(z.object({ emailNotifications: z.boolean() })) },
+      responses: { 200: json(z.object({ emailNotifications: z.boolean() }), "Saved"), ...errorResponses },
+    }),
+    async (c) => {
+      const u = requireUser(c);
+      const { emailNotifications } = c.req.valid("json");
+      await c.get("db").update(s.users).set({ emailNotifications }).where(eq(s.users.id, u.id));
+      return c.json({ emailNotifications }, 200);
     },
   );
 }
