@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { EllipsisVertical, LogOut, UserRound } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -15,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
-import { getInitials } from "@/lib/utils";
+import { UserAvatar } from "@/components/user-avatar";
 
 import { useSignOut } from "../sign-out";
 import { ROLE_LABEL, type ShellUser } from "../user-types";
@@ -24,14 +23,7 @@ export function NavUser({ user }: { readonly user: ShellUser }) {
   const { isMobile } = useSidebar();
   const signOut = useSignOut();
 
-  const avatar = (
-    <Avatar className="h-8 w-8 rounded-lg">
-      <AvatarImage src={user.image ?? undefined} alt={user.name} />
-      <AvatarFallback className="bg-sidebar-primary text-sidebar-primary-foreground rounded-lg text-xs font-semibold">
-        {getInitials(user.name)}
-      </AvatarFallback>
-    </Avatar>
-  );
+  const avatar = <UserAvatar id={user.id} userRole={user.role} name={user.name} size={32} />;
 
   return (
     <SidebarMenu>

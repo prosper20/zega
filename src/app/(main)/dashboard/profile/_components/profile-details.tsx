@@ -1,7 +1,6 @@
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { getInitials } from "@/lib/utils";
+import { UserAvatar } from "@/components/user-avatar";
 import type { CurrentUser } from "@/server/session";
 
 import { ROLE_LABEL } from "../../_components/user-types";
@@ -16,11 +15,7 @@ export function ProfileDetails({ user }: { user: CurrentUser }) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center gap-4">
-        <Avatar className="size-14 rounded-xl">
-          <AvatarFallback className="bg-primary text-primary-foreground rounded-xl text-lg font-semibold">
-            {getInitials(user.name)}
-          </AvatarFallback>
-        </Avatar>
+        <UserAvatar id={user.id} userRole={user.role} name={user.name} size={56} />
         <div className="space-y-1">
           <CardTitle className="text-lg">{user.name}</CardTitle>
           <Badge variant="secondary">{ROLE_LABEL[user.role]}</Badge>

@@ -49,7 +49,7 @@ beforeEach(() => {
 describe("UsersManager", () => {
   it("lists users with roles and officer specialties, and protects the current admin", async () => {
     renderWithProviders(<UsersManager currentUserId="u-admin" />);
-    expect(await screen.findByText("Chinedu Okeke")).toBeInTheDocument();
+    expect(await screen.findByText("Chinedu Okeke", { selector: "div" })).toBeInTheDocument();
     expect(screen.getByText("Plumbing")).toBeInTheDocument();
     expect(screen.queryByRole("button", { name: "Actions for Adaeze Okafor" })).not.toBeInTheDocument();
   });

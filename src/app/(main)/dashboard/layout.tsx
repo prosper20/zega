@@ -22,7 +22,13 @@ export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default async function Layout({ children }: Readonly<{ children: ReactNode }>) {
   const current = await requireUser();
-  const user: ShellUser = { name: current.name, email: current.email, image: current.image, role: current.role };
+  const user: ShellUser = {
+    id: current.id,
+    name: current.name,
+    email: current.email,
+    image: current.image,
+    role: current.role,
+  };
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
   const [variant, collapsible] = await Promise.all([

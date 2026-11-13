@@ -34,6 +34,7 @@ import { Label } from "@/components/ui/label";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { UserAvatar } from "@/components/user-avatar";
 import { ROLE_SLUGS, type RoleSlug } from "@/domain/constants";
 import { ROLE_INFO } from "@/domain/permissions";
 import { unwrap } from "@/lib/api-client";
@@ -155,8 +156,13 @@ export function UsersManager({ currentUserId }: { currentUserId: string }) {
               : users.data?.data.map((u) => (
                   <TableRow key={u.id} className={u.banned ? "opacity-60" : undefined}>
                     <TableCell className="pl-4">
-                      <div className="font-medium">{u.name}</div>
-                      <div className="text-muted-foreground text-xs">{u.email}</div>
+                      <div className="flex items-center gap-3">
+                        <UserAvatar id={u.id} userRole={u.role} name={u.name} size={32} />
+                        <div>
+                          <div className="font-medium">{u.name}</div>
+                          <div className="text-muted-foreground text-xs">{u.email}</div>
+                        </div>
+                      </div>
                     </TableCell>
                     <TableCell>
                       <Badge variant={u.role === "admin" ? "default" : "secondary"}>{ROLE_INFO[u.role].label}</Badge>

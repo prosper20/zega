@@ -12,6 +12,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Input } from "@/components/ui/input";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
 import { Skeleton } from "@/components/ui/skeleton";
+import { UserAvatar } from "@/components/user-avatar";
 import { REQUEST_PRIORITIES, type RequestPriority } from "@/domain/constants";
 import { unwrap } from "@/lib/api-client";
 import { errorMessage, keys, type OfficerSuggestion, type RequestDetail, useRequest } from "@/lib/queries";
@@ -137,6 +138,7 @@ export function AssignPanel({ initial }: { initial: RequestDetail }) {
                       className={cn("rounded-lg border p-3", i === 0 && "border-primary/40 bg-accent/50")}
                     >
                       <div className="flex items-center gap-2">
+                        <UserAvatar id={o.officer.id} userRole="officer" name={o.officer.name} size={28} />
                         <div className="min-w-0 flex-1">
                           <div className="flex items-center gap-1.5 text-sm font-medium">
                             {o.officer.name}

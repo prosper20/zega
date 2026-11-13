@@ -4,7 +4,6 @@ import Link from "next/link";
 
 import { Bell, LogOut, UserRound } from "lucide-react";
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import {
   DropdownMenu,
@@ -15,7 +14,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getInitials } from "@/lib/utils";
+import { UserAvatar } from "@/components/user-avatar";
 
 import { useSignOut } from "../sign-out";
 import { ROLE_LABEL, type ShellUser } from "../user-types";
@@ -25,13 +24,8 @@ export function UserMenu({ user }: { user: ShellUser }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button type="button" aria-label="Account menu" className="rounded-lg">
-          <Avatar className="size-8 rounded-lg">
-            <AvatarImage src={user.image ?? undefined} alt={user.name} />
-            <AvatarFallback className="bg-primary text-primary-foreground rounded-lg text-xs font-semibold">
-              {getInitials(user.name)}
-            </AvatarFallback>
-          </Avatar>
+        <button type="button" aria-label="Account menu" className="rounded-full">
+          <UserAvatar id={user.id} userRole={user.role} name={user.name} size={32} />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="min-w-60 rounded-lg" side="bottom" align="end" sideOffset={6}>

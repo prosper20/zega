@@ -5,10 +5,11 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 
 import { formatDistanceToNow } from "date-fns";
-import { ArrowLeft, Copy, MapPin, ThumbsUp, UserRound, Wrench } from "lucide-react";
+import { ArrowLeft, Copy, MapPin, ThumbsUp, Wrench } from "lucide-react";
 import { toast } from "sonner";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { UserAvatar } from "@/components/user-avatar";
 import { type RequestDetail, useRequest, useTimeline } from "@/lib/queries";
 
 import { ActionsPanel } from "./actions-panel";
@@ -125,15 +126,30 @@ export function RequestView({
               <CardTitle className="text-base">People</CardTitle>
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
-              <div className="flex items-center gap-2">
-                <UserRound className="text-muted-foreground size-4" />
-                <span className="text-muted-foreground">Reported by</span>
-                <span className="ml-auto font-medium">{request.requester.name}</span>
+              <div className="flex items-center gap-3">
+                <UserAvatar
+                  id={request.requester.id}
+                  role={request.requester.role ?? "student"}
+                  name={request.requester.name}
+                  size={32}
+                />
+                <div className="min-w-0">
+                  <div className="truncate font-medium">{request.requester.name}</div>
+                  <div className="text-muted-foreground text-xs">Reported this request</div>
+                </div>
               </div>
-              <div className="flex items-center gap-2">
-                <Wrench className="text-muted-foreground size-4" />
-                <span className="text-muted-foreground">Officer</span>
-                <span className="ml-auto font-medium">{request.assignee?.name ?? "Not assigned yet"}</span>
+              <div className="flex items-center gap-3">
+                {request.assignee ? (
+                  <UserAvatar id={request.assignee.id} userRole="officer" name={request.assignee.name} size={32} />
+                ) : (
+                  <span className="bg-muted text-muted-foreground flex size-8 items-center justify-center rounded-full">
+                    <Wrench className="size-4" />
+                  </span>
+                )}
+                <div className="min-w-0">
+                  <div className="truncate font-medium">{request.assignee?.name ?? "Not assigned yet"}</div>
+                  <div className="text-muted-foreground text-xs">Maintenance officer</div>
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <ThumbsUp className="text-muted-foreground size-4" />
