@@ -6,6 +6,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import type { RoleSlug } from "@/domain/constants";
 import { requireUser } from "@/server/session";
 
+import { OfficerHome } from "./_components/home/officer-home";
 import { RequesterHome } from "./_components/home/requester-home";
 import { PageHeader } from "./_components/page-header";
 
@@ -66,6 +67,8 @@ export default async function DashboardHome() {
       <PageHeader title={`${greeting}, ${user.name.split(" ")[0]}`} description="Report it. Track it. Resolve it." />
       {user.role === "student" || user.role === "staff" ? (
         <RequesterHome user={user} />
+      ) : user.role === "officer" ? (
+        <OfficerHome user={user} />
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {QUICK_LINKS[user.role].map((l) => (

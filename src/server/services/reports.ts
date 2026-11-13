@@ -148,3 +148,37 @@ const csvCell = (v: unknown) => {
 export function toCsv(header: string[], rows: unknown[][]) {
   return `﻿${[header, ...rows].map((r) => r.map(csvCell).join(",")).join("\r\n")}\r\n`;
 }
+
+/** Workload snapshot for one maintenance officer (their dashboard). */
+export async function officerSummary(db: Database, officerId: string) {
+  const [r] = rowsOf<{
+    open: number;
+    in_progress: number;
+    overdue: number;
+    due_soon: number;
+    resolved_week: number;
+    avg_rating: number | null;
+    avg_hours: number | null;
+  }>(
+    await db.execute(sql`
+      select
+        count(*) filter (where r.status in ${OPEN})::int as open,
+        count(*) filter (where r.status = 'in_progress')::int as in_progress,
+        count(*) filter (where r.status in ${OPEN} and now() > r.resolution_due_at)::int as overdue,
+        count(*) filter (where r.status in ${OPEN} and r.resolution_due_at between now() and now() + interval '24 hours')::int as due_soon,
+        count(*) filter (where r.resolved_at > now() - interval '7 days')::int as resolved_week,
+        (select round(avg(t.score)::numeric, 2)::float from ratings t join service_requests x on x.id = t.request_id where x.current_assignee_id = ${officerId}) as avg_rating,
+        round(avg(extract(epoch from r.resolved_at - r.created_at) / 3600) filter (where r.resolved_at is not null)::numeric, 1)::float as avg_hours
+      from service_requests r
+      where r.current_assignee_id = ${officerId} and r.deleted_at is null`),
+  );
+  return {
+    open: r.open,
+    inProgress: r.in_progress,
+    overdue: r.overdue,
+    dueSoon: r.due_soon,
+    resolvedThisWeek: r.resolved_week,
+    avgRating: r.avg_rating,
+    avgResolutionHours: r.avg_hours,
+  };
+}

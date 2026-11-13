@@ -314,8 +314,29 @@ export async function getRequest(db: Database, user: CurrentUser, idOrRef: strin
       comment: true,
       internalNotes: can(user.role, "comment:internal"),
       vote: can(user.role, "request:vote") && !isOwner && open,
+      upload: uploadKinds(user, row, isOwner, open),
     },
   };
+}
+
+/** Photo kinds the viewer may add now (mirrors the checks in addAttachment). */
+function uploadKinds(
+  user: CurrentUser,
+  row: Row,
+  isOwner: boolean,
+  open: boolean,
+): ("evidence" | "before" | "after")[] {
+  if (user.role === "admin") return ["evidence", "before", "after"];
+  const kinds: ("evidence" | "before" | "after")[] = [];
+  if (isOwner && open) kinds.push("evidence");
+  if (
+    user.role === "officer" &&
+    row.currentAssigneeId === user.id &&
+    ["assigned", "in_progress", "on_hold", "resolved"].includes(row.status)
+  ) {
+    kinds.push("before", "after");
+  }
+  return kinds;
 }
 
 /* ---------------------------------------------------------------- writes */

@@ -331,3 +331,26 @@ describe("photo attachments", () => {
     expect((await upload(student, mine.id, JPEG, "after")).status).toBe(403);
   });
 });
+
+describe("officer tools", () => {
+  it("summarises an officer's workload and refuses other roles", async () => {
+    const res = await api.call(officer, "GET", "/reports/officer");
+    expect(res.status).toBe(200);
+    expect(res.data).toMatchObject({
+      open: expect.any(Number),
+      overdue: expect.any(Number),
+      dueSoon: expect.any(Number),
+    });
+    expect((await api.call(student, "GET", "/reports/officer")).status).toBe(403);
+  });
+
+  it("tells each viewer which photo kinds they may upload", async () => {
+    const job = (await api.call(officer, "GET", "/requests?assignee=me&status=in_progress&limit=1")).data.data[0];
+    if (job) {
+      const asOfficer = await api.call(officer, "GET", `/requests/${job.id}`);
+      expect(asOfficer.data.can.upload).toEqual(["before", "after"]);
+    }
+    const mine = (await api.call(student, "GET", "/requests?scope=mine&open=true&limit=1")).data.data[0];
+    expect((await api.call(student, "GET", `/requests/${mine.id}`)).data.can.upload).toEqual(["evidence"]);
+  });
+});

@@ -2,11 +2,11 @@ import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 
 import { STATUS_LABELS } from "@/domain/constants";
 import { formatDuration } from "@/domain/sla";
-import { summary, toCsv } from "@/server/services/reports";
+import { officerSummary, summary, toCsv } from "@/server/services/reports";
 import { listRequests } from "@/server/services/requests";
 
 import type { AppEnv } from "../context";
-import { authed, requirePermission, requireUser } from "../guard";
+import { authed, requirePermission, requireRoleIn, requireUser } from "../guard";
 import { errorResponses, json } from "../schemas/common";
 import { RequestListQuery } from "../schemas/requests";
 
@@ -79,6 +79,38 @@ export function reportRoutes(app: OpenAPIHono<AppEnv>) {
       const to = q.to ? new Date(q.to.getTime() + DAY - 1) : new Date();
       const from = q.from ?? new Date(to.getTime() - 30 * DAY);
       return c.json(await summary(c.get("db"), { from, to }), 200);
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "get",
+      path: "/reports/officer",
+      tags: ["Reports"],
+      summary: "Your workload (officers)",
+      description: "Open, in-progress, overdue and due-soon jobs, plus resolutions this week and average rating.",
+      security: authed,
+      responses: {
+        200: json(
+          z
+            .object({
+              open: z.number().int(),
+              inProgress: z.number().int(),
+              overdue: z.number().int(),
+              dueSoon: z.number().int(),
+              resolvedThisWeek: z.number().int(),
+              avgRating: z.number().nullable(),
+              avgResolutionHours: z.number().nullable(),
+            })
+            .openapi("OfficerSummary"),
+          "Workload summary",
+        ),
+        ...errorResponses,
+      },
+    }),
+    async (c) => {
+      const user = requireRoleIn(c, "officer");
+      return c.json(await officerSummary(c.get("db"), user.id), 200);
     },
   );
 

@@ -72,6 +72,7 @@ export const RequestDetailSchema = RequestSummarySchema.extend({
   attachments: z.array(AttachmentSchema),
   availableTransitions: z.array(TransitionOptionSchema),
   can: z.object({
+    upload: z.array(z.enum(["evidence", "before", "after"])),
     edit: z.boolean(),
     assign: z.boolean(),
     comment: z.boolean(),

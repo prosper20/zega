@@ -16,6 +16,7 @@ import { CategoryIcon, PriorityBadge, SlaBadge, StatusBadge } from "./badges";
 import { CommentBox } from "./comment-box";
 import { EditRequestDialog } from "./edit-dialog";
 import { PhotoGallery } from "./photo-gallery";
+import { PhotoUploader } from "./photo-uploader";
 import { SlaCard as SlaCardLazy } from "./sla-card";
 import { RequestStepper } from "./stepper";
 import { Timeline } from "./timeline";
@@ -98,6 +99,7 @@ export function RequestView({
                 </p>
               )}
               <PhotoGallery photos={request.attachments} />
+              <PhotoUploader request={request} />
             </CardContent>
           </Card>
 
