@@ -9,7 +9,7 @@ import { requireRole } from "@/server/session";
 import { PageHeader } from "../_components/page-header";
 import { MyRequests } from "./_components/my-requests";
 
-export const metadata: Metadata = { title: "My requests | ZEGA" };
+export const metadata: Metadata = { title: "My requests" };
 
 export default async function MyRequestsPage() {
   await requireRole("student", "staff");

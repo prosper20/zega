@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "../../_components/page-header";
 import { LocationsManager } from "./_components/locations-manager";
 
-export const metadata: Metadata = { title: "Locations & QR | ZEGA" };
+export const metadata: Metadata = { title: "Locations & QR" };
 
 export default function AdminLocationsPage() {
   return (

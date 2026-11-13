@@ -5,7 +5,7 @@ import type { Metadata } from "next";
 
 import { Button } from "@/components/ui/button";
 
-export const metadata: Metadata = { title: "Access denied | ZEGA", robots: { index: false, follow: false } };
+export const metadata: Metadata = { title: "Access denied", robots: { index: false, follow: false } };
 
 export default function UnauthorizedPage() {
   return (

@@ -7,7 +7,7 @@ import { requireRole } from "@/server/session";
 import { PageHeader } from "../../_components/page-header";
 import { ReportWizard } from "./_components/report-wizard";
 
-export const metadata: Metadata = { title: "Report an issue | ZEGA" };
+export const metadata: Metadata = { title: "Report an issue" };
 
 export default async function NewRequestPage({
   searchParams,

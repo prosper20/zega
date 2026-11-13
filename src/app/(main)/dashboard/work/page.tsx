@@ -6,7 +6,7 @@ import { PageHeader } from "../_components/page-header";
 import { InstallAppButton } from "./_components/install-app-button";
 import { WorkBoard } from "./_components/work-board";
 
-export const metadata: Metadata = { title: "My work orders | ZEGA" };
+export const metadata: Metadata = { title: "My work orders" };
 
 export default async function WorkPage() {
   const user = await requireRole("officer");

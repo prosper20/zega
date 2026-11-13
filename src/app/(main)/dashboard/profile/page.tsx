@@ -8,7 +8,7 @@ import { EmailPreferencesCard } from "./_components/email-preferences-card";
 import { ProfileDetails } from "./_components/profile-details";
 import { SessionsCard } from "./_components/sessions-card";
 
-export const metadata: Metadata = { title: "Profile & sessions | ZEGA" };
+export const metadata: Metadata = { title: "Profile & sessions" };
 
 export default async function ProfilePage() {
   const user = await requireUser();

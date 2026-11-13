@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import { cookies } from "next/headers";
 
 import { cn } from "cn";
+import type { Metadata } from "next";
 
 import { AppSidebar } from "@/app/(main)/dashboard/_components/sidebar/app-sidebar";
 import { LiveUpdates } from "@/components/live/live-updates";
@@ -15,6 +16,9 @@ import { requireUser } from "@/server/session";
 import { SearchDialog } from "./_components/header/search-dialog";
 import { UserMenu } from "./_components/header/user-menu";
 import type { ShellUser } from "./_components/user-types";
+
+/** The app behind sign-in is private: keep every dashboard page out of search engines. */
+export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default async function Layout({ children }: Readonly<{ children: ReactNode }>) {
   const current = await requireUser();

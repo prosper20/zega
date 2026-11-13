@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "../../_components/page-header";
 import { ReportBuilder } from "./_components/report-builder";
 
-export const metadata: Metadata = { title: "Reports | ZEGA" };
+export const metadata: Metadata = { title: "Reports" };
 
 export default function AdminReportsPage() {
   return (

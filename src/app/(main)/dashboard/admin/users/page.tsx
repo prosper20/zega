@@ -6,7 +6,7 @@ import { PageHeader } from "../../_components/page-header";
 import { PermissionMatrix } from "./_components/permission-matrix";
 import { UsersManager } from "./_components/users-manager";
 
-export const metadata: Metadata = { title: "Users & roles | ZEGA" };
+export const metadata: Metadata = { title: "Users & roles" };
 
 export default async function AdminUsersPage() {
   const me = await requireRole("admin");

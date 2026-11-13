@@ -10,7 +10,7 @@ import { requireRole } from "@/server/session";
 
 import { PrintButton } from "./print-button";
 
-export const metadata: Metadata = { title: "QR stickers | ZEGA", robots: { index: false } };
+export const metadata: Metadata = { title: "QR stickers", robots: { index: false, follow: false } };
 
 /**
  * Printable A4 sheet of "report a problem here" stickers. Each QR encodes the short /r/<token>

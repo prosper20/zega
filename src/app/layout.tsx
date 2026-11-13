@@ -15,6 +15,9 @@ import { PreferencesStoreProvider } from "@/stores/preferences/preferences-provi
 import "./globals.css";
 
 export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#001e40" },
     { media: "(prefers-color-scheme: dark)", color: "#021021" },
@@ -23,15 +26,39 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   metadataBase: new URL(APP_CONFIG.url),
-  applicationName: APP_CONFIG.name,
-  title: APP_CONFIG.meta.title,
+  title: { default: APP_CONFIG.meta.title, template: `%s | ${APP_CONFIG.name}` },
   description: APP_CONFIG.meta.description,
+  applicationName: APP_CONFIG.name,
+  keywords: [
+    "university maintenance",
+    "campus facilities",
+    "service requests",
+    "work orders",
+    "hostel maintenance",
+    "fault reporting",
+    "SLA tracking",
+    "QR code reporting",
+  ],
+  authors: [{ name: APP_CONFIG.name }],
+  creator: APP_CONFIG.name,
+  category: "productivity",
+  alternates: { canonical: "/" },
+  formatDetection: { telephone: false, email: false, address: false },
   appleWebApp: { capable: true, title: APP_CONFIG.name, statusBarStyle: "black-translucent" },
   openGraph: {
     type: "website",
     siteName: APP_CONFIG.name,
-    locale: "en_US",
+    locale: "en_GB",
+    url: "/",
+    title: APP_CONFIG.meta.title,
+    description: APP_CONFIG.meta.description,
   },
+  twitter: {
+    card: "summary_large_image",
+    title: APP_CONFIG.meta.title,
+    description: APP_CONFIG.meta.description,
+  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
@@ -39,7 +66,7 @@ export default function RootLayout({ children }: Readonly<{ children: ReactNode 
     PREFERENCE_DEFAULTS;
   return (
     <html
-      lang="en"
+      lang="en-GB"
       data-theme-mode={theme_mode}
       data-theme-preset={theme_preset}
       data-content-layout={content_layout}

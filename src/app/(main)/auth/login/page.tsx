@@ -8,7 +8,7 @@ import { LoginForm } from "../_components/login-form";
 import { safeNext } from "../_components/safe-next";
 
 export const metadata: Metadata = {
-  title: `Log in | ${APP_CONFIG.name}`,
+  title: "Log in",
   description: "Log in to report, track and resolve campus maintenance requests.",
   alternates: { canonical: "/auth/login" },
 };

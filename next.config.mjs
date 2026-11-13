@@ -12,6 +12,8 @@ const nextConfig = {
   outputFileTracingRoot: projectRoot,
   // Server-only PDF renderer: load from node_modules instead of bundling.
   serverExternalPackages: ["@react-pdf/renderer"],
+  // Fonts read from disk by the Open Graph image routes.
+  outputFileTracingIncludes: { "/**/*": ["./src/lib/og-fonts/**"] },
   async headers() {
     return [
       {

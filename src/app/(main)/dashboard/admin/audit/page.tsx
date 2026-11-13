@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "../../_components/page-header";
 import { AuditLog } from "./_components/audit-log";
 
-export const metadata: Metadata = { title: "Audit trail | ZEGA" };
+export const metadata: Metadata = { title: "Audit trail" };
 
 export default function AdminAuditPage() {
   return (

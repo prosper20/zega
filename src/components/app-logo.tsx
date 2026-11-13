@@ -127,3 +127,34 @@ export function ZegaWordmark({
     </svg>
   );
 }
+
+/**
+ * The ZEGA wordmark as plain SVG elements with explicit colours, for image renderers
+ * (next/og Open Graph images) that cannot use React components or currentColor.
+ */
+export function wordmarkSvg(color: string, ringColor: string, width: number) {
+  const thin = 3.4;
+  const thick = 5.8;
+  const height = Math.round((width * 31) / 118);
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="3 5 118 31" width={width} height={height} aria-hidden="true">
+      <path d="M6 13 V8.5 H23" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <path d="M22.2 9 L9.2 31" fill="none" stroke={color} strokeWidth={thick} strokeLinejoin="round" />
+      <path d="M8 31 H25 V27" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <path d="M36 8.5 V31" fill="none" stroke={color} strokeWidth={thick} strokeLinejoin="round" />
+      <path d="M31.5 31 H49" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <path d="M36 8.5 H51 V12.5" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <path d="M36 19.8 H46" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <path d="M68 8.5 V31" fill="none" stroke={color} strokeWidth={thick} strokeLinejoin="round" />
+      <path d="M68 8.5 H85 V13" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <path d="M63.5 31 H85" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <path d="M85 31.5 V20" fill="none" stroke={color} strokeWidth={thick} strokeLinejoin="round" />
+      <path d="M77 20 H85" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <path d="M96 31 L105.5 8.5 L115 31" fill="none" stroke={color} strokeWidth={thick} strokeLinejoin="round" />
+      <path d="M100 22.5 H111" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <path d="M92 31 H99" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <path d="M112 31 H119" fill="none" stroke={color} strokeWidth={thin} strokeLinejoin="round" />
+      <circle cx="52.3" cy="31" r="3.3" fill="none" stroke={ringColor} strokeWidth={3.2} />
+    </svg>
+  );
+}

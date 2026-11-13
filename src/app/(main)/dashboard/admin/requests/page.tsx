@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "../../_components/page-header";
 import { RequestsTable } from "./_components/requests-table";
 
-export const metadata: Metadata = { title: "All requests | ZEGA" };
+export const metadata: Metadata = { title: "All requests" };
 
 export default function AdminRequestsPage() {
   return (

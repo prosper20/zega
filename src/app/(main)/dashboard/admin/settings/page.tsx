@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "../../_components/page-header";
 import { CategorySettings } from "./_components/category-settings";
 
-export const metadata: Metadata = { title: "Categories & SLAs | ZEGA" };
+export const metadata: Metadata = { title: "Categories & SLAs" };
 
 export default function AdminSettingsPage() {
   return (

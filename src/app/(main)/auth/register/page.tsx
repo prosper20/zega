@@ -7,7 +7,7 @@ import { APP_CONFIG } from "@/config/app-config";
 import { RegisterForm } from "../_components/register-form";
 
 export const metadata: Metadata = {
-  title: `Create an account | ${APP_CONFIG.name}`,
+  title: "Create an account",
   description: "Students and staff can create a ZEGA account to report and track maintenance requests.",
   alternates: { canonical: "/auth/register" },
 };

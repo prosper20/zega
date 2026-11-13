@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 import { PageHeader } from "../_components/page-header";
 import { NotificationsList } from "./_components/notifications-list";
 
-export const metadata: Metadata = { title: "Notifications | ZEGA" };
+export const metadata: Metadata = { title: "Notifications" };
 
 export default function NotificationsPage() {
   return (

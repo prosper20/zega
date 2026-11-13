@@ -12,7 +12,7 @@ import { requireUser } from "@/server/session";
 type Props = { params: Promise<{ ref: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  return { title: `${decodeURIComponent((await params).ref)} | ZEGA` };
+  return { title: decodeURIComponent((await params).ref) };
 }
 
 /** Request tracking page, shared by every role (visibility is enforced by the service). */
