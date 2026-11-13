@@ -20,6 +20,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { UserAvatar } from "@/components/user-avatar";
 import { type RequestStatus, STATUS_LABELS } from "@/domain/constants";
 import { useRequestList } from "@/lib/queries";
 
@@ -317,7 +318,20 @@ export function AdminDashboard() {
           </CardAction>
         </CardHeader>
         <CardContent className="p-0">
-          <Table>
+          <ul className="divide-y border-t md:hidden">
+            {s?.officers.map((o) => (
+              <li key={o.id} className="flex items-center gap-3 px-4 py-3">
+                <UserAvatar id={o.id} userRole="officer" name={o.name} size={32} />
+                <div className="min-w-0 flex-1">
+                  <div className="truncate font-medium">{o.name}</div>
+                  <div className="text-muted-foreground text-xs">
+                    {o.open} open · {o.resolved} resolved · {o.avgRating ? `${o.avgRating.toFixed(1)}★` : "no ratings"}
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <Table className="hidden md:table">
             <TableHeader>
               <TableRow>
                 <TableHead className="pl-6">Officer</TableHead>

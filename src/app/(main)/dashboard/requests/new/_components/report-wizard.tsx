@@ -167,7 +167,28 @@ export function ReportWizard({
 
   return (
     <div className="grid gap-6 lg:grid-cols-[220px_1fr]">
-      <nav aria-label="Report steps" className="lg:pt-2">
+      <div className="sm:hidden">
+        <div className="flex items-baseline justify-between text-sm">
+          <span className="font-semibold">{STEPS[step]}</span>
+          <span className="text-muted-foreground text-xs tabular-nums">
+            Step {step + 1} of {STEPS.length}
+          </span>
+        </div>
+        <div
+          className="bg-muted mt-2 h-1.5 overflow-hidden rounded-full"
+          role="progressbar"
+          aria-label="Report progress"
+          aria-valuemin={1}
+          aria-valuemax={STEPS.length}
+          aria-valuenow={step + 1}
+        >
+          <div
+            className="bg-primary h-full rounded-full transition-[width]"
+            style={{ width: `${((step + 1) / STEPS.length) * 100}%` }}
+          />
+        </div>
+      </div>
+      <nav aria-label="Report steps" className="hidden sm:block lg:pt-2">
         <ol className="flex gap-2 lg:flex-col lg:gap-1">
           {STEPS.map((label, i) => (
             <li key={label} className="flex-1 lg:flex-none">
@@ -390,7 +411,9 @@ export function ReportWizard({
           />
         )}
 
-        <div className="flex items-center justify-between gap-2">
+        {/* Phones: a sticky action bar just above the tab bar, within thumb reach. */}
+        <div aria-hidden="true" className="h-14 md:hidden" />
+        <div className="bg-background fixed inset-x-0 bottom-[calc(3.5rem+1px+env(safe-area-inset-bottom))] z-30 flex items-center justify-between gap-2 border-t p-3 md:static md:border-0 md:bg-transparent md:p-0 [&>button]:h-11 [&>button]:flex-1 md:[&>button]:h-10 md:[&>button]:flex-none">
           <Button variant="outline" onClick={back} disabled={step === 0 || submitting !== null} className="h-10">
             <ArrowLeft data-icon="inline-start" /> Back
           </Button>

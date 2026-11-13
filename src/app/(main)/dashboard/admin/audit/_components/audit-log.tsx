@@ -10,6 +10,7 @@ import { format } from "date-fns";
 import { ChevronRight, Loader2, ShieldAlert, ShieldCheck } from "lucide-react";
 import { parseAsString, useQueryStates } from "nuqs";
 
+import { ResponsiveList } from "@/components/responsive-list";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -166,87 +167,155 @@ export function AuditLog() {
         </NativeSelect>
       </div>
 
-      <div className="bg-card overflow-x-auto rounded-xl border">
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-8 pl-4" />
-              <TableHead>When</TableHead>
-              <TableHead>Who</TableHead>
-              <TableHead>What</TableHead>
-              <TableHead>Details</TableHead>
-              <TableHead className="pr-4">Hash</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {log.isPending
-              ? Array.from({ length: 8 }, (_, i) => (
-                  <TableRow key={i}>
-                    <TableCell colSpan={6}>
-                      <Skeleton className="h-7" />
-                    </TableCell>
-                  </TableRow>
-                ))
-              : rows.map((e) => {
-                  const expanded = open.has(e.id);
-                  const link = requestLink(e);
-                  return (
-                    <Fragment key={e.id}>
-                      <TableRow className="cursor-pointer" onClick={() => toggle(e.id)} aria-expanded={expanded}>
-                        <TableCell className="pl-4">
-                          <ChevronRight
-                            className={cn("text-muted-foreground size-4 transition-transform", expanded && "rotate-90")}
-                          />
-                        </TableCell>
-                        <TableCell className="text-xs whitespace-nowrap tabular-nums">
-                          {format(new Date(e.createdAt), "d MMM yyyy, HH:mm:ss")}
-                        </TableCell>
-                        <TableCell className="text-sm">
-                          {e.actorName ?? <span className="text-muted-foreground">{e.actorId ?? "Unknown"}</span>}
-                        </TableCell>
-                        <TableCell>
-                          <span
-                            className={cn("rounded px-1.5 py-0.5 text-[11px] font-semibold", ACTION_STYLE[e.action])}
-                          >
-                            {e.action}
-                          </span>{" "}
-                          <span className="text-sm">{TABLES[e.tableName] ?? e.tableName}</span>
-                        </TableCell>
-                        <TableCell className="text-muted-foreground max-w-72 truncate text-sm">
-                          {summarise(e)}
-                        </TableCell>
-                        <TableCell className="pr-4 font-mono text-[11px]" title={e.hash}>
-                          #{e.id} · {e.hash.slice(0, 10)}…
+      <ResponsiveList
+        items={rows}
+        empty={
+          log.isPending ? (
+            <Skeleton className="h-40" />
+          ) : (
+            <p className="text-muted-foreground p-6 text-center text-sm">No entries.</p>
+          )
+        }
+        table={
+          <div className="bg-card overflow-x-auto rounded-xl border">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-8 pl-4" />
+                  <TableHead>When</TableHead>
+                  <TableHead>Who</TableHead>
+                  <TableHead>What</TableHead>
+                  <TableHead>Details</TableHead>
+                  <TableHead className="pr-4">Hash</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {log.isPending
+                  ? Array.from({ length: 8 }, (_, i) => (
+                      <TableRow key={i}>
+                        <TableCell colSpan={6}>
+                          <Skeleton className="h-7" />
                         </TableCell>
                       </TableRow>
-                      {expanded && (
-                        <TableRow className="bg-muted/30 hover:bg-muted/30">
-                          <TableCell />
-                          <TableCell colSpan={5} className="space-y-3 py-3">
-                            <DiffView entry={e} />
-                            <div className="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px]">
-                              <span>row {e.rowId}</span>
-                              <span>prev {e.prevHash?.slice(0, 16) ?? "GENESIS"}…</span>
-                              <span>hash {e.hash.slice(0, 16)}…</span>
-                              {link && (
-                                <Link
-                                  href={link}
-                                  className="text-primary font-sans text-xs"
-                                  onClick={(ev) => ev.stopPropagation()}
-                                >
-                                  Open request →
-                                </Link>
-                              )}
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      )}
-                    </Fragment>
-                  );
-                })}
-          </TableBody>
-        </Table>
-      </div>
+                    ))
+                  : rows.map((e) => {
+                      const expanded = open.has(e.id);
+                      const link = requestLink(e);
+                      return (
+                        <Fragment key={e.id}>
+                          <TableRow>
+                            <TableCell className="pl-4">
+                              <button
+                                type="button"
+                                onClick={() => toggle(e.id)}
+                                aria-expanded={expanded}
+                                aria-label={`${expanded ? "Hide" : "Show"} details of entry ${e.id}`}
+                                className="hover:bg-muted flex size-7 items-center justify-center rounded-md"
+                              >
+                                <ChevronRight
+                                  className={cn(
+                                    "text-muted-foreground size-4 transition-transform",
+                                    expanded && "rotate-90",
+                                  )}
+                                />
+                              </button>
+                            </TableCell>
+                            <TableCell className="text-xs whitespace-nowrap tabular-nums">
+                              {format(new Date(e.createdAt), "d MMM yyyy, HH:mm:ss")}
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              {e.actorName ?? <span className="text-muted-foreground">{e.actorId ?? "Unknown"}</span>}
+                            </TableCell>
+                            <TableCell>
+                              <span
+                                className={cn(
+                                  "rounded px-1.5 py-0.5 text-[11px] font-semibold",
+                                  ACTION_STYLE[e.action],
+                                )}
+                              >
+                                {e.action}
+                              </span>{" "}
+                              <span className="text-sm">{TABLES[e.tableName] ?? e.tableName}</span>
+                            </TableCell>
+                            <TableCell className="text-muted-foreground max-w-72 truncate text-sm">
+                              {summarise(e)}
+                            </TableCell>
+                            <TableCell className="pr-4 font-mono text-[11px]" title={e.hash}>
+                              #{e.id} · {e.hash.slice(0, 10)}…
+                            </TableCell>
+                          </TableRow>
+                          {expanded && (
+                            <TableRow className="bg-muted/30 hover:bg-muted/30">
+                              <TableCell />
+                              <TableCell colSpan={5} className="space-y-3 py-3">
+                                <DiffView entry={e} />
+                                <div className="text-muted-foreground flex flex-wrap items-center gap-x-4 gap-y-1 font-mono text-[11px]">
+                                  <span>row {e.rowId}</span>
+                                  <span>prev {e.prevHash?.slice(0, 16) ?? "GENESIS"}…</span>
+                                  <span>hash {e.hash.slice(0, 16)}…</span>
+                                  {link && (
+                                    <Link href={link} className="text-primary font-sans text-xs">
+                                      Open request →
+                                    </Link>
+                                  )}
+                                </div>
+                              </TableCell>
+                            </TableRow>
+                          )}
+                        </Fragment>
+                      );
+                    })}
+              </TableBody>
+            </Table>
+          </div>
+        }
+        card={(e) => {
+          const expanded = open.has(e.id);
+          const link = requestLink(e);
+          return (
+            <li key={e.id} className="bg-card rounded-xl border">
+              <button
+                type="button"
+                onClick={() => toggle(e.id)}
+                aria-expanded={expanded}
+                className="flex w-full items-start gap-3 p-4 text-left"
+              >
+                <span className="min-w-0 flex-1">
+                  <span className="flex flex-wrap items-center gap-2 text-sm">
+                    <span className={cn("rounded px-1.5 py-0.5 text-[11px] font-semibold", ACTION_STYLE[e.action])}>
+                      {e.action}
+                    </span>
+                    <span className="font-medium">{TABLES[e.tableName] ?? e.tableName}</span>
+                  </span>
+                  <span className="text-muted-foreground mt-1 block truncate text-sm">{summarise(e)}</span>
+                  <span className="text-muted-foreground mt-1 block text-xs">
+                    {e.actorName ?? e.actorId ?? "Unknown"} · {format(new Date(e.createdAt), "d MMM, HH:mm")} · #{e.id}
+                  </span>
+                </span>
+                <ChevronRight
+                  className={cn(
+                    "text-muted-foreground mt-1 size-4 shrink-0 transition-transform",
+                    expanded && "rotate-90",
+                  )}
+                />
+              </button>
+              {expanded && (
+                <div className="space-y-3 border-t p-4">
+                  <DiffView entry={e} />
+                  <div className="text-muted-foreground font-mono text-[11px] break-all">
+                    hash {e.hash.slice(0, 24)}…
+                  </div>
+                  {link && (
+                    <Link href={link} className="text-primary text-sm font-medium">
+                      Open request →
+                    </Link>
+                  )}
+                </div>
+              )}
+            </li>
+          );
+        }}
+      />
 
       {log.hasNextPage && (
         <div className="flex justify-center">

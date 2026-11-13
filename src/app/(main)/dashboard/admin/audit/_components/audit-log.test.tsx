@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { HttpResponse, http } from "msw";
 import { describe, expect, it } from "vitest";
@@ -26,12 +26,15 @@ describe("AuditLog", () => {
   it("shows who changed what, with a readable diff", async () => {
     server.use(http.get("*/api/audit", () => HttpResponse.json({ data: [entry], nextBefore: null })));
     renderWithProviders(<AuditLog />);
-    expect(await screen.findByText("Chinedu Okeke")).toBeInTheDocument();
-    expect(screen.getByText("status")).toBeInTheDocument();
-    await userEvent.click(screen.getByText("Chinedu Okeke"));
-    expect(screen.getByText("assigned")).toHaveClass("line-through");
-    expect(screen.getByText("in_progress")).toBeInTheDocument();
-    expect(screen.queryByText("updated_at")).not.toBeInTheDocument();
+    // The desktop table (the mobile card list renders alongside it in jsdom, which has no CSS).
+    await screen.findAllByText("Chinedu Okeke");
+    const table = within(screen.getByRole("table"));
+    expect(table.getByText("Chinedu Okeke")).toBeInTheDocument();
+    expect(table.getByText("status")).toBeInTheDocument();
+    await userEvent.click(table.getByRole("button", { name: "Show details of entry 42" }));
+    expect(table.getByText("assigned")).toHaveClass("line-through");
+    expect(table.getByText("in_progress")).toBeInTheDocument();
+    expect(table.queryByText("updated_at")).not.toBeInTheDocument();
   });
 
   it("reports tampering found by the integrity check", async () => {

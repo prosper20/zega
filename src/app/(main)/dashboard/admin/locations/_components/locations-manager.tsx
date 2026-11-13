@@ -19,16 +19,9 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 
+import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select";
@@ -192,67 +185,13 @@ function AddLocationDialog({
   }
 
   return (
-    <Dialog open onOpenChange={(v) => !v && onClose()}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Add a location</DialogTitle>
-          <DialogDescription>It gets its own QR sticker automatically.</DialogDescription>
-        </DialogHeader>
-        <div className="grid gap-3">
-          <div className="grid gap-1.5">
-            <Label htmlFor="loc-parent">Inside</Label>
-            <NativeSelect
-              id="loc-parent"
-              value={form.parentId}
-              onChange={(e) => setForm((f) => ({ ...f, parentId: e.target.value }))}
-              className="w-full"
-            >
-              {parents.map((p) => (
-                <NativeSelectOption key={p.id} value={p.id}>
-                  {p.kind === "campus" ? p.name : p.label}
-                </NativeSelectOption>
-              ))}
-            </NativeSelect>
-          </div>
-          <div className="grid grid-cols-2 gap-3">
-            <div className="grid gap-1.5">
-              <Label htmlFor="loc-name">Name</Label>
-              <Input
-                id="loc-name"
-                value={form.name}
-                placeholder="Room 210"
-                onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
-              />
-            </div>
-            <div className="grid gap-1.5">
-              <Label htmlFor="loc-kind">Type</Label>
-              <NativeSelect
-                id="loc-kind"
-                value={form.kind}
-                onChange={(e) => setForm((f) => ({ ...f, kind: e.target.value as (typeof KINDS)[number] }))}
-                className="w-full"
-              >
-                {KINDS.map((k) => (
-                  <NativeSelectOption key={k} value={k}>
-                    {k[0].toUpperCase() + k.slice(1)}
-                  </NativeSelectOption>
-                ))}
-              </NativeSelect>
-            </div>
-          </div>
-          <div className="grid gap-1.5">
-            <Label htmlFor="loc-code">Short code</Label>
-            <Input
-              id="loc-code"
-              value={form.code}
-              placeholder="SCI-210"
-              className="font-mono uppercase"
-              onChange={(e) => setForm((f) => ({ ...f, code: e.target.value.toUpperCase() }))}
-            />
-            <p className="text-muted-foreground text-xs">Letters, numbers and dashes. Printed on the sticker.</p>
-          </div>
-        </div>
-        <DialogFooter>
+    <ResponsiveDialog
+      open={true}
+      onOpenChange={(v) => !v && onClose()}
+      title={<>Add a location</>}
+      description={<>It gets its own QR sticker automatically.</>}
+      footer={
+        <>
           <Button variant="outline" onClick={onClose}>
             Cancel
           </Button>
@@ -260,8 +199,63 @@ function AddLocationDialog({
             {saving && <Loader2 className="animate-spin" data-icon="inline-start" />}
             Add location
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </>
+      }
+    >
+      <div className="grid gap-3">
+        <div className="grid gap-1.5">
+          <Label htmlFor="loc-parent">Inside</Label>
+          <NativeSelect
+            id="loc-parent"
+            value={form.parentId}
+            onChange={(e) => setForm((f) => ({ ...f, parentId: e.target.value }))}
+            className="w-full"
+          >
+            {parents.map((p) => (
+              <NativeSelectOption key={p.id} value={p.id}>
+                {p.kind === "campus" ? p.name : p.label}
+              </NativeSelectOption>
+            ))}
+          </NativeSelect>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <div className="grid gap-1.5">
+            <Label htmlFor="loc-name">Name</Label>
+            <Input
+              id="loc-name"
+              value={form.name}
+              placeholder="Room 210"
+              onChange={(e) => setForm((f) => ({ ...f, name: e.target.value }))}
+            />
+          </div>
+          <div className="grid gap-1.5">
+            <Label htmlFor="loc-kind">Type</Label>
+            <NativeSelect
+              id="loc-kind"
+              value={form.kind}
+              onChange={(e) => setForm((f) => ({ ...f, kind: e.target.value as (typeof KINDS)[number] }))}
+              className="w-full"
+            >
+              {KINDS.map((k) => (
+                <NativeSelectOption key={k} value={k}>
+                  {k[0].toUpperCase() + k.slice(1)}
+                </NativeSelectOption>
+              ))}
+            </NativeSelect>
+          </div>
+        </div>
+        <div className="grid gap-1.5">
+          <Label htmlFor="loc-code">Short code</Label>
+          <Input
+            id="loc-code"
+            value={form.code}
+            placeholder="SCI-210"
+            className="font-mono uppercase"
+            onChange={(e) => setForm((f) => ({ ...f, code: e.target.value.toUpperCase() }))}
+          />
+          <p className="text-muted-foreground text-xs">Letters, numbers and dashes. Printed on the sticker.</p>
+        </div>
+      </div>
+    </ResponsiveDialog>
   );
 }

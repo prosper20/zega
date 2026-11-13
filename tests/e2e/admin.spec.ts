@@ -46,7 +46,11 @@ test.describe("administrator tools", () => {
 
     // Users: the new assignment is reflected; officers can be filtered.
     await page.goto("/dashboard/admin/users?role=officer");
-    await expect(page.getByText(officerName).first()).toBeVisible({ timeout: 60_000 });
+    await expect(
+      page.getByRole("table").getByText(officerName, { exact: true }).filter({ visible: true }).first(),
+    ).toBeVisible({
+      timeout: 60_000,
+    });
     await expect(page.getByText("What each role can do")).toBeVisible();
 
     // Audit: verify the hash chain end to end.

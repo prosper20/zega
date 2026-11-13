@@ -10,15 +10,8 @@ import { parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 
 import { RequestRow } from "@/components/requests/request-row";
+import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +28,7 @@ import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { REQUEST_PRIORITIES, type RequestStatus, STATUS_LABELS } from "@/domain/constants";
 import { checkTransition, TRANSITIONS } from "@/domain/request-machine";
 import { useDebounced } from "@/hooks/use-debounced";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { unwrap } from "@/lib/api-client";
 import { errorMessage, type RequestDetail, type RequestSummary, useRequestList } from "@/lib/queries";
 
@@ -71,6 +65,8 @@ export function WorkBoard({ officerId }: { officerId: string }) {
   const [pending, setPending] = useState<Pending | null>(null);
   const [note, setNote] = useState("");
   const [saving, setSaving] = useState(false);
+  const mobile = useIsMobile();
+  const [mobileStatus, setMobileStatus] = useState<RequestStatus>("assigned");
   const [now, setNow] = useState(() => Date.now());
   useEffect(() => {
     const id = setInterval(() => setNow(Date.now()), 60_000);
@@ -221,6 +217,45 @@ export function WorkBoard({ officerId }: { officerId: string }) {
             <RequestRow key={j.id} request={{ ...j, status: statusOf(j) }} />
           ))}
         </div>
+      ) : mobile ? (
+        <div className="flex flex-col gap-3">
+          <div className="bg-muted grid grid-cols-4 gap-1 rounded-lg p-1" role="tablist" aria-label="Job status">
+            {COLUMNS.map((col) => {
+              const count = jobs.filter((j) => statusOf(j) === col.status).length;
+              const on = mobileStatus === col.status;
+              return (
+                <button
+                  key={col.status}
+                  type="button"
+                  role="tab"
+                  aria-selected={on}
+                  onClick={() => setMobileStatus(col.status)}
+                  className={cn(
+                    "flex min-h-11 flex-col items-center justify-center rounded-md border px-1 text-[11px] leading-tight font-medium",
+                    on ? "bg-background border-primary text-primary" : "text-muted-foreground border-transparent",
+                  )}
+                >
+                  <span className="text-sm font-semibold tabular-nums">{count}</span>
+                  {STATUS_LABELS[col.status]}
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-muted-foreground text-xs">{COLUMNS.find((c) => c.status === mobileStatus)?.hint}</p>
+          {jobs
+            .filter((j) => statusOf(j) === mobileStatus)
+            .map((j) => (
+              <JobCard
+                key={j.id}
+                job={j}
+                now={now}
+                action={<MoveMenu job={j} moves={allowedMoves(j)} onMove={(to) => onDrop(j.id, to)} large />}
+              />
+            ))}
+          {jobs.every((j) => statusOf(j) !== mobileStatus) && (
+            <p className="text-muted-foreground bg-card rounded-xl border p-6 text-center text-sm">Nothing here.</p>
+          )}
+        </div>
       ) : (
         <DragDropProvider
           onDragEnd={(event) => {
@@ -251,33 +286,13 @@ export function WorkBoard({ officerId }: { officerId: string }) {
         </DragDropProvider>
       )}
 
-      <Dialog open={pending !== null} onOpenChange={(v) => !v && setPending(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{pending?.label}</DialogTitle>
-            <DialogDescription>
-              {pending?.job.refCode}: {pending?.job.title}
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-1.5">
-            <Label htmlFor="move-note">
-              {pending?.to === "resolved" ? "What did you do to fix it?" : "What is it waiting for?"}
-            </Label>
-            <Textarea
-              id="move-note"
-              rows={3}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              maxLength={1000}
-              autoFocus
-            />
-            {pending?.to === "resolved" && (
-              <p className="text-muted-foreground text-xs">
-                Tip: add an &ldquo;after&rdquo; photo on the job page so the requester can see the fix.
-              </p>
-            )}
-          </div>
-          <DialogFooter>
+      <ResponsiveDialog
+        open={pending !== null}
+        onOpenChange={(v) => !v && setPending(null)}
+        title={pending?.label}
+        description={pending ? `${pending.job.refCode}: ${pending.job.title}` : undefined}
+        footer={
+          <>
             <Button variant="outline" onClick={() => setPending(null)}>
               Cancel
             </Button>
@@ -285,9 +300,28 @@ export function WorkBoard({ officerId }: { officerId: string }) {
               {saving && <Loader2 className="animate-spin" data-icon="inline-start" />}
               {pending?.label}
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </>
+        }
+      >
+        <div className="space-y-1.5">
+          <Label htmlFor="move-note">
+            {pending?.to === "resolved" ? "What did you do to fix it?" : "What is it waiting for?"}
+          </Label>
+          <Textarea
+            id="move-note"
+            rows={3}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            maxLength={1000}
+            autoFocus
+          />
+          {pending?.to === "resolved" && (
+            <p className="text-muted-foreground text-xs">
+              Tip: add an &ldquo;after&rdquo; photo on the job page so the requester can see the fix.
+            </p>
+          )}
+        </div>
+      </ResponsiveDialog>
     </div>
   );
 }
@@ -346,31 +380,45 @@ function DraggableJob({
         job={job}
         now={now}
         dragging={isDragging}
-        action={
-          moves.length > 0 && (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="xs"
-                  className="-mr-1 h-6"
-                  onPointerDown={(e) => e.stopPropagation()}
-                  aria-label={`Move ${job.refCode}`}
-                >
-                  Move <ChevronDown className="size-3" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                {moves.map((to) => (
-                  <DropdownMenuItem key={to} onSelect={() => onMove(to)}>
-                    {STATUS_LABELS[to]}
-                  </DropdownMenuItem>
-                ))}
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )
-        }
+        action={<MoveMenu job={job} moves={moves} onMove={onMove} />}
       />
     </div>
+  );
+}
+
+/** "Move to" menu: the tap and keyboard alternative to dragging (and the only way on phones). */
+function MoveMenu({
+  job,
+  moves,
+  onMove,
+  large,
+}: {
+  job: RequestSummary;
+  moves: RequestStatus[];
+  onMove: (to: RequestStatus) => void;
+  large?: boolean;
+}) {
+  if (!moves.length) return null;
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button
+          variant={large ? "outline" : "ghost"}
+          size={large ? "sm" : "xs"}
+          className={large ? "h-9 px-3" : "-mr-1 h-6"}
+          onPointerDown={(e) => e.stopPropagation()}
+          aria-label={`Move ${job.refCode}`}
+        >
+          Move <ChevronDown className="size-3" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        {moves.map((to) => (
+          <DropdownMenuItem key={to} onSelect={() => onMove(to)} className="min-h-10">
+            {STATUS_LABELS[to]}
+          </DropdownMenuItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 }

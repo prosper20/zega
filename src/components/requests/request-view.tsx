@@ -86,9 +86,10 @@ export function RequestView({
         </CardContent>
       </Card>
 
-      <div className="grid gap-6 lg:grid-cols-[1fr_340px]">
-        <div className="flex min-w-0 flex-col gap-6">
-          <Card>
+      {/* Phones: one column ordered by what you act on first (actions, details, activity, then SLA and people). */}
+      <div className="flex flex-col gap-6 lg:grid lg:grid-cols-[1fr_340px] lg:items-start">
+        <div className="contents min-w-0 lg:flex lg:flex-col lg:gap-6">
+          <Card className="order-2 lg:order-none">
             <CardHeader>
               <CardTitle className="text-base">Details</CardTitle>
             </CardHeader>
@@ -104,7 +105,7 @@ export function RequestView({
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="order-3 lg:order-none">
             <CardHeader>
               <CardTitle className="text-base">Activity</CardTitle>
             </CardHeader>
@@ -117,11 +118,15 @@ export function RequestView({
           </Card>
         </div>
 
-        <aside className="flex flex-col gap-6">
-          {sidebarTop}
-          <ActionsPanel request={request} extra={actionsExtra} />
-          <SlaCardLazy request={request} />
-          <Card>
+        <aside className="contents lg:flex lg:flex-col lg:gap-6">
+          <div className="order-1 flex flex-col gap-6 empty:hidden lg:order-none">
+            {sidebarTop}
+            <ActionsPanel request={request} extra={actionsExtra} />
+          </div>
+          <div className="order-4 empty:hidden lg:order-none">
+            <SlaCardLazy request={request} />
+          </div>
+          <Card className="order-5 lg:order-none">
             <CardHeader>
               <CardTitle className="text-base">People</CardTitle>
             </CardHeader>

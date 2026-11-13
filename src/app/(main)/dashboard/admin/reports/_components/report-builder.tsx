@@ -153,7 +153,22 @@ function ReportTable({ title, head, rows }: { title: string; head: string[]; row
         <CardDescription>{rows.length} rows</CardDescription>
       </CardHeader>
       <CardContent className="p-0">
-        <Table>
+        <ul className="divide-y border-t md:hidden">
+          {rows.map((r) => (
+            <li key={String(r[0])} className="px-4 py-3">
+              <div className="font-medium">{r[0]}</div>
+              <dl className="text-muted-foreground mt-1 flex flex-wrap gap-x-4 gap-y-1 text-xs">
+                {r.slice(1).map((v, i) => (
+                  <div key={head[i + 1]} className="flex gap-1">
+                    <dt>{head[i + 1]}:</dt>
+                    <dd className="text-foreground font-medium tabular-nums">{v}</dd>
+                  </div>
+                ))}
+              </dl>
+            </li>
+          ))}
+        </ul>
+        <Table className="hidden md:table">
           <TableHeader>
             <TableRow>
               {head.map((h, i) => (

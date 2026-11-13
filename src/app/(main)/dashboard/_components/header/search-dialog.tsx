@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 
 import { Search } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
 import {
   Command,
   CommandDialog,
@@ -131,17 +130,19 @@ export function SearchDialog({ role }: { role: RoleSlug }) {
 
   return (
     <>
-      <Button
+      {/* On phones a wide field-like trigger (thumb-friendly); on desktop a quiet link with the shortcut. */}
+      <button
+        type="button"
         onClick={() => handleOpenChange(true)}
-        variant="link"
-        className="text-muted-foreground px-0! font-normal hover:no-underline"
+        className="text-muted-foreground bg-muted/60 flex h-10 w-full items-center gap-2 rounded-lg border px-3 text-sm md:h-8 md:w-auto md:border-0 md:bg-transparent md:px-0"
+        aria-label="Search pages"
       >
-        <Search data-icon="inline-start" />
-        Search
-        <kbd className="bg-muted inline-flex h-5 items-center gap-1 rounded border px-1.5 text-[10px] font-medium select-none">
+        <Search className="size-4 shrink-0" />
+        <span className="flex-1 text-left md:flex-none">Search</span>
+        <kbd className="bg-muted hidden h-5 items-center gap-1 rounded border px-1.5 text-[10px] font-medium select-none md:inline-flex">
           <span className="text-xs">⌘</span>J
         </kbd>
-      </Button>
+      </button>
       <CommandDialog open={open} onOpenChange={handleOpenChange}>
         <Command>
           <CommandInput placeholder="Jump to a page…" value={query} onValueChange={setQuery} />

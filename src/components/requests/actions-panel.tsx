@@ -5,16 +5,9 @@ import { useState } from "react";
 import { CheckCircle2, Loader2, RotateCcw } from "lucide-react";
 import { toast } from "sonner";
 
+import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { errorMessage, type RequestDetail, useTransition } from "@/lib/queries";
@@ -100,36 +93,17 @@ export function ActionsPanel({ request, extra }: { request: RequestDetail; extra
         {extra}
       </CardContent>
 
-      <Dialog open={open !== null} onOpenChange={(v) => !v && setOpen(null)}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{open?.label}</DialogTitle>
-            <DialogDescription>
-              {isConfirm
-                ? "How was the service? Your rating helps improve maintenance on campus."
-                : `${request.refCode}: ${request.title}`}
-            </DialogDescription>
-          </DialogHeader>
-          {isConfirm && (
-            <div className="flex flex-col items-center gap-2 py-2">
-              <StarRating value={score} onChange={setScore} />
-              <span className="text-muted-foreground text-xs">{score ? `${score} out of 5` : "Optional"}</span>
-            </div>
-          )}
-          <div className="space-y-1.5">
-            <Label htmlFor="transition-note">
-              {(open && NOTE_PROMPT[open.to]) ?? "Add a note"}{" "}
-              {needsNote ? "" : <span className="text-muted-foreground font-normal">(optional)</span>}
-            </Label>
-            <Textarea
-              id="transition-note"
-              rows={3}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              maxLength={1000}
-            />
-          </div>
-          <DialogFooter>
+      <ResponsiveDialog
+        open={open !== null}
+        onOpenChange={(v) => !v && setOpen(null)}
+        title={open?.label}
+        description={
+          isConfirm
+            ? "How was the service? Your rating helps improve maintenance on campus."
+            : `${request.refCode}: ${request.title}`
+        }
+        footer={
+          <>
             <Button variant="outline" onClick={() => setOpen(null)}>
               Cancel
             </Button>
@@ -137,9 +111,29 @@ export function ActionsPanel({ request, extra }: { request: RequestDetail; extra
               {transition.isPending && <Loader2 className="animate-spin" data-icon="inline-start" />}
               {open?.label}
             </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
+          </>
+        }
+      >
+        {isConfirm && (
+          <div className="flex flex-col items-center gap-2 py-2">
+            <StarRating value={score} onChange={setScore} />
+            <span className="text-muted-foreground text-xs">{score ? `${score} out of 5` : "Optional"}</span>
+          </div>
+        )}
+        <div className="space-y-1.5">
+          <Label htmlFor="transition-note">
+            {(open && NOTE_PROMPT[open.to]) ?? "Add a note"}{" "}
+            {needsNote ? "" : <span className="text-muted-foreground font-normal">(optional)</span>}
+          </Label>
+          <Textarea
+            id="transition-note"
+            rows={3}
+            value={note}
+            onChange={(e) => setNote(e.target.value)}
+            maxLength={1000}
+          />
+        </div>
+      </ResponsiveDialog>
     </Card>
   );
 }

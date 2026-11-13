@@ -245,3 +245,29 @@ html:has([data-landing-page]) {
     linear-gradient(to bottom, color-mix(in oklab, white 9%, transparent) 1px, transparent 1px);
   background-size: 56px 56px;
 }
+
+/*
+ * Touch targets on phones: at least 44pt (Apple HIG) for fields and standard buttons.
+ * min-height only ever enlarges, so desktop sizing and explicit heights stay intact.
+ * Extra-small and inline (link) buttons are left alone; they sit inside cards that are the target.
+ */
+@media (max-width: 767px) {
+  [data-slot="input"],
+  [data-slot="native-select-wrapper"],
+  [data-slot="native-select"],
+  [data-slot="select-trigger"],
+  [data-slot="button"]:is([data-size="default"], [data-size="sm"], [data-size="lg"]):not([data-variant="link"]) {
+    min-height: 2.75rem;
+  }
+  [data-slot="button"][data-size="icon"],
+  [data-slot="button"][data-size="icon-sm"] {
+    min-height: 2.75rem;
+    min-width: 2.75rem;
+  }
+  /* 16px text stops iOS Safari from zooming into a focused field. */
+  [data-slot="input"],
+  [data-slot="textarea"],
+  [data-slot="native-select"] {
+    font-size: 1rem;
+  }
+}

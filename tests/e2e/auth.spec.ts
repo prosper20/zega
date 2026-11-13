@@ -35,12 +35,33 @@ test.describe("authentication and role-based access", () => {
     await page.getByRole("button", { name: "Admin" }).click();
     await expect(page).toHaveURL(/\/dashboard$/);
     await expect(page.getByText("SLA compliance")).toBeVisible();
-    // On phones the sidebar is a slide-over menu.
-    if (isMobile) await page.getByRole("button", { name: "Toggle Sidebar" }).click();
-    await expect(page.getByRole("link", { name: "Audit trail" }).first()).toBeVisible();
-    if (isMobile) await page.keyboard.press("Escape");
-    await page.getByRole("button", { name: "Account menu" }).click();
+    if (isMobile) {
+      // Phones: primary destinations in the bottom tab bar, everything else (and the account) in the sidebar.
+      const tabs = page.getByRole("navigation", { name: "Main" });
+      await tabs.getByRole("link", { name: "Audit" }).click();
+      await expect(page).toHaveURL(/\/dashboard\/admin\/audit$/);
+      await page.getByRole("button", { name: "Toggle Sidebar" }).click();
+      await page.getByRole("button", { name: /Administrator/ }).click();
+    } else {
+      await expect(page.getByRole("link", { name: "Audit trail" }).first()).toBeVisible();
+      await page.getByRole("button", { name: "Account menu" }).click();
+    }
     await page.getByRole("menuitem", { name: "Sign out" }).click();
     await expect(page).toHaveURL(/\/auth\/login/);
+  });
+
+  test("phones get a bottom tab bar with a prominent report action", async ({ page, isMobile }) => {
+    test.skip(!isMobile, "tab bar is phone-only");
+    await page.goto("/auth/login");
+    await page.getByRole("button", { name: "Student" }).click();
+    await expect(page).toHaveURL(/\/dashboard$/);
+    const tabs = page.getByRole("navigation", { name: "Main" });
+    await tabs.getByRole("link", { name: "Report" }).click();
+    await expect(page).toHaveURL(/\/dashboard\/requests\/new$/);
+    await expect(tabs.getByRole("link", { name: "Report" })).toHaveAttribute("aria-current", "page");
+    await expect(page.getByText(/Step 1 of 4/)).toBeVisible();
+    await expect(page.getByRole("button", { name: "Continue" })).toBeInViewport();
+    const width = await page.evaluate(() => document.documentElement.scrollWidth);
+    expect(width).toBeLessThanOrEqual(page.viewportSize()?.width ?? 0);
   });
 });

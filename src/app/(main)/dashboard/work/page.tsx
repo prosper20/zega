@@ -14,7 +14,7 @@ export default async function WorkPage() {
     <div className="flex flex-col gap-6" data-content-padding="true">
       <PageHeader
         title="My work orders"
-        description="Drag a job to update its status. Most urgent first."
+        description="Drag a job or use Move to update its status. Most urgent first."
         actions={<InstallAppButton />}
       />
       <WorkBoard officerId={user.id} />

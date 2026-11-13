@@ -6,8 +6,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Loader2, Pencil } from "lucide-react";
 import { toast } from "sonner";
 
+import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -47,16 +47,26 @@ export function EditRequestDialog({ request }: { request: RequestDetail }) {
   }
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
-      <DialogTrigger asChild>
-        <Button variant="outline" size="sm">
-          <Pencil data-icon="inline-start" /> Edit
-        </Button>
-      </DialogTrigger>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Edit {request.refCode}</DialogTitle>
-        </DialogHeader>
+    <>
+      <Button variant="outline" size="sm" onClick={() => setOpen(true)}>
+        <Pencil data-icon="inline-start" /> Edit
+      </Button>
+      <ResponsiveDialog
+        open={open}
+        onOpenChange={setOpen}
+        title={`Edit ${request.refCode}`}
+        footer={
+          <>
+            <Button variant="outline" onClick={() => setOpen(false)}>
+              Cancel
+            </Button>
+            <Button onClick={save} disabled={saving || title.trim().length < 5 || description.trim().length < 10}>
+              {saving && <Loader2 className="animate-spin" data-icon="inline-start" />}
+              Save changes
+            </Button>
+          </>
+        }
+      >
         <div className="space-y-3">
           <div className="space-y-1.5">
             <Label htmlFor="edit-title">Title</Label>
@@ -77,16 +87,7 @@ export function EditRequestDialog({ request }: { request: RequestDetail }) {
             <Input id="edit-detail" value={detail} maxLength={200} onChange={(e) => setDetail(e.target.value)} />
           </div>
         </div>
-        <DialogFooter>
-          <Button variant="outline" onClick={() => setOpen(false)}>
-            Cancel
-          </Button>
-          <Button onClick={save} disabled={saving || title.trim().length < 5 || description.trim().length < 10}>
-            {saving && <Loader2 className="animate-spin" data-icon="inline-start" />}
-            Save changes
-          </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+      </ResponsiveDialog>
+    </>
   );
 }

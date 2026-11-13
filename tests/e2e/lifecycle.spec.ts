@@ -28,7 +28,9 @@ async function drag(page: Page, from: Locator, to: Locator) {
   await page.mouse.move(startX, startY);
   await page.mouse.down();
   await page.mouse.move(startX + 10, startY + 10, { steps: 5 });
-  await page.mouse.move(b.x + b.width / 2, b.y + 60, { steps: 25 });
+  // Drop level with the card (clamped inside the target column) so it stays on screen however long the columns get.
+  const dropY = Math.min(Math.max(startY, b.y + 60), b.y + b.height - 20);
+  await page.mouse.move(b.x + b.width / 2, dropY, { steps: 25 });
   await page.mouse.up();
 }
 

@@ -152,26 +152,34 @@ function CategoryCard({ category }: { category: Category }) {
           </NativeSelect>
         </div>
         <div className="overflow-hidden rounded-lg border">
-          <div className="bg-muted/50 text-muted-foreground grid grid-cols-3 gap-2 px-3 py-2 text-xs font-medium">
+          <div className="bg-muted/50 text-muted-foreground hidden grid-cols-3 gap-2 px-3 py-2 text-xs font-medium md:grid">
             <span>Priority</span>
             <span>First response (hours)</span>
             <span>Resolution (hours)</span>
           </div>
           {REQUEST_PRIORITIES.map((p) => (
-            <div key={p} className="grid grid-cols-3 items-center gap-2 border-t px-3 py-2">
-              <span className="text-sm capitalize">{p}</span>
+            <div
+              key={p}
+              className="grid grid-cols-2 items-end gap-2 border-t px-3 py-3 md:grid-cols-3 md:items-center md:py-2"
+            >
+              <span className="col-span-2 text-sm font-medium capitalize md:col-span-1 md:font-normal">{p}</span>
               {(["response", "resolution"] as const).map((k) => (
-                <Input
-                  key={k}
-                  type="number"
-                  min={0.1}
-                  step={0.25}
-                  inputMode="decimal"
-                  aria-label={`${p} ${k} target in hours`}
-                  value={sla[p][k]}
-                  onChange={(e) => setSla((s) => ({ ...s, [p]: { ...s[p], [k]: e.target.value } }))}
-                  className="h-8"
-                />
+                <div key={k} className="grid gap-1">
+                  <label htmlFor={`sla-${p}-${k}`} className="text-muted-foreground text-xs md:hidden">
+                    {k === "response" ? "First response (h)" : "Resolution (h)"}
+                  </label>
+                  <Input
+                    id={`sla-${p}-${k}`}
+                    type="number"
+                    min={0.1}
+                    step={0.25}
+                    inputMode="decimal"
+                    aria-label={`${p} ${k} target in hours`}
+                    value={sla[p][k]}
+                    onChange={(e) => setSla((s) => ({ ...s, [p]: { ...s[p], [k]: e.target.value } }))}
+                    className="h-11 md:h-8"
+                  />
+                </div>
               ))}
             </div>
           ))}

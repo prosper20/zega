@@ -13,8 +13,25 @@ export function PermissionMatrix() {
         <CardTitle className="text-base">What each role can do</CardTitle>
         <CardDescription>Role-based access control enforced by the API on every request.</CardDescription>
       </CardHeader>
-      <CardContent className="overflow-x-auto p-0">
-        <Table>
+      <CardContent className="p-0">
+        <ul className="divide-y border-t md:hidden">
+          {(Object.entries(PERMISSIONS) as [Permission, string][]).map(([key, label]) => (
+            <li key={key} className="space-y-2 px-4 py-3">
+              <div className="text-sm">{label}</div>
+              <div className="flex flex-wrap gap-1.5">
+                {ROLE_SLUGS.filter((r) => can(r, key)).map((r) => (
+                  <span
+                    key={r}
+                    className="bg-secondary text-secondary-foreground rounded-md px-2 py-0.5 text-xs font-medium"
+                  >
+                    {ROLE_INFO[r].label}
+                  </span>
+                ))}
+              </div>
+            </li>
+          ))}
+        </ul>
+        <Table className="hidden md:table">
           <TableHeader>
             <TableRow>
               <TableHead className="pl-6">Permission</TableHead>

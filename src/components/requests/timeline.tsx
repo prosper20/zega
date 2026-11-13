@@ -28,7 +28,7 @@ export function Timeline({ items, loading }: { items: TimelineItem[] | undefined
     );
   if (!items?.length) return <p className="text-muted-foreground text-sm">No activity yet.</p>;
   return (
-    <ol className="relative space-y-5 before:absolute before:top-2 before:bottom-2 before:left-[15px] before:w-px before:bg-border">
+    <ol className="before:bg-border relative space-y-5 before:absolute before:top-2 before:bottom-2 before:left-[15px] before:w-px">
       {items.map((item, i) => {
         const Icon = item.kind === "status" && item.from && item.to ? ArrowRightLeft : ICON[item.kind];
         return (

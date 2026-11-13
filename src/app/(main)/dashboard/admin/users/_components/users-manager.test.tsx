@@ -49,15 +49,19 @@ beforeEach(() => {
 describe("UsersManager", () => {
   it("lists users with roles and officer specialties, and protects the current admin", async () => {
     renderWithProviders(<UsersManager currentUserId="u-admin" />);
-    expect(await screen.findByText("Chinedu Okeke", { selector: "div" })).toBeInTheDocument();
-    expect(screen.getByText("Plumbing")).toBeInTheDocument();
-    expect(screen.queryByRole("button", { name: "Actions for Adaeze Okafor" })).not.toBeInTheDocument();
+    await screen.findAllByText("Chinedu Okeke");
+    const table = within(screen.getByRole("table"));
+    expect(table.getByText("Chinedu Okeke", { selector: "div" })).toBeInTheDocument();
+    expect(table.getByText("Plumbing")).toBeInTheDocument();
+    expect(table.queryByRole("button", { name: "Actions for Adaeze Okafor" })).not.toBeInTheDocument();
   });
 
   it("deactivates a user", async () => {
     const user = userEvent.setup();
     renderWithProviders(<UsersManager currentUserId="u-admin" />);
-    await user.click(await screen.findByRole("button", { name: "Actions for Chinedu Okeke" }));
+    await screen.findAllByText("Chinedu Okeke");
+    const table = within(screen.getByRole("table"));
+    await user.click(table.getByRole("button", { name: "Actions for Chinedu Okeke" }));
     await user.click(screen.getByRole("menuitem", { name: /Deactivate/ }));
     await waitFor(() => expect(calls).toEqual([{ method: "PATCH", path: "/api/users/u-off", body: { banned: true } }]));
   });

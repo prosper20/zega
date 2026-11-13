@@ -15,6 +15,7 @@ import { requireUser } from "@/server/session";
 
 import { SearchDialog } from "./_components/header/search-dialog";
 import { UserMenu } from "./_components/header/user-menu";
+import { MobileTabBar } from "./_components/mobile-tab-bar";
 import type { ShellUser } from "./_components/user-types";
 
 /** The app behind sign-in is private: keep every dashboard page out of search engines. */
@@ -59,30 +60,36 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
         >
           <header
             className={cn(
-              "flex h-12 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12",
+              "flex h-14 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:h-12",
               // Solid sticky bar (no translucency or blur).
               "bg-background sticky top-0 z-50 rounded-t-[inherit]",
             )}
           >
-            <div className="flex w-full items-center justify-between px-4 lg:px-6">
-              <div className="flex items-center gap-1 lg:gap-2">
-                <SidebarTrigger className="-ml-1" />
+            {/* Phones: sidebar icon, a search field filling the width, then notifications. */}
+            <div className="flex w-full items-center gap-2 px-3 md:justify-between md:px-4 lg:px-6">
+              <div className="flex min-w-0 flex-1 items-center gap-2 md:flex-none lg:gap-2">
+                <SidebarTrigger className="-ml-1 size-10 md:size-7" />
                 <Separator
                   orientation="vertical"
-                  className="mx-2 data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center"
+                  className="mx-2 hidden data-[orientation=vertical]:h-4 data-[orientation=vertical]:self-center md:block"
                 />
-                <SearchDialog role={user.role} />
+                <div className="min-w-0 flex-1">
+                  <SearchDialog role={user.role} />
+                </div>
               </div>
               <div className="flex items-center gap-2">
                 <NotificationBell />
-                <UserMenu user={user} />
+                <div className="hidden md:block">
+                  <UserMenu user={user} />
+                </div>
               </div>
             </div>
           </header>
           {/* Pages can set data-content-padding="false" to render full-bleed app layouts. */}
-          <div className="min-h-0 min-w-0 flex-1 overflow-x-hidden p-4 has-data-[content-padding=false]:p-0 md:p-6 md:has-data-[content-padding=false]:p-0">
+          <div className="min-h-0 min-w-0 flex-1 overflow-x-hidden p-4 pb-[calc(5.5rem+env(safe-area-inset-bottom))] has-data-[content-padding=false]:p-0 md:p-6 md:pb-6 md:has-data-[content-padding=false]:p-0">
             {children}
           </div>
+          <MobileTabBar role={user.role} />
         </SidebarInset>
       </SidebarProvider>
     </LiveUpdates>
