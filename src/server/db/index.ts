@@ -28,7 +28,7 @@ const pool =
   globalForDb.zegaPool ??
   new Pool({
     connectionString: env.DATABASE_URL,
-    max: isProd ? 10 : 4,
+    max: isProd ? 10 : 8,
     idleTimeoutMillis: isProd ? 10_000 : 5 * 60_000,
   });
 if (process.env.NODE_ENV !== "production") globalForDb.zegaPool = pool;

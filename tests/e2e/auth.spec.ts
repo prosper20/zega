@@ -30,11 +30,15 @@ test.describe("authentication and role-based access", () => {
     await expect(page).toHaveURL(/\/unauthorized$/);
   });
 
-  test("admins see the administration menu and can sign out", async ({ page }) => {
+  test("admins see the administration menu and can sign out", async ({ page, isMobile }) => {
     await page.goto("/auth/login");
     await page.getByRole("button", { name: "Admin" }).click();
     await expect(page).toHaveURL(/\/dashboard$/);
-    await expect(page.getByRole("link", { name: "All requests" }).first()).toBeVisible();
+    await expect(page.getByText("SLA compliance")).toBeVisible();
+    // On phones the sidebar is a slide-over menu.
+    if (isMobile) await page.getByRole("button", { name: "Toggle Sidebar" }).click();
+    await expect(page.getByRole("link", { name: "Audit trail" }).first()).toBeVisible();
+    if (isMobile) await page.keyboard.press("Escape");
     await page.getByRole("button", { name: "Account menu" }).click();
     await page.getByRole("menuitem", { name: "Sign out" }).click();
     await expect(page).toHaveURL(/\/auth\/login/);
