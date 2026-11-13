@@ -6,6 +6,7 @@ import { problems } from "@/server/api/problem";
 import { withActor } from "@/server/db/actor";
 import * as s from "@/server/db/schema";
 import type { Database } from "@/server/db/types";
+import { log } from "@/server/log";
 import type { CurrentUser } from "@/server/session-types";
 
 /** Blank form fields are stored as NULL rather than empty strings. */
@@ -138,6 +139,11 @@ export async function updateUser(
     // Deactivating or changing role ends existing sessions so the change applies immediately.
     if (input.banned || input.role) await tx.delete(s.sessions).where(eq(s.sessions.userId, id));
   });
+  if (input.role && input.role !== target.role)
+    log.security("user.role_changed", { actorId: admin.id, userId: id, from: target.role, to: input.role });
+  if (input.banned !== undefined && input.banned !== target.banned)
+    log.security(input.banned ? "user.deactivated" : "user.reactivated", { actorId: admin.id, userId: id });
+  if (input.banned || input.role) log.security("user.sessions_revoked", { actorId: admin.id, userId: id });
   return getUser(db, id);
 }
 

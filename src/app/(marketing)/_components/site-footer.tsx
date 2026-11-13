@@ -35,6 +35,7 @@ const COLUMNS = [
     links: [
       { label: "Log in", href: "/auth/login" },
       { label: "Register", href: "/auth/register" },
+      { label: "Privacy", href: "/privacy" },
     ],
   },
 ];

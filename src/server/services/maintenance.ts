@@ -1,14 +1,17 @@
-import { and, eq, inArray, isNull, lt, sql } from "drizzle-orm";
+import { and, eq, inArray, isNotNull, isNull, lt, sql } from "drizzle-orm";
 
 import { OPEN_STATUSES } from "@/domain/constants";
 import { checkTransition } from "@/domain/request-machine";
 import { SYSTEM_ACTOR, withActor } from "@/server/db/actor";
 import * as s from "@/server/db/schema";
 import { type Database, rowsOf } from "@/server/db/types";
+import { log } from "@/server/log";
 
 import { adminIds, notify } from "./notify";
 
 export const AUTO_CLOSE_HOURS = 72;
+/** Read notifications older than this are deleted (unread ones are kept until read). */
+export const NOTIFICATION_RETENTION_DAYS = 180;
 
 /**
  * Atomically claims a job for this run window. Only one server instance wins, so the sweep can be
@@ -144,12 +147,33 @@ export async function autoCloseResolved(db: Database, now = new Date()) {
 }
 
 /** The background sweep. Safe to call often: it runs at most once per window across all instances. */
+/**
+ * Data retention: drops what is no longer needed. Read notifications after
+ * NOTIFICATION_RETENTION_DAYS, plus expired sessions and verification tokens. Requests, their
+ * history and the audit trail are kept (they are the institution's record).
+ */
+export async function purgeExpiredData(db: Database, now = new Date()) {
+  const cutoff = new Date(now.getTime() - NOTIFICATION_RETENTION_DAYS * 86_400_000);
+  const notifications = await db
+    .delete(s.notifications)
+    .where(and(isNotNull(s.notifications.readAt), lt(s.notifications.readAt, cutoff)))
+    .returning({ id: s.notifications.id });
+  const sessions = await db.delete(s.sessions).where(lt(s.sessions.expiresAt, now)).returning({ id: s.sessions.id });
+  const verifications = await db
+    .delete(s.verifications)
+    .where(lt(s.verifications.expiresAt, now))
+    .returning({ id: s.verifications.id });
+  return { notifications: notifications.length, sessions: sessions.length, verifications: verifications.length };
+}
+
 export async function runMaintenance(db: Database, opts: { force?: boolean; everySeconds?: number } = {}) {
   const claimed = await claimJob(db, "maintenance", opts.force ? 0 : (opts.everySeconds ?? 300));
   if (!claimed) return { ran: false as const };
   const escalated = await escalateSlaBreaches(db);
   const autoClosed = await autoCloseResolved(db);
-  const result = { ran: true as const, escalated, autoClosed, at: new Date().toISOString() };
+  const purged = await purgeExpiredData(db);
+  const result = { ran: true as const, escalated, autoClosed, purged, at: new Date().toISOString() };
+  log.info("maintenance.completed", { escalated, autoClosed, purged });
   await db
     .update(s.systemJobs)
     .set({ lastResult: JSON.stringify(result) })

@@ -1,6 +1,7 @@
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 import { streamSSE } from "hono/streaming";
 
+import { log } from "@/server/log";
 import { canReceive, type ZegaEvent } from "@/server/realtime/events";
 import { runMaintenance } from "@/server/services/maintenance";
 
@@ -33,7 +34,7 @@ export function realtimeRoutes(app: OpenAPIHono<AppEnv>) {
       const bus = c.get("events");
       const db = c.get("db");
       // Opportunistic background sweep (SLA escalation, auto-close): runs at most every 5 minutes.
-      void runMaintenance(db).catch((e) => console.error("[maintenance]", e));
+      void runMaintenance(db).catch((err) => log.error("maintenance.failed", { err }));
 
       c.header("Cache-Control", "no-cache, no-transform");
       c.header("X-Accel-Buffering", "no");

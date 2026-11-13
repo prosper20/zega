@@ -3,7 +3,13 @@ import { afterAll, beforeAll, describe, expect, it } from "vitest";
 
 import * as s from "@/server/db/schema";
 import { rowsOf } from "@/server/db/types";
-import { autoCloseResolved, claimJob, escalateSlaBreaches } from "@/server/services/maintenance";
+import {
+  autoCloseResolved,
+  claimJob,
+  escalateSlaBreaches,
+  NOTIFICATION_RETENTION_DAYS,
+  purgeExpiredData,
+} from "@/server/services/maintenance";
 
 import { createTestApi } from "../helpers/test-api";
 
@@ -119,6 +125,35 @@ describe("background sweep", () => {
     const last = timeline.data.filter((i: { kind: string }) => i.kind === "status").at(-1);
     expect(last).toMatchObject({ to: "closed", actor: null });
     expect(last.note).toMatch(/automatically/);
+  });
+
+  it("purges old read notifications and expired sessions, keeping unread ones", async () => {
+    const day = 86_400_000;
+    const old = new Date(Date.now() - (NOTIFICATION_RETENTION_DAYS + 5) * day);
+    const base = { userId: admin, type: "comment" as const, title: "Retention test", body: "x" };
+    const [readOld, unreadOld, readRecent] = await api.db
+      .insert(s.notifications)
+      .values([
+        { ...base, readAt: old, createdAt: old },
+        { ...base, readAt: null, createdAt: old },
+        { ...base, readAt: new Date(), createdAt: new Date() },
+      ])
+      .returning({ id: s.notifications.id });
+    await api.db.insert(s.sessions).values({
+      id: "expired-session",
+      token: "expired-token",
+      userId: admin,
+      expiresAt: new Date(Date.now() - day),
+    });
+
+    const purged = await purgeExpiredData(api.db);
+    expect(purged.notifications).toBeGreaterThanOrEqual(1);
+    expect(purged.sessions).toBeGreaterThanOrEqual(1);
+    const left = new Set((await api.db.select({ id: s.notifications.id }).from(s.notifications)).map((n) => n.id));
+    expect(left.has(readOld.id)).toBe(false);
+    expect(left.has(unreadOld.id)).toBe(true);
+    expect(left.has(readRecent.id)).toBe(true);
+    expect(await api.db.select().from(s.sessions).where(eq(s.sessions.id, "expired-session"))).toHaveLength(0);
   });
 
   it("protects the cron endpoint with a secret", async () => {

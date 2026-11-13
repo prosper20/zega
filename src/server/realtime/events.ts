@@ -1,3 +1,4 @@
+import { log } from "@/server/log";
 import type { CurrentUser } from "@/server/session-types";
 
 /** Payloads published by the database triggers on the `zega_events` channel. */
@@ -43,7 +44,7 @@ export function createFanout() {
         try {
           l(e);
         } catch (err) {
-          console.error("[events] listener failed", err);
+          log.error("events.listener_failed", { type: e.type, err });
         }
       }
     },

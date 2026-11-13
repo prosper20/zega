@@ -1,5 +1,7 @@
 import { sql } from "drizzle-orm";
 
+import { log } from "@/server/log";
+
 import type { Database, Tx } from "./types";
 import { AsyncLocalStorage } from "node:async_hooks";
 
@@ -17,7 +19,7 @@ const afterCommitStore = new AsyncLocalStorage<AfterCommit[]>();
 export function afterCommit(fn: AfterCommit) {
   const queue = afterCommitStore.getStore();
   if (queue) queue.push(fn);
-  else void fn().catch((e) => console.error("[afterCommit]", e));
+  else void fn().catch((err) => log.error("after_commit.failed", { err }));
 }
 
 /**
@@ -36,7 +38,7 @@ export async function withActor<T>(db: Database, actorId: string, fn: (tx: Tx) =
     // Awaited (with a cap) so serverless functions do not freeze before the work finishes.
     const timeout = new Promise((resolve) => setTimeout(resolve, 8000));
     await Promise.race([
-      Promise.allSettled(queue.map((job) => job().catch((e) => console.error("[afterCommit]", e)))),
+      Promise.allSettled(queue.map((job) => job().catch((err) => log.error("after_commit.failed", { actorId, err })))),
       timeout,
     ]);
   }

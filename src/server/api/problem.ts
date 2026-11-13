@@ -3,6 +3,8 @@ import { HTTPException } from "hono/http-exception";
 import type { ContentfulStatusCode } from "hono/utils/http-status";
 import { ZodError } from "zod";
 
+import { log } from "@/server/log";
+
 import type { AppEnv } from "./context";
 
 /**
@@ -59,12 +61,24 @@ export function problemResponse(
   detail?: string,
   errors?: ProblemBody["errors"],
 ) {
+  const instance = new URL(c.req.url).pathname;
+  if (status === 401 || status === 403 || status === 429) {
+    const event = status === 401 ? "auth.unauthenticated" : status === 403 ? "auth.forbidden" : "auth.rate_limited";
+    log.security(event, {
+      requestId: c.get("requestId"),
+      userId: c.get("user")?.id ?? null,
+      role: c.get("user")?.role ?? null,
+      method: c.req.method,
+      route: instance,
+      reason: slug,
+    });
+  }
   const body: ProblemBody = {
     type: `${PROBLEM_TYPE_BASE}${slug}`,
     title: TITLES[status] ?? "Error",
     status,
     detail,
-    instance: new URL(c.req.url).pathname,
+    instance,
     requestId: c.get("requestId"),
     ...(errors?.length ? { errors } : {}),
   };
@@ -85,6 +99,12 @@ export function handleError(err: Error, c: Context<AppEnv>) {
   const pgCode = (err as { cause?: { code?: string } }).cause?.code;
   if (pgCode === "23505") return problemResponse(c, 409, "conflict", "That record already exists.");
   if (pgCode === "23503") return problemResponse(c, 422, "validation-failed", "A referenced record does not exist.");
-  console.error(`[api] ${c.get("requestId")}`, err);
+  log.error("api.unhandled", {
+    requestId: c.get("requestId"),
+    userId: c.get("user")?.id ?? null,
+    method: c.req.method,
+    route: new URL(c.req.url).pathname,
+    err,
+  });
   return problemResponse(c, 500, "internal", "Something went wrong. Quote the request id if you report it.");
 }

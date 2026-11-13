@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -215,6 +216,13 @@ export function RegisterForm() {
         {submitting && <Loader2 className="animate-spin" data-icon="inline-start" />}
         Create account
       </Button>
+      <p className="text-muted-foreground text-center text-xs">
+        By creating an account you agree to how ZEGA handles your data, described in the{" "}
+        <Link href="/privacy" className="text-foreground underline underline-offset-4">
+          privacy notice
+        </Link>
+        .
+      </p>
       <p className="text-muted-foreground text-center text-xs">
         Maintenance officers and administrators are added by an administrator.
       </p>

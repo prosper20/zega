@@ -4,6 +4,7 @@ import { Client, neonConfig } from "@neondatabase/serverless";
 import ws from "ws";
 
 import { relaxConnectTimeout } from "@/server/db/network";
+import { log } from "@/server/log";
 
 import { createFanout, type EventBus, parseEvent } from "./events";
 
@@ -30,7 +31,7 @@ function createNeonBus(): EventBus {
         if (e) fanout.emit(e);
       });
       c.on("error", (err) => {
-        console.error("[events] listener connection error", err.message);
+        log.warn("events.connection_lost", { err, retryInMs: retry });
         client = null;
         void c.end().catch(() => undefined);
         setTimeout(() => void connect(), retry);
@@ -42,7 +43,7 @@ function createNeonBus(): EventBus {
       retry = 1000;
     })()
       .catch((err) => {
-        console.error("[events] could not listen", (err as Error).message);
+        log.error("events.listen_failed", { err, retryInMs: retry });
         setTimeout(() => void connect(), retry);
         retry = Math.min(retry * 2, 30_000);
       })
