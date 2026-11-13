@@ -146,7 +146,9 @@ function testEvidence() {
     .map((f) => {
       const file = f.name.replace(`${ROOT}/`, "");
       const passed = f.assertionResults.filter((a) => a.status === "passed").length;
-      const kind = file.startsWith("tests/api") ? "API and database" : file.endsWith(".tsx") ? "Component" : "Unit";
+      let kind = "Unit";
+      if (file.startsWith("tests/api")) kind = "API and database";
+      else if (file.endsWith(".tsx")) kind = "Component";
       return { file, kind, total: f.assertionResults.length, passed };
     })
     .sort((a, b) => a.kind.localeCompare(b.kind) || a.file.localeCompare(b.file));
