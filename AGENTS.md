@@ -18,7 +18,7 @@ npx skills add shadcn/ui
 
 The skill contains the component, styling, composition, accessibility, and CLI rules. Do not duplicate those rules here. Always inspect the local component source before using it.
 
-Do not modify files inside `src/components/ui/` or `src/components/calendar/`. Keep these components intact and apply styling or customization where they are used.
+Do not modify files inside `src/components/ui/` except for project-wide design rules. Current deliberate change: form fields (`input`, `textarea`, `native-select`, `input-group`) show focus with a border colour change only, no outline or ring (product decision). Selected options elsewhere also use border colour only.
 
 ## Setup
 

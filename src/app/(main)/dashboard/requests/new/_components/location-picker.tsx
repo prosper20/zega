@@ -74,7 +74,7 @@ export function LocationPicker({
           const TopIcon = KIND_ICON[top.kind as keyof typeof KIND_ICON] ?? MapPin;
           return (
             <div key={top.id}>
-              <div className="bg-muted/60 text-muted-foreground sticky top-0 flex items-center gap-2 px-3 py-1.5 text-xs font-semibold tracking-wide uppercase backdrop-blur">
+              <div className="bg-muted text-muted-foreground sticky top-0 flex items-center gap-2 px-3 py-1.5 text-xs font-semibold tracking-wide uppercase">
                 <TopIcon className="size-3.5" /> {top.name}
               </div>
               {items.map((l) => {

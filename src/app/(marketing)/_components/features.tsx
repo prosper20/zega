@@ -61,8 +61,7 @@ export function Features() {
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-5xl">
-            Accountability{" "}
-            <span className="from-primary bg-gradient-to-r to-emerald-400 bg-clip-text text-transparent">built in</span>
+            Accountability <span className="text-primary">built in</span>
           </h2>
           <p className="text-muted-foreground mt-4 text-lg">
             Everything a university needs to replace manual complaints with a process people can trust.

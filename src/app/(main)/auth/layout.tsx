@@ -13,7 +13,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   return (
     <main>
       <div className="grid h-dvh justify-center p-2 lg:grid-cols-2">
-        <div className="bg-sidebar relative order-2 hidden h-full rounded-3xl lg:flex">
+        <div className="bg-sidebar relative order-2 hidden h-full rounded-xl lg:flex">
           <div className="text-sidebar-foreground absolute top-10 space-y-2 px-10">
             <AppLogo className="text-sidebar-primary size-10" />
             <h1 className="text-2xl font-semibold tracking-tight">{APP_CONFIG.name}</h1>

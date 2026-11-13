@@ -12,7 +12,7 @@ export default async function DashboardHome() {
   const greeting = hour < 12 ? "Good morning" : hour < 17 ? "Good afternoon" : "Good evening";
   return (
     <div className="flex flex-col gap-6">
-      <PageHeader title={`${greeting}, ${user.name.split(" ")[0]}`} description="Report it. Track it. Resolve it." />
+      <PageHeader title={`${greeting}, ${user.name.split(" ")[0]}`} />
       {user.role === "admin" ? (
         <AdminDashboard />
       ) : user.role === "officer" ? (

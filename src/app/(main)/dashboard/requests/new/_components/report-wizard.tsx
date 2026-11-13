@@ -230,8 +230,8 @@ export function ReportWizard({
                             setStep(1);
                           }}
                           className={cn(
-                            "flex items-start gap-3 rounded-xl border p-4 text-left transition-all hover:shadow-sm",
-                            active ? "border-primary bg-accent ring-primary/20 ring-2" : "hover:border-primary/40",
+                            "flex items-start gap-3 rounded-xl border p-4 text-left transition-all",
+                            active ? "border-primary bg-accent" : "hover:border-primary/40",
                           )}
                         >
                           <span className="bg-primary/10 text-primary flex size-10 shrink-0 items-center justify-center rounded-lg">
@@ -338,7 +338,7 @@ export function ReportWizard({
                         onClick={() => set("priority", p)}
                         className={cn(
                           "rounded-lg border px-3 py-2 text-left text-sm transition-colors",
-                          priority === p ? "border-primary bg-accent ring-primary/20 ring-2" : "hover:bg-muted",
+                          priority === p ? "border-primary bg-accent" : "hover:bg-muted",
                         )}
                       >
                         <span className="block font-medium capitalize">{p}</span>

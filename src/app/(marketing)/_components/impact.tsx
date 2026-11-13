@@ -7,28 +7,28 @@ const CARDS = [
     sub: "to report a fault with a QR scan",
     icon: QrCode,
     href: "#how-it-works",
-    tone: "from-blue-950 to-primary",
+    tone: "bg-primary",
   },
   {
     stat: "100%",
     sub: "of actions recorded on the audit trail",
     icon: Fingerprint,
     href: "#features",
-    tone: "from-slate-900 to-blue-800",
+    tone: "bg-sidebar",
   },
   {
     stat: "1 click",
     sub: "to assign the right officer",
     icon: MousePointerClick,
     href: "#roles",
-    tone: "from-blue-900 to-sky-600",
+    tone: "bg-secondary-foreground",
   },
   {
     stat: "Live",
     sub: "status updates, no refreshing",
     icon: Radio,
     href: "#features",
-    tone: "from-blue-950 to-emerald-600",
+    tone: "bg-emerald-700",
   },
 ];
 
@@ -47,7 +47,7 @@ export function Impact() {
               key={c.stat}
               href={c.href}
               className={cn(
-                "group relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-2xl bg-gradient-to-br p-5 text-white shadow-lg transition-transform hover:-translate-y-1",
+                "group relative flex aspect-[3/4] flex-col justify-between overflow-hidden rounded-xl p-5 text-white transition-colors hover:brightness-110",
                 c.tone,
               )}
             >

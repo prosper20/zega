@@ -25,12 +25,7 @@ export function JobCard({
   const dueText =
     due === null ? null : due >= now ? `${formatDuration(due - now)} left` : `${formatDuration(now - due)} overdue`;
   return (
-    <div
-      className={cn(
-        "bg-card space-y-2 rounded-lg border p-3 shadow-xs",
-        dragging && "shadow-lg ring-primary/30 ring-2",
-      )}
-    >
+    <div className={cn("bg-card space-y-2 rounded-lg border p-3 shadow-xs", dragging && "border-primary")}>
       <div className="flex items-start justify-between gap-2">
         <Link
           href={`/dashboard/requests/${job.refCode}`}

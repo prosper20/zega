@@ -83,7 +83,7 @@ export function RegisterForm() {
       toast.error(message);
       return;
     }
-    toast.success("Account created. Welcome to ZEGA!");
+    toast.success("Account created. You can report your first issue now.");
     router.replace("/dashboard");
     router.refresh();
   }
@@ -114,9 +114,7 @@ export function RegisterForm() {
                       htmlFor={`account-${type}`}
                       className={cn(
                         "flex cursor-pointer items-center gap-2 rounded-lg border px-3 py-2.5 text-sm font-medium transition-colors",
-                        field.value === type
-                          ? "border-primary bg-accent text-accent-foreground ring-primary/20 ring-2"
-                          : "hover:bg-muted",
+                        field.value === type ? "border-primary bg-accent text-accent-foreground" : "hover:bg-muted",
                       )}
                     >
                       <RadioGroupItem id={`account-${type}`} value={type} />

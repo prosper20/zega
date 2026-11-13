@@ -26,10 +26,6 @@ export function CtaBand() {
       ) : (
         <>
           <div aria-hidden="true" className="bg-blueprint absolute inset-0 -z-10 opacity-70" />
-          <div
-            aria-hidden="true"
-            className="bg-primary/40 absolute -top-32 left-1/2 -z-10 size-[28rem] -translate-x-1/2 rounded-full blur-3xl"
-          />
         </>
       )}
       <div className="mx-auto max-w-3xl px-4 py-24 text-center sm:px-6 sm:py-32">
@@ -40,7 +36,7 @@ export function CtaBand() {
         <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
           <Button asChild className="text-primary h-12 bg-white px-6 text-base font-semibold hover:bg-white/90">
             <Link href="/auth/register">
-              Get started <ArrowRight data-icon="inline-end" />
+              Create your account <ArrowRight data-icon="inline-end" />
             </Link>
           </Button>
           <Button

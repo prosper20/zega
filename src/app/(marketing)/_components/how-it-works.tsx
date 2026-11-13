@@ -53,16 +53,14 @@ export function HowItWorks() {
       <div className="mx-auto max-w-5xl px-4 sm:px-6">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight sm:text-5xl">
-            From fault to{" "}
-            <span className="from-primary bg-gradient-to-r to-emerald-400 bg-clip-text text-transparent">fixed</span>,
-            on the record
+            From fault to <span className="text-primary">fixed</span>, on the record
           </h2>
           <p className="text-muted-foreground mt-4 text-lg">
             Every request follows the same accountable path, so nothing gets lost between a phone call and a repair.
           </p>
         </div>
 
-        <div className="from-primary relative mt-12 flex h-[360px] items-start justify-center overflow-hidden rounded-2xl bg-gradient-to-br to-emerald-400 sm:h-[420px]">
+        <div className="bg-primary relative mt-12 flex h-[360px] items-start justify-center overflow-hidden rounded-xl sm:h-[420px]">
           <div className="bg-blueprint absolute inset-0 opacity-60" aria-hidden="true" />
           <LandingVideo
             key={step.slot.id}
@@ -70,7 +68,7 @@ export function HowItWorks() {
             fallback={step.mock}
             chrome={false}
             canvas={PHONE}
-            className="animate-in fade-in slide-in-from-bottom-4 relative mt-10 w-[220px] rounded-[2rem] border-[6px] border-white/80 shadow-2xl duration-500 sm:w-[250px]"
+            className="animate-in fade-in slide-in-from-bottom-4 relative mt-10 w-[220px] rounded-[2rem] border-[6px] border-white/80 shadow-lg duration-500 sm:w-[250px]"
           />
         </div>
 

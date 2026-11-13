@@ -210,7 +210,7 @@ export function AssignMock() {
           key={o.name}
           className={cn(
             "bg-card flex items-center gap-2 rounded-lg border px-3 py-2 transition-all",
-            i === 0 && t >= 1 && "border-primary ring-primary/20 ring-2",
+            i === 0 && t >= 1 && "border-primary",
           )}
         >
           <div className="bg-secondary text-secondary-foreground flex size-6 items-center justify-center rounded-full text-[9px] font-semibold">

@@ -65,7 +65,7 @@ export async function RequesterHome({ user }: { user: CurrentUser }) {
         {stats.map((s) => (
           <Link key={s.label} href={s.href} className="group">
             <Card
-              className={`h-full transition-shadow group-hover:shadow-md ${s.highlight ? "border-emerald-300 dark:border-emerald-500/40" : ""}`}
+              className={`h-full transition-colors group-hover:border-primary/50 ${s.highlight ? "border-emerald-300 dark:border-emerald-500/40" : ""}`}
             >
               <CardContent className="flex items-center gap-4 p-5">
                 <span

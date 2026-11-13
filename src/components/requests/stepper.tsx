@@ -42,12 +42,18 @@ export function RequestStepper({ status }: { status: RequestStatus }) {
               className={cn(
                 "relative z-10 flex size-7 items-center justify-center rounded-full border-2 text-xs font-semibold",
                 done ? "border-primary bg-primary text-primary-foreground" : "bg-background text-muted-foreground",
-                current && !stopped && "ring-primary/20 ring-4",
               )}
             >
               {done ? <Check className="size-3.5" strokeWidth={3} /> : i + 1}
             </span>
-            <span className={cn("text-xs", done ? "font-medium" : "text-muted-foreground")}>{step.label}</span>
+            <span
+              className={cn(
+                "text-xs",
+                current && !stopped ? "text-primary font-semibold" : done ? "font-medium" : "text-muted-foreground",
+              )}
+            >
+              {step.label}
+            </span>
           </li>
         );
       })}

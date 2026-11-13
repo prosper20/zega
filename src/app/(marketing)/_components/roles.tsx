@@ -61,10 +61,7 @@ const ROLES = [
 /** MaintainX-style platform tabs on a full-bleed brand gradient. */
 export function Roles() {
   return (
-    <section
-      id="roles"
-      className="from-primary relative scroll-mt-16 overflow-hidden bg-gradient-to-b to-blue-400 py-20 text-white sm:py-28"
-    >
+    <section id="roles" className="bg-primary relative scroll-mt-16 overflow-hidden py-20 text-white sm:py-28">
       <div className="mx-auto max-w-6xl px-4 sm:px-6">
         <h2 className="mx-auto max-w-3xl text-center text-3xl font-bold tracking-tight text-balance sm:text-5xl">
           One platform, a dashboard for every role on campus
@@ -102,12 +99,12 @@ export function Roles() {
                     {role.cta.label} <ArrowRight className="size-4" />
                   </Link>
                 </div>
-                <div className="flex items-center justify-center rounded-2xl bg-white/15 p-3 ring-1 ring-white/20 sm:p-12">
+                <div className="flex items-center justify-center rounded-xl border border-white/20 bg-white/10 p-3 sm:p-12">
                   <LandingVideo
                     slot={role.slot}
                     fallback={role.mock}
                     chrome={false}
-                    className="w-full max-w-lg border-0 shadow-2xl shadow-blue-950/30"
+                    className="w-full max-w-lg border-0 shadow-lg"
                   />
                 </div>
               </div>

@@ -57,7 +57,7 @@ export default async function QrStickersPage({ searchParams }: { searchParams: P
           {stickers.map((s) => (
             <section
               key={s.id}
-              className="flex break-inside-avoid flex-col items-center gap-3 rounded-2xl border-2 border-[#246cff] p-5 text-center"
+              className="flex break-inside-avoid flex-col items-center gap-3 rounded-xl border-2 border-[#246cff] p-5 text-center"
             >
               <ZegaWordmark variant="brand-navy" className="h-6 w-auto" />
               <p className="text-sm font-semibold">Something broken here? Scan to report it.</p>

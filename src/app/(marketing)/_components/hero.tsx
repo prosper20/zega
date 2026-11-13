@@ -29,7 +29,7 @@ function StatCard({
   const Icon = trend === "up" ? TrendingUp : TrendingDown;
   return (
     <div
-      className={`bg-card text-card-foreground absolute z-10 hidden rounded-xl border p-4 shadow-2xl sm:block ${className ?? ""}`}
+      className={`bg-card text-card-foreground absolute z-10 hidden rounded-xl border p-4 shadow-lg sm:block ${className ?? ""}`}
     >
       <div className="text-muted-foreground text-sm font-medium">{label}</div>
       <div className="mt-1 flex items-center gap-2">

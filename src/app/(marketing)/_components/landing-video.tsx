@@ -58,7 +58,7 @@ export function LandingVideo({
 
   return (
     <figure
-      className={cn("bg-card text-card-foreground relative overflow-hidden rounded-2xl border shadow-xl", className)}
+      className={cn("bg-card text-card-foreground relative overflow-hidden rounded-xl border shadow-lg", className)}
     >
       {chrome && (
         <div className="bg-muted/60 flex items-center gap-1.5 border-b px-4 py-2.5" aria-hidden="true">

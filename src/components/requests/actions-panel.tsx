@@ -54,7 +54,9 @@ export function ActionsPanel({ request, extra }: { request: RequestDetail; extra
       { to: open.to, note: note.trim() || undefined, ...(isConfirm && score ? { rating: { score } } : {}) },
       {
         onSuccess: () => {
-          toast.success(isConfirm ? "Thanks for confirming!" : `Request ${open.label.toLowerCase()}`);
+          toast.success(
+            isConfirm ? "Fix confirmed. Thank you for the feedback." : `Request ${open.label.toLowerCase()}`,
+          );
           setOpen(null);
           setNote("");
           setScore(0);

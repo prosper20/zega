@@ -310,7 +310,7 @@ function Column({
       aria-label={`${STATUS_LABELS[status]} (${count})`}
       className={cn(
         "bg-muted/40 flex min-h-64 flex-col gap-2 rounded-xl border p-2 transition-colors",
-        isDropTarget && "bg-accent ring-primary/30 ring-2",
+        isDropTarget && "bg-accent border-primary",
       )}
     >
       <header className="flex items-baseline justify-between px-1 pt-1">
