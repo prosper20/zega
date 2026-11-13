@@ -36,12 +36,12 @@ function StatCard({
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-blue-900 text-white">
+    <section className="relative flex items-center overflow-hidden bg-blue-900 text-white lg:min-h-[calc(100svh-4rem-1px)]">
       <Image src="/images/hero-campus.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
       <div aria-hidden="true" className="absolute inset-0 bg-black/40" />
       <div aria-hidden="true" className="absolute inset-0 bg-blue-900/80" />
       <div aria-hidden="true" className="bg-blueprint absolute inset-0 opacity-50" />
-      <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1fr_1.2fr]">
+      <div className="relative mx-auto grid w-full max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1fr_1.2fr]">
         <div>
           <h1 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl xl:text-6xl">
             Reported, tracked and resolved.
