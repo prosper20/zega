@@ -56,13 +56,26 @@ describe("UsersManager", () => {
     expect(table.queryByRole("button", { name: "Actions for Adaeze Okafor" })).not.toBeInTheDocument();
   });
 
-  it("deactivates a user", async () => {
+  it("deactivates a user only after confirmation", async () => {
     const user = userEvent.setup();
     renderWithProviders(<UsersManager currentUserId="u-admin" />);
     await screen.findAllByText("Chinedu Okeke");
     const table = within(screen.getByRole("table"));
-    await user.click(table.getByRole("button", { name: "Actions for Chinedu Okeke" }));
-    await user.click(screen.getByRole("menuitem", { name: /Deactivate/ }));
+    const openMenu = async () => {
+      await user.click(table.getByRole("button", { name: "Actions for Chinedu Okeke" }));
+      await user.click(screen.getByRole("menuitem", { name: /Deactivate/ }));
+    };
+
+    // Cancelling sends nothing.
+    await openMenu();
+    const first = await screen.findByRole("alertdialog");
+    expect(within(first).getByText("Deactivate Chinedu Okeke?")).toBeInTheDocument();
+    await user.click(within(first).getByRole("button", { name: "Cancel" }));
+    await waitFor(() => expect(screen.queryByRole("alertdialog")).not.toBeInTheDocument());
+    expect(calls).toEqual([]);
+
+    await openMenu();
+    await user.click(within(await screen.findByRole("alertdialog")).getByRole("button", { name: "Deactivate" }));
     await waitFor(() => expect(calls).toEqual([{ method: "PATCH", path: "/api/users/u-off", body: { banned: true } }]));
   });
 

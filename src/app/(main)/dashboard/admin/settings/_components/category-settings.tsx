@@ -6,6 +6,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Archive, ArchiveRestore, Loader2, Save } from "lucide-react";
 import { toast } from "sonner";
 
+import { useConfirm } from "@/components/confirm-action";
 import { CategoryIcon } from "@/components/requests/badges";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -57,6 +58,7 @@ function CategoryCard({ category }: { category: Category }) {
   ) as Record<RequestPriority, { response: string; resolution: string }>;
   const [sla, setSla] = useState(initial);
   const [saving, setSaving] = useState(false);
+  const { confirm, dialog } = useConfirm();
   const dirty = JSON.stringify(sla) !== JSON.stringify(initial);
   const refresh = () => qc.invalidateQueries({ queryKey: keys.categories });
 
@@ -104,8 +106,21 @@ function CategoryCard({ category }: { category: Category }) {
     }
   }
 
+  async function toggleArchived() {
+    if (category.archived) return patch({ archived: false }, `${category.name} restored`);
+    const ok = await confirm({
+      title: `Archive ${category.name}?`,
+      description:
+        "It disappears from the report form. Existing requests in this category keep it, and you can restore it at any time.",
+      confirmLabel: "Archive",
+      destructive: true,
+    });
+    if (ok) await patch({ archived: true }, `${category.name} archived (hidden from the report form)`);
+  }
+
   return (
     <Card className={category.archived ? "opacity-60" : undefined}>
+      {dialog}
       <CardHeader>
         <CardTitle className="flex items-center gap-2 text-base">
           <span className="bg-primary/10 text-primary flex size-8 items-center justify-center rounded-lg">
@@ -116,18 +131,7 @@ function CategoryCard({ category }: { category: Category }) {
         </CardTitle>
         <CardDescription>{category.description}</CardDescription>
         <CardAction>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() =>
-              void patch(
-                { archived: !category.archived },
-                category.archived
-                  ? `${category.name} restored`
-                  : `${category.name} archived (hidden from the report form)`,
-              )
-            }
-          >
+          <Button variant="ghost" size="sm" onClick={() => void toggleArchived()}>
             {category.archived ? <ArchiveRestore data-icon="inline-start" /> : <Archive data-icon="inline-start" />}
             {category.archived ? "Restore" : "Archive"}
           </Button>

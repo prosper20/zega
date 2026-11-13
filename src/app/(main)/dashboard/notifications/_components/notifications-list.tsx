@@ -90,13 +90,17 @@ export function NotificationsList() {
                   <Icon className="size-4" />
                 </span>
                 <div className="min-w-0 flex-1">
-                  <Link
-                    href={n.refCode ? `/dashboard/requests/${n.refCode}` : "#"}
-                    onClick={() => !n.readAt && read.mutate([n.id])}
-                    className="hover:text-primary text-sm font-medium"
-                  >
-                    {n.title}
-                  </Link>
+                  {n.refCode ? (
+                    <Link
+                      href={`/dashboard/requests/${n.refCode}`}
+                      onClick={() => !n.readAt && read.mutate([n.id])}
+                      className="hover:text-primary text-sm font-medium"
+                    >
+                      {n.title}
+                    </Link>
+                  ) : (
+                    <p className="text-sm font-medium">{n.title}</p>
+                  )}
                   <p className="text-muted-foreground text-sm">{n.body}</p>
                   <time
                     className="text-muted-foreground text-xs"

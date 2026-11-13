@@ -11,6 +11,7 @@ import { Download, Loader2, Search, SlidersHorizontal, X } from "lucide-react";
 import { parseAsArrayOf, parseAsString, parseAsStringLiteral, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 
+import { useConfirm } from "@/components/confirm-action";
 import { CategoryIcon, PriorityBadge, SlaBadge, StatusBadge } from "@/components/requests/badges";
 import { ResponsiveList } from "@/components/responsive-list";
 import { Button } from "@/components/ui/button";
@@ -73,6 +74,7 @@ export function RequestsTable() {
   const total = list.data?.pages[0]?.pageInfo.total ?? 0;
   const [selected, setSelected] = useState<Set<string>>(new Set());
   const [bulkBusy, setBulkBusy] = useState(false);
+  const { confirm, dialog } = useConfirm();
   const [filtersOpen, setFiltersOpen] = useState(false);
   const mobile = useIsMobile();
   const active = Object.entries(f).filter(([k, v]) => k !== "sort" && (Array.isArray(v) ? v.length : v)).length;
@@ -86,6 +88,20 @@ export function RequestsTable() {
 
   async function bulk(kind: "assign" | "priority", value: string) {
     if (!value || !selected.size) return;
+    const n = selected.size;
+    const what = kind === "assign" ? (officers.data?.data.find((o) => o.id === value)?.name ?? "this officer") : value;
+    const confirmed = await confirm({
+      title:
+        kind === "assign"
+          ? `Assign ${n} request${n > 1 ? "s" : ""} to ${what}?`
+          : `Set ${n} request${n > 1 ? "s" : ""} to ${what} priority?`,
+      description:
+        kind === "assign"
+          ? "Requesters and the officer are notified. Any current officer on these requests is replaced."
+          : "SLA targets are recalculated from the new priority. Requesters see the change on their timeline.",
+      confirmLabel: kind === "assign" ? "Assign" : "Set priority",
+    });
+    if (!confirmed) return;
     setBulkBusy(true);
     let ok = 0;
     const failures: string[] = [];
@@ -332,6 +348,7 @@ export function RequestsTable() {
         </div>
       </div>
 
+      {dialog}
       <ResponsiveList
         items={list.isPending ? [] : rows}
         empty={

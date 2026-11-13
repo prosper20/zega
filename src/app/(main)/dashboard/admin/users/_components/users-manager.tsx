@@ -8,6 +8,7 @@ import { BadgeCheck, Ban, Loader2, MoreHorizontal, Plus, RotateCcw, Search, Wren
 import { parseAsInteger, parseAsString, useQueryStates } from "nuqs";
 import { toast } from "sonner";
 
+import { useConfirm } from "@/components/confirm-action";
 import { ResponsiveDialog } from "@/components/responsive-dialog";
 import { ResponsiveList } from "@/components/responsive-list";
 import { Badge } from "@/components/ui/badge";
@@ -80,6 +81,36 @@ export function UsersManager({ currentUserId }: { currentUserId: string }) {
   const [creating, setCreating] = useState(false);
   const [editingSpecs, setEditingSpecs] = useState<User | null>(null);
   const refresh = () => qc.invalidateQueries({ queryKey: ["users"] });
+  const { confirm, dialog } = useConfirm();
+
+  async function changeRole(u: User, r: RoleSlug) {
+    const ok = await confirm({
+      title: `Make ${u.name} ${ROLE_INFO[r].label.toLowerCase()}?`,
+      description: `They lose ${ROLE_INFO[u.role].label.toLowerCase()} access and get ${ROLE_INFO[r].label.toLowerCase()} permissions on their next request. The change is recorded in the audit trail.`,
+      confirmLabel: "Change role",
+    });
+    if (ok) await update(u, { role: r }, `${u.name} is now ${ROLE_INFO[r].label.toLowerCase()}`);
+  }
+
+  async function setActive(u: User, active: boolean) {
+    const ok = await confirm(
+      active
+        ? {
+            title: `Reactivate ${u.name}?`,
+            description: "They will be able to sign in again.",
+            confirmLabel: "Reactivate",
+          }
+        : {
+            title: `Deactivate ${u.name}?`,
+            description:
+              "They are signed out on every device and cannot sign in until reactivated. Their requests and history stay.",
+            confirmLabel: "Deactivate",
+            destructive: true,
+          },
+    );
+    if (ok)
+      await update(u, { banned: !active }, active ? `${u.name} reactivated` : `${u.name} deactivated and signed out`);
+  }
 
   async function update(u: User, patch: Partial<Pick<User, "role" | "banned">>, message: string) {
     try {
@@ -105,10 +136,7 @@ export function UsersManager({ currentUserId }: { currentUserId: string }) {
             <DropdownMenuSubTrigger>Change role</DropdownMenuSubTrigger>
             <DropdownMenuSubContent>
               {ROLE_SLUGS.filter((r) => r !== u.role).map((r) => (
-                <DropdownMenuItem
-                  key={r}
-                  onSelect={() => void update(u, { role: r }, `${u.name} is now ${ROLE_INFO[r].label.toLowerCase()}`)}
-                >
+                <DropdownMenuItem key={r} onSelect={() => void changeRole(u, r)}>
                   {ROLE_INFO[r].label}
                 </DropdownMenuItem>
               ))}
@@ -121,14 +149,11 @@ export function UsersManager({ currentUserId }: { currentUserId: string }) {
           )}
           <DropdownMenuSeparator />
           {u.banned ? (
-            <DropdownMenuItem onSelect={() => void update(u, { banned: false }, `${u.name} reactivated`)}>
+            <DropdownMenuItem onSelect={() => void setActive(u, true)}>
               <RotateCcw /> Reactivate
             </DropdownMenuItem>
           ) : (
-            <DropdownMenuItem
-              variant="destructive"
-              onSelect={() => void update(u, { banned: true }, `${u.name} deactivated and signed out`)}
-            >
+            <DropdownMenuItem variant="destructive" onSelect={() => void setActive(u, false)}>
               <Ban /> Deactivate
             </DropdownMenuItem>
           )}
@@ -298,6 +323,7 @@ export function UsersManager({ currentUserId }: { currentUserId: string }) {
         </div>
       </div>
 
+      {dialog}
       <CreateUserDialog open={creating} onOpenChange={setCreating} onCreated={refresh} />
       {editingSpecs && (
         <SpecialtiesDialog user={editingSpecs} onClose={() => setEditingSpecs(null)} onSaved={refresh} />
