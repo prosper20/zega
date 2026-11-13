@@ -5,6 +5,7 @@ import { createApi } from "@/server/api/app";
 import * as s from "@/server/db/schema";
 import { seedDatabase } from "@/server/db/seed";
 import type { Database } from "@/server/db/types";
+import { memoryStorage } from "@/server/storage";
 
 import { createTestDb } from "./test-db";
 
@@ -17,8 +18,10 @@ export const NOW = new Date("2026-11-12T12:00:00Z");
 export async function createTestApi() {
   const ctx = await createTestDb();
   await seedDatabase(ctx.db, { requests: 60, students: 8, now: NOW });
+  const storage = memoryStorage();
   const app = createApi({
     db: ctx.db,
+    storage,
     authenticate: async (req) => {
       const id = req.headers.get("x-test-user");
       if (!id) return null;
@@ -56,5 +59,5 @@ export async function createTestApi() {
     return { status: res.status, data: data as any, headers: res.headers };
   };
 
-  return { ...ctx, app, call, userByEmail, db: ctx.db as Database };
+  return { ...ctx, app, call, userByEmail, storage, db: ctx.db as Database };
 }

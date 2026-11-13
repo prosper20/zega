@@ -1,12 +1,15 @@
 import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 
+import { addAttachment, MAX_ATTACHMENT_BYTES } from "@/server/services/attachments";
 import * as svc from "@/server/services/requests";
 
 import type { AppEnv } from "../context";
 import { authed, requireUser } from "../guard";
+import { problems } from "../problem";
 import { errorResponses, IdParam, json, jsonBody, OkSchema } from "../schemas/common";
 import {
   AssignSchema,
+  AttachmentSchema,
   CommentSchema,
   CreateCommentSchema,
   CreateRequestSchema,
@@ -204,6 +207,46 @@ export function requestRoutes(app: OpenAPIHono<AppEnv>) {
     }),
     async (c) =>
       c.json(await svc.addComment(c.get("db"), requireUser(c), c.req.valid("param").id, c.req.valid("json")), 201),
+  );
+
+  app.openapi(
+    createRoute({
+      method: "post",
+      path: "/requests/{id}/attachments",
+      tags,
+      summary: "Upload a photo",
+      description:
+        "multipart/form-data with `file` (JPEG, PNG or WebP, max 3 MB, checked by content not extension) and `kind` (`evidence` for requesters, `before`/`after` for the assigned officer). Browsers compress and strip location metadata before upload.",
+      security: authed,
+      request: {
+        params: IdParam,
+        body: {
+          required: true,
+          content: {
+            "multipart/form-data": {
+              schema: z.object({
+                file: z.any().openapi({ type: "string", format: "binary" }),
+                kind: z.enum(["evidence", "before", "after"]).default("evidence"),
+              }),
+            },
+          },
+        },
+      },
+      responses: { 201: json(AttachmentSchema, "The stored attachment"), 409: errorResponses[422], ...errorResponses },
+    }),
+    async (c) => {
+      const user = requireUser(c);
+      const db = c.get("db");
+      const row = await svc.loadVisible(db, user, c.req.valid("param").id);
+      const form = await c.req.parseBody();
+      const file = form.file;
+      if (!(file instanceof File))
+        throw problems.invalid("Attach an image in the `file` field.", [{ path: "file", message: "Required." }]);
+      if (file.size > MAX_ATTACHMENT_BYTES) throw problems.invalid("Photos must be 3 MB or smaller.");
+      const kind = form.kind === "before" || form.kind === "after" ? form.kind : "evidence";
+      const bytes = new Uint8Array(await file.arrayBuffer());
+      return c.json(await addAttachment(db, c.get("storage"), user, row, { bytes, kind }), 201);
+    },
   );
 
   for (const [method, on] of [

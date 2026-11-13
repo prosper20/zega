@@ -18,6 +18,7 @@ import * as s from "@/server/db/schema";
 import { type Database, type DbOrTx, rowsOf } from "@/server/db/types";
 import type { CurrentUser } from "@/server/session-types";
 
+import { listAttachments } from "./attachments";
 import { getLocationIndex } from "./locations";
 import { adminIds, notify } from "./notify";
 
@@ -249,7 +250,7 @@ export async function listRequests(db: Database, user: CurrentUser, q: RequestLi
 }
 
 /** Loads a request the user may see, by UUID or reference code. Hidden requests are reported as not found. */
-async function loadVisible(db: DbOrTx, user: CurrentUser, idOrRef: string) {
+export async function loadVisible(db: DbOrTx, user: CurrentUser, idOrRef: string) {
   const key = UUID_PATTERN.test(idOrRef)
     ? eq(s.serviceRequests.id, idOrRef)
     : REF_PATTERN.test(idOrRef)
@@ -278,7 +279,7 @@ function transitionContext(
 
 export async function getRequest(db: Database, user: CurrentUser, idOrRef: string) {
   const row = await loadVisible(db, user, idOrRef);
-  const [voted, rating] = await Promise.all([
+  const [voted, rating, attachments] = await Promise.all([
     db
       .select({ u: s.requestVotes.userId })
       .from(s.requestVotes)
@@ -289,6 +290,7 @@ export async function getRequest(db: Database, user: CurrentUser, idOrRef: strin
       .from(s.ratings)
       .where(eq(s.ratings.requestId, row.id))
       .limit(1),
+    listAttachments(db, row.id),
   ]);
   const isOwner = row.requesterId === user.id;
   const open = OPEN_STATUSES.includes(row.status);
@@ -299,6 +301,7 @@ export async function getRequest(db: Database, user: CurrentUser, idOrRef: strin
     firstResponseAt: iso(row.firstResponseAt),
     hasVoted: voted.length > 0,
     rating: rating[0] ?? null,
+    attachments,
     availableTransitions: availableTransitions(transitionContext(user, row)).map((t) => ({
       to: t.to,
       label: t.label,

@@ -275,3 +275,59 @@ describe("admin features", () => {
     expect(res.data.label).toBe("Moremi Hall › Floor 2 › Shower block");
   });
 });
+
+describe("photo attachments", () => {
+  const JPEG = new Uint8Array([
+    0xff, 0xd8, 0xff, 0xe0, 0, 16, 74, 70, 73, 70, 0, 1, 1, 0, 0, 1, 0, 1, 0, 0, 0xff, 0xd9,
+  ]);
+  const upload = async (
+    as: string,
+    id: string,
+    bytes: Uint8Array<ArrayBuffer>,
+    kind = "evidence",
+    name = "photo.jpg",
+  ) => {
+    const form = new FormData();
+    form.set("file", new File([bytes as Uint8Array<ArrayBuffer>], name, { type: "image/jpeg" }));
+    form.set("kind", kind);
+    const res = await api.app.request(`/api/requests/${id}/attachments`, {
+      method: "POST",
+      headers: { "x-test-user": as },
+      body: form,
+    });
+    return { status: res.status, data: await res.json() };
+  };
+
+  it("accepts evidence from the requester and shows it on the request", async () => {
+    const created = await api.call(student, "POST", "/requests", {
+      title: "Broken window louvres",
+      description: "Two louvres fell out during the storm last night.",
+      categoryId,
+      locationId,
+    });
+    const res = await upload(student, created.data.id, JPEG);
+    expect(res.status).toBe(201);
+    expect(res.data).toMatchObject({ kind: "evidence", contentType: "image/jpeg" });
+    expect(api.storage.files.size).toBe(1);
+    const detail = await api.call(student, "GET", `/requests/${created.data.id}`);
+    expect(detail.data.attachments).toHaveLength(1);
+  });
+
+  it("rejects files that are not really images, whatever their name says", async () => {
+    const created = await api.call(student, "POST", "/requests", {
+      title: "Door lock jammed in room",
+      description: "The lock will not turn with the key at all.",
+      categoryId,
+      locationId,
+    });
+    const fake = new TextEncoder().encode("<script>alert(1)</script>") as Uint8Array<ArrayBuffer>;
+    const res = await upload(student, created.data.id, fake, "evidence", "evil.jpg");
+    expect(res.status).toBe(422);
+    expect(res.data.detail).toMatch(/JPEG, PNG or WebP/);
+  });
+
+  it("stops requesters adding officer before/after photos", async () => {
+    const mine = (await api.call(student, "GET", "/requests?scope=mine&open=true&limit=1")).data.data[0];
+    expect((await upload(student, mine.id, JPEG, "after")).status).toBe(403);
+  });
+});

@@ -1,16 +1,32 @@
-import { ClipboardList } from "lucide-react";
+import Link from "next/link";
 
-import { Placeholder } from "@/app/(main)/dashboard/_components/placeholder";
+import { PlusCircle } from "lucide-react";
+import type { Metadata } from "next";
 
-export const metadata = { title: "My requests | ZEGA" };
+import { Button } from "@/components/ui/button";
+import { requireRole } from "@/server/session";
 
-export default function MyRequestsPage() {
+import { PageHeader } from "../_components/page-header";
+import { MyRequests } from "./_components/my-requests";
+
+export const metadata: Metadata = { title: "My requests | ZEGA" };
+
+export default async function MyRequestsPage() {
+  await requireRole("student", "staff");
   return (
-    <Placeholder
-      title="My requests"
-      description="Everything you have reported, with live status."
-      icon={ClipboardList}
-      message="Requests you report will appear here with their reference codes and status."
-    />
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title="My requests"
+        description="Everything you have reported, with live status."
+        actions={
+          <Button asChild className="h-9">
+            <Link href="/dashboard/requests/new">
+              <PlusCircle data-icon="inline-start" /> Report an issue
+            </Link>
+          </Button>
+        }
+      />
+      <MyRequests />
+    </div>
   );
 }

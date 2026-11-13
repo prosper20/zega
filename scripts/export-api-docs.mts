@@ -7,7 +7,7 @@ import { createApi } from "../src/server/api/app";
 import { OPENAPI_CONFIG, toPostman } from "../src/server/api/openapi";
 import { mkdirSync, writeFileSync } from "node:fs";
 
-const app = createApi({ db: {} as never, authenticate: async () => null });
+const app = createApi({ db: {} as never, authenticate: async () => null, storage: { put: async () => ({ url: "", pathname: "" }) } });
 const doc = app.getOpenAPI31Document(OPENAPI_CONFIG);
 const base = process.env.API_BASE_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 

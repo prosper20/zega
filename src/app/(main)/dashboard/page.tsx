@@ -6,6 +6,7 @@ import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/ca
 import type { RoleSlug } from "@/domain/constants";
 import { requireUser } from "@/server/session";
 
+import { RequesterHome } from "./_components/home/requester-home";
 import { PageHeader } from "./_components/page-header";
 
 const QUICK_LINKS: Record<RoleSlug, { href: string; title: string; body: string; icon: typeof PlusCircle }[]> = {
@@ -63,23 +64,27 @@ export default async function DashboardHome() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader title={`${greeting}, ${user.name.split(" ")[0]}`} description="Report it. Track it. Resolve it." />
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-        {QUICK_LINKS[user.role].map((l) => (
-          <Link key={l.href} href={l.href} className="group">
-            <Card className="h-full transition-shadow group-hover:shadow-md">
-              <CardHeader>
-                <div className="bg-accent text-accent-foreground mb-2 flex size-10 items-center justify-center rounded-lg">
-                  <l.icon className="size-5" />
-                </div>
-                <CardTitle className="flex items-center gap-1">
-                  {l.title} <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                </CardTitle>
-                <CardDescription>{l.body}</CardDescription>
-              </CardHeader>
-            </Card>
-          </Link>
-        ))}
-      </div>
+      {user.role === "student" || user.role === "staff" ? (
+        <RequesterHome user={user} />
+      ) : (
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {QUICK_LINKS[user.role].map((l) => (
+            <Link key={l.href} href={l.href} className="group">
+              <Card className="h-full transition-shadow group-hover:shadow-md">
+                <CardHeader>
+                  <div className="bg-accent text-accent-foreground mb-2 flex size-10 items-center justify-center rounded-lg">
+                    <l.icon className="size-5" />
+                  </div>
+                  <CardTitle className="flex items-center gap-1">
+                    {l.title} <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
+                  </CardTitle>
+                  <CardDescription>{l.body}</CardDescription>
+                </CardHeader>
+              </Card>
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

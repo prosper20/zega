@@ -51,12 +51,25 @@ export const TransitionOptionSchema = z
   .object({ to: StatusEnum, label: z.string(), requiresNote: z.boolean(), requiresAssignee: z.boolean() })
   .openapi("TransitionOption");
 
+export const AttachmentSchema = z
+  .object({
+    id: z.uuid(),
+    url: z.string(),
+    kind: z.enum(["evidence", "before", "after"]),
+    contentType: z.string(),
+    sizeBytes: z.number().int(),
+    createdAt: z.string().datetime(),
+    uploadedBy: z.object({ id: z.string(), name: z.string() }),
+  })
+  .openapi("Attachment");
+
 export const RequestDetailSchema = RequestSummarySchema.extend({
   description: z.string(),
   locationDetail: z.string().nullable(),
   firstResponseAt: z.string().datetime().nullable(),
   hasVoted: z.boolean(),
   rating: z.object({ score: z.number().int(), comment: z.string().nullable() }).nullable(),
+  attachments: z.array(AttachmentSchema),
   availableTransitions: z.array(TransitionOptionSchema),
   can: z.object({
     edit: z.boolean(),

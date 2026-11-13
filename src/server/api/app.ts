@@ -30,6 +30,7 @@ export function createApi(deps: ApiDeps) {
     const requestId = c.req.header("x-request-id")?.slice(0, 64) || `req_${crypto.randomUUID().slice(0, 8)}`;
     c.set("requestId", requestId);
     c.set("db", deps.db);
+    c.set("storage", deps.storage);
     c.set("user", await deps.authenticate(c.req.raw).catch(() => null));
     await next();
     c.header("X-Request-Id", requestId);
