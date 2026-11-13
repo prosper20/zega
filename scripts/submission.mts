@@ -73,9 +73,8 @@ type Shot = { file: string; caption: string; figure: string };
 
 const SHOTS: { group: string; items: [file: string, caption: string][] }[] = [
   {
-    group: "8.1 Public pages",
+    group: "8.1 Registration and login",
     items: [
-      ["public-landing", "Landing page"],
       ["public-login", "Log in, with one-click demo accounts"],
       ["public-register", "Registration for students and staff, with validation"],
     ],
@@ -85,33 +84,20 @@ const SHOTS: { group: string; items: [file: string, caption: string][] }[] = [
     items: [
       ["student-dashboard", "Requester dashboard: open requests, items awaiting confirmation and recent activity"],
       ["student-report-form", "Service request submission form (step 1 of 4: category)"],
-      ["student-my-requests", "My requests (All tab) with search and category filter"],
-      [
-        "student-tracking",
-        "Request tracking page: status steps, service targets, details, activity timeline and people",
-      ],
-      ["student-notifications", "In-app notifications"],
-      ["student-profile", "Profile: details, email preference and signed-in devices"],
-      ["staff-dashboard", "Staff dashboard"],
+      ["student-tracking", "Request tracking page: progress, service targets, details and activity timeline"],
     ],
   },
   {
     group: "8.3 Maintenance officer",
-    items: [
-      ["officer-dashboard", "Officer dashboard: today's queue and SLA risk"],
-      ["officer-work-board", "Work-order board: drag a job between Assigned, In progress, On hold and Resolved"],
-      ["officer-job", "Job page with the actions the lifecycle allows, notes and photos"],
-    ],
+    items: [["officer-work-board", "Work-order board: drag a job between Assigned, In progress, On hold and Resolved"]],
   },
   {
     group: "8.4 Administrator",
     items: [
-      ["admin-dashboard", "Operations dashboard: volume, backlog, SLA compliance, workload and hotspots"],
+      ["admin-dashboard", "Operations dashboard: volume, backlog, SLA compliance and status breakdown"],
       ["admin-requests", "Request management: search, filters, sorting, pagination and bulk actions"],
       ["admin-request-detail", "Request detail with triage, assignment and ranked officer suggestions"],
-      ["admin-users", "Users and roles, with the permission matrix"],
-      ["admin-settings", "Categories and SLA targets"],
-      ["admin-locations", "Campus locations and printable QR stickers"],
+      ["admin-users", "User and role management, with the permission matrix"],
       ["admin-reports", "Reports with PDF and CSV export"],
       ["admin-audit", "Tamper-evident audit trail with integrity verification"],
     ],
@@ -173,18 +159,12 @@ const KEY_CASES = [
   "reports validation errors per field",
   "shows officers only jobs that are or were theirs",
   "paginates with a keyset cursor without gaps or repeats",
-  "lets a student report an issue with SLA due dates and notifies admins",
   "blocks students and officers from assigning, and rejects invalid moves",
   "assigns an officer, who then works and resolves the job",
   "records every step on the audit trail with the right actors",
-  "rejects files that are not really images, whatever their name says",
   "pushes a status change and a notification to the requester, and nothing to unrelated users",
-  "blocks transitions that skip the lifecycle",
-  "only the assigned officer (or an admin) can start and resolve work",
   "guides the reporter through category, place and details, validating each step",
   "only offers moves the lifecycle allows, and asks for a note where required",
-  "shows validation errors and does not submit an empty form",
-  "deactivates a user only after confirmation",
 ];
 
 function levelOf(file: string) {
@@ -243,15 +223,11 @@ function testEvidence() {
           `| ${level} | ${cell(a.ancestorTitles.join(" › ") || file)} | ${cell(a.title)} | ${a.status === "passed" ? "Passed" : "Failed"} |`,
         );
   }
+  const counts = ["Unit", "API and database", "Component"]
+    .map((k) => `${levels.get(k)?.tests ?? 0} ${k.toLowerCase()}`)
+    .join(", ");
   const out = [
-    `**Vitest** run of ${when} UTC (\`npm run test:report\`): **${v.numPassedTests} of ${v.numTotalTests} tests passed**, ${v.numFailedTests} failed.`,
-    "",
-    "| Level | Test files | Tests | Passed |",
-    "| --- | --- | --- | --- |",
-    ...["Unit", "API and database", "Component"].map((k) => {
-      const l = levels.get(k);
-      return `| ${k} | ${l?.files ?? 0} | ${l?.tests ?? 0} | ${l?.passed ?? 0} |`;
-    }),
+    `**Vitest** run of ${when} UTC (\`npm run test:report\`): **${v.numPassedTests} of ${v.numTotalTests} tests passed** (${counts}), ${v.numFailedTests} failed.`,
   ];
   if (cov) {
     const pct = (k: keyof Coverage["total"]) => `${cov.total[k].pct.toFixed(1)}%`;
@@ -287,7 +263,7 @@ const headings = (md: string) =>
     .map(([, l, t]) => ({ level: l.length, text: t }));
 
 /** Larger sections start on a new page; short ones flow on. */
-const PAGE_BREAK = /^(1|3|5|7|8|9|10|Appendix A)\b/;
+const PAGE_BREAK = /^(1|7|8|Appendix A)\b/;
 const breaksBefore = (depth: number, text: string) =>
   (depth === 1 && PAGE_BREAK.test(text)) || text.startsWith("7.1 Navigating");
 
@@ -402,7 +378,14 @@ try { await mermaid.run({ querySelector: "pre.mermaid" }); } finally { window.__
     await page.waitForFunction(() => (window as unknown as { __mermaidDone?: boolean }).__mermaidDone, null, {
       timeout: 60_000,
     });
-    await page.evaluate(() => document.fonts.ready);
+    // Load the web fonts explicitly; printing before they arrive silently falls back to system fonts.
+    const fontsOk = await page.evaluate(async () => {
+      await Promise.all(
+        ["400 16px Inter", "700 16px Inter", "16px 'JetBrains Mono'"].map((f) => document.fonts.load(f)),
+      );
+      return document.fonts.check("16px Inter");
+    });
+    if (!fontsOk) throw new Error("Inter did not load (check the network); refusing to print with fallback fonts.");
     const svgs = page.locator("pre.mermaid svg");
     const count = await svgs.count();
     for (let i = 0; i < count; i++) {

@@ -36,45 +36,16 @@ accounts (section 10).
 
 # 3. Requirement analysis
 
-## 3.1 Actors
+## 3.1 Actors and use cases
 
-| Actor | Goal |
-| --- | --- |
-| Student / Staff (requester) | Report faults, follow progress, confirm or reopen fixes, rate the service |
-| Maintenance officer | See assigned jobs, update progress with notes and photos, mark jobs resolved |
-| Administrator | Triage and assign requests, manage users, roles and catalogue, monitor and report |
-| System | Escalate service level breaches, close unconfirmed fixes after 72 hours, purge expired data |
+| Actor | Goal | Main use cases |
+| --- | --- | --- |
+| Student / Staff | Get faults fixed and know what is happening | Register and log in; report a fault with photos or a QR scan; track a request and its timeline; add a "me too"; confirm and rate, or reopen |
+| Maintenance officer | Work through assigned jobs | See assigned jobs on the board; update status with notes and photos; mark jobs resolved |
+| Administrator | Run and account for the service | Triage, assign and bulk update; manage users, roles and specialties; manage categories, SLA targets and locations; reports and exports; verify the audit trail |
+| System | Keep requests moving | Escalate SLA breaches; close unconfirmed fixes after 72 hours; purge expired data |
 
-## 3.2 Use cases
-
-```mermaid
-flowchart LR
-  R([Student / Staff])
-  O([Maintenance officer])
-  A([Administrator])
-  S([System scheduler])
-  subgraph ZEGA
-    UC1[Register and log in]
-    UC2[Report a fault with photos or QR]
-    UC3[Track request and timeline]
-    UC4[Confirm and rate or reopen]
-    UC5[Add me too vote]
-    UC6[View assigned jobs on the board]
-    UC7[Update status with notes and photos]
-    UC8[Triage, assign and bulk update]
-    UC9[Manage users, roles and specialties]
-    UC10[Manage categories, SLAs and locations]
-    UC11[Reports and PDF or CSV export]
-    UC12[View and verify audit trail]
-    UC13[Escalate SLA breaches and auto close]
-  end
-  R --- UC1 & UC2 & UC3 & UC4 & UC5
-  O --- UC1 & UC6 & UC7
-  A --- UC1 & UC8 & UC9 & UC10 & UC11 & UC12
-  S --- UC13
-```
-
-## 3.3 Functional requirements
+## 3.2 Functional requirements
 
 | ID | Requirement | Where it is met |
 | --- | --- | --- |
@@ -91,7 +62,7 @@ flowchart LR
 | FR11 | Users receive in-app and email notifications; status updates appear live | Notification bell, SSE `/api/events`, Resend |
 | FR12 | Every change is recorded in an audit trail that can be verified | Audit trail screen, `GET /api/audit/verify` |
 
-## 3.4 Non-functional requirements
+## 3.3 Non-functional requirements
 
 | Area | Requirement and approach |
 | --- | --- |
@@ -217,11 +188,9 @@ stateDiagram-v2
 | --- | --- |
 | Passwords | scrypt hashing; minimum length with letters and digits enforced by Zod |
 | Sessions | Database sessions in httpOnly, SameSite cookies; 7 days, refreshed daily; users can list and sign out devices; a role change or deactivation ends all sessions |
-| API clients | Short-lived EdDSA JWT from `GET /api/auth/token`, public keys at `/api/auth/jwks` |
 | Authorisation | Every route checks a permission from `src/domain/permissions.ts`; services also check ownership. Requesters only see their own requests and officers only their assigned ones; hidden requests return `404`, not `403` |
 | Abuse | Rate limiting stored in the database; upload size and count limits; image type checked from the file bytes |
-| Headers | Content Security Policy, `X-Frame-Options: DENY`, `nosniff`, referrer and permissions policies |
-| Logging | Structured JSON logs with security events (denied access, role changes, deactivations) and a request id that also appears in error responses |
+| Hardening | Content Security Policy and other security headers; structured logs of security events (denied access, role changes, deactivations) |
 
 # 6. Database and relationship types
 
@@ -430,15 +399,11 @@ months, so dashboards and reports show realistic data.
 | Challenge | Solution |
 | --- | --- |
 | **Real-time updates on serverless hosting.** Vercel functions are short-lived and WebSockets are not available, and adding a hosted push service would add cost and another dependency. | Server-Sent Events over a streaming route. PostgreSQL triggers call `pg_notify`, one `LISTEN` connection per server instance fans events out to the users allowed to see them, and the browser reconnects automatically and refetches what changed. |
-| **Keeping API documentation accurate.** Hand-written Swagger files drift from the code. | Routes are declared with `@hono/zod-openapi`; the same Zod schema validates the request and generates the OpenAPI document, Swagger UI and Postman collection. |
 | **A race in the audit hash chain.** Under concurrent writes two transactions could take audit ids in one order and the chain lock in the other, breaking verification. A dedicated script reproduced it. | Migration `0004` assigns the id while holding an advisory lock, so ids and hashes are always in the same order. The verification function and tests confirm the chain. |
 | **Testing against a real database without Docker.** Mocked databases would not exercise triggers, `ltree`, full-text search or the audit chain. | PGlite runs PostgreSQL in process. Each API test file builds a fresh database from the real migrations and seed in seconds. |
-| **Unreliable connections to the database from the development network.** Neon's default connection timeout was too short on a slow link and caused intermittent failures. | A small helper relaxes the connect timeout for scripts and the development server, and migrations use the direct connection. |
 | **One lifecycle, many places.** Status rules were needed in the API, the request page, the work board and the tests. | A single typed state machine in `src/domain` is imported by all of them, so the UI never offers a move the API would reject. |
-| **Drag and drop in automated tests.** The board's pointer sensor ignores instant synthetic drags, and long columns pushed drop targets off screen. | The end-to-end test moves the pointer gradually and clamps the drop point inside the visible column. Phones get a Move menu instead of dragging. |
 | **A strict Content Security Policy versus third-party documentation.** The API reference loads scripts and fonts from a CDN. | A strict policy for the application and a separate, relaxed policy only for `/api/docs`. |
 | **Mobile usability.** Wide admin tables and multi-column boards do not fit a phone. | Tables render as cards below 768px, filters and dialogs become bottom sheets, the board becomes a status switcher, and a bottom tab bar gives each role its main destinations. |
-| **Large media on the landing page.** The original background video was 60 MB. | It was re-encoded to 1.8 MB and loads only when scrolled into view; images are served in modern formats by Next.js. |
 
 # 12. Conclusion
 

@@ -32,36 +32,28 @@ async function firstRef(ctx: BrowserContext, query: string) {
   throw new Error(`No visible request for ${query}`);
 }
 
+// Only the screens that evidence the brief: sign-in, each role's main screen, the submission form,
+// tracking, request management with assignment, users, reports and the audit trail.
 const PUBLIC: Shot[] = [
-  { name: "landing", path: "/", mobile: true },
-  { name: "login", path: "/auth/login", mobile: true },
-  { name: "register", path: "/auth/register", mobile: true },
+  { name: "login", path: "/auth/login" },
+  { name: "register", path: "/auth/register" },
 ];
 
 const BY_ROLE: Record<Role, Shot[]> = {
   student: [
-    { name: "dashboard", path: "/dashboard", mobile: true },
+    { name: "dashboard", path: "/dashboard" },
     { name: "report-form", path: "/dashboard/requests/new", mobile: true },
-    { name: "my-requests", path: "/dashboard/requests?tab=all", mobile: true },
-    { name: "tracking", path: (c) => firstRef(c, "status=resolved,closed"), full: true, mobile: true },
-    { name: "notifications", path: "/dashboard/notifications" },
-    { name: "profile", path: "/dashboard/profile" },
+    { name: "tracking", path: (c) => firstRef(c, "status=resolved,closed"), mobile: true },
   ],
-  staff: [{ name: "dashboard", path: "/dashboard" }],
-  officer: [
-    { name: "dashboard", path: "/dashboard", mobile: true },
-    { name: "work-board", path: "/dashboard/work", mobile: true },
-    { name: "job", path: (c) => firstRef(c, "status=in_progress,on_hold,assigned"), full: true },
-  ],
+  staff: [],
+  officer: [{ name: "work-board", path: "/dashboard/work", mobile: true }],
   admin: [
-    { name: "dashboard", path: "/dashboard", full: true, mobile: true },
+    { name: "dashboard", path: "/dashboard" },
     { name: "requests", path: "/dashboard/admin/requests", mobile: true },
-    { name: "request-detail", path: (c) => firstRef(c, "status=submitted"), full: true },
-    { name: "users", path: "/dashboard/admin/users", full: true },
-    { name: "settings", path: "/dashboard/admin/settings", full: true },
-    { name: "locations", path: "/dashboard/admin/locations" },
-    { name: "reports", path: "/dashboard/admin/reports", full: true },
-    { name: "audit", path: "/dashboard/admin/audit", mobile: true },
+    { name: "request-detail", path: (c) => firstRef(c, "status=submitted") },
+    { name: "users", path: "/dashboard/admin/users" },
+    { name: "reports", path: "/dashboard/admin/reports" },
+    { name: "audit", path: "/dashboard/admin/audit" },
   ],
 };
 
@@ -96,7 +88,8 @@ async function capture(browser: Browser, prefix: string, shots: Shot[], email?: 
     });
     for (const s of list) {
       const path = typeof s.path === "string" ? s.path : await s.path(ctx);
-      await page.goto(`${BASE}${path}`);
+      // The dev server compiles each route on first visit, which can take a while.
+      await page.goto(`${BASE}${path}`, { timeout: 120_000 });
       await settle(page);
       const file = `${OUT}/${prefix}-${s.name}${mobile ? "-mobile" : ""}.png`;
       await page.screenshot({ path: file, fullPage: Boolean(s.full) && !mobile });

@@ -26,6 +26,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
               src="/images/auth-campus.jpg"
               alt="University campus buildings"
               fill
+              priority
               sizes="50vw"
               className="object-cover"
             />
