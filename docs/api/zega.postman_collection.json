@@ -53,6 +53,80 @@
               "variable": []
             }
           }
+        },
+        {
+          "name": "Update your preferences",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/me",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "me"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"emailNotifications\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          }
+        },
+        {
+          "name": "Live updates (Server-Sent Events)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Long-lived `text/event-stream`. Emits `request` events when a request you are involved in changes status, and `notification` events for your new notifications. Backed by Postgres LISTEN/NOTIFY; streams are recycled every few minutes and browsers reconnect automatically.",
+            "url": {
+              "raw": "{{baseUrl}}/api/events",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "events"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Run the background sweep (Vercel Cron)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Escalates SLA breaches and auto-closes unconfirmed resolved requests. Requires `Authorization: Bearer $CRON_SECRET`.",
+            "url": {
+              "raw": "{{baseUrl}}/api/cron/maintenance",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "cron",
+                "maintenance"
+              ],
+              "query": [],
+              "variable": []
+            }
+          }
         }
       ]
     },
@@ -511,6 +585,33 @@
                   "language": "json"
                 }
               }
+            }
+          }
+        },
+        {
+          "name": "Upload a photo",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "description": "multipart/form-data with `file` (JPEG, PNG or WebP, max 3 MB, checked by content not extension) and `kind` (`evidence` for requesters, `before`/`after` for the assigned officer). Browsers compress and strip location metadata before upload.",
+            "url": {
+              "raw": "{{baseUrl}}/api/requests/:id/attachments",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "requests",
+                ":id",
+                "attachments"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "ZG-26-000123"
+                }
+              ]
             }
           }
         },
@@ -1021,6 +1122,59 @@
                   "disabled": true
                 }
               ],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Download the summary as PDF (admin)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "A printable A4 report generated on the server: KPIs, daily volume chart, status and category breakdowns, officer performance and hotspots.",
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/summary.pdf",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "reports",
+                "summary.pdf"
+              ],
+              "query": [
+                {
+                  "key": "from",
+                  "value": "2026-10-13",
+                  "disabled": true
+                },
+                {
+                  "key": "to",
+                  "value": "2026-11-12",
+                  "disabled": true
+                }
+              ],
+              "variable": []
+            }
+          }
+        },
+        {
+          "name": "Your workload (officers)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "description": "Open, in-progress, overdue and due-soon jobs, plus resolutions this week and average rating.",
+            "url": {
+              "raw": "{{baseUrl}}/api/reports/officer",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "reports",
+                "officer"
+              ],
+              "query": [],
               "variable": []
             }
           }

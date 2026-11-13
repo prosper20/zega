@@ -2,7 +2,6 @@ import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 
 import { STATUS_LABELS } from "@/domain/constants";
 import { formatDuration } from "@/domain/sla";
-import { renderSummaryPdf } from "@/server/pdf/summary-report";
 import { officerSummary, summary, toCsv } from "@/server/services/reports";
 import { listRequests } from "@/server/services/requests";
 
@@ -106,6 +105,8 @@ export function reportRoutes(app: OpenAPIHono<AppEnv>) {
       const q = c.req.valid("query");
       const to = q.to ? new Date(q.to.getTime() + DAY - 1) : new Date();
       const from = q.from ?? new Date(to.getTime() - 30 * DAY);
+      // Loaded on demand: the PDF engine is heavy and only this endpoint needs it.
+      const { renderSummaryPdf } = await import("@/server/pdf/summary-report");
       const pdf = await renderSummaryPdf(await summary(c.get("db"), { from, to }), user.name);
       return c.body(new Uint8Array(pdf), 200, {
         "Content-Type": "application/pdf",
