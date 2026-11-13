@@ -6,6 +6,7 @@ import { cn } from "cn";
 
 import { Button } from "@/components/ui/button";
 
+import { FaultToFixedVideo } from "./fault-to-fixed-video";
 import { LandingVideo } from "./landing-video";
 import { MEDIA } from "./media";
 import { AssignMock, ReportMock, ResolveMock } from "./ui-mocks";
@@ -34,7 +35,7 @@ const STEPS = [
 const DURATION = 7000;
 const PHONE = { w: 320, h: 600 };
 
-/** MaintainX-style showcase: one gradient media panel, three columns with progress lines that auto-advance. */
+/** MaintainX-style showcase: a looping video panel under the phone mock, and three auto-advancing steps. */
 export function HowItWorks() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
@@ -60,8 +61,9 @@ export function HowItWorks() {
           </p>
         </div>
 
-        <div className="bg-primary relative mt-12 flex h-[360px] items-start justify-center overflow-hidden rounded-xl sm:h-[420px]">
-          <div className="bg-blueprint absolute inset-0 opacity-60" aria-hidden="true" />
+        <div className="bg-sidebar relative mt-12 flex h-[360px] items-start justify-center overflow-hidden rounded-xl sm:h-[420px]">
+          <FaultToFixedVideo />
+          <div className="absolute inset-0 bg-black/25" aria-hidden="true" />
           <LandingVideo
             key={step.slot.id}
             slot={step.slot}

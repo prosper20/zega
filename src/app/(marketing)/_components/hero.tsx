@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import { ArrowRight, Fingerprint, Radio, ShieldCheck, TrendingDown, TrendingUp, Webhook } from "lucide-react";
@@ -43,7 +44,10 @@ function StatCard({
 export function Hero() {
   return (
     <section className="bg-primary text-primary-foreground relative overflow-hidden">
-      <div aria-hidden="true" className="bg-blueprint absolute inset-0" />
+      <Image src="/images/hero-campus.jpg" alt="" fill priority sizes="100vw" className="object-cover" />
+      <div aria-hidden="true" className="absolute inset-0 bg-black/50" />
+      <div aria-hidden="true" className="bg-primary/70 absolute inset-0" />
+      <div aria-hidden="true" className="bg-blueprint absolute inset-0 opacity-50" />
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1fr_1.2fr]">
         <div>
           <h1 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl xl:text-6xl">

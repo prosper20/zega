@@ -217,14 +217,11 @@ export function RegisterForm() {
         Create account
       </Button>
       <p className="text-muted-foreground text-center text-xs">
-        By creating an account you agree to how ZEGA handles your data, described in the{" "}
+        By continuing you agree to ZEGA&apos;s{" "}
         <Link href="/privacy" className="text-foreground underline underline-offset-4">
-          privacy notice
+          privacy policy
         </Link>
         .
-      </p>
-      <p className="text-muted-foreground text-center text-xs">
-        Maintenance officers and administrators are added by an administrator.
       </p>
     </form>
   );
