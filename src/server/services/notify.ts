@@ -2,6 +2,7 @@ import { createElement } from "react";
 
 import { eq, inArray } from "drizzle-orm";
 
+import { appUrl } from "@/config/app-url";
 import { afterCommit } from "@/server/db/actor";
 import * as s from "@/server/db/schema";
 import type { DbOrTx } from "@/server/db/types";
@@ -64,8 +65,8 @@ export async function notify(tx: DbOrTx, n: NotificationInput) {
     })
     .from(s.users)
     .where(inArray(s.users.id, recipients));
-  const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-  const link = n.data?.refCode ? `${appUrl}/dashboard/requests/${n.data.refCode}` : `${appUrl}/dashboard/notifications`;
+  const base = appUrl();
+  const link = n.data?.refCode ? `${base}/dashboard/requests/${n.data.refCode}` : `${base}/dashboard/notifications`;
   for (const p of people.filter((x) => x.optIn && !x.banned)) {
     afterCommit(() =>
       sendEmail({

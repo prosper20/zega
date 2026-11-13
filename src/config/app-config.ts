@@ -1,11 +1,12 @@
 import packageJson from "../../package.json";
+import { appUrl } from "./app-url";
 
 const currentYear = new Date().getFullYear();
 
 export const APP_CONFIG = {
   name: "ZEGA",
   tagline: "Report it. Track it. Resolve it.",
-  url: process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000",
+  url: appUrl(),
   version: packageJson.version,
   copyright: `© ${currentYear}, ZEGA.`,
   meta: {

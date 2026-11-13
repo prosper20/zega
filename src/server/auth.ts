@@ -6,6 +6,7 @@ import { nextCookies } from "better-auth/next-js";
 import { admin, jwt } from "better-auth/plugins";
 import { eq } from "drizzle-orm";
 
+import { appUrl, trustedOrigins } from "@/config/app-url";
 import { profileFieldsSchema } from "@/domain/schemas/auth";
 import { env } from "@/env";
 
@@ -25,7 +26,8 @@ const isProd = process.env.NODE_ENV === "production";
 export const auth = betterAuth({
   appName: "ZEGA",
   secret: env.BETTER_AUTH_SECRET,
-  baseURL: env.BETTER_AUTH_URL ?? env.NEXT_PUBLIC_APP_URL,
+  baseURL: env.BETTER_AUTH_URL ?? appUrl(),
+  trustedOrigins: trustedOrigins(),
   database: drizzleAdapter(db, {
     provider: "pg",
     schema: {
