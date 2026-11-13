@@ -1,16 +1,23 @@
-import { Users } from "lucide-react";
+import type { Metadata } from "next";
 
-import { Placeholder } from "@/app/(main)/dashboard/_components/placeholder";
+import { requireRole } from "@/server/session";
 
-export const metadata = { title: "Users & roles | ZEGA" };
+import { PageHeader } from "../../_components/page-header";
+import { PermissionMatrix } from "./_components/permission-matrix";
+import { UsersManager } from "./_components/users-manager";
 
-export default function AdminUsersPage() {
+export const metadata: Metadata = { title: "Users & roles | ZEGA" };
+
+export default async function AdminUsersPage() {
+  const me = await requireRole("admin");
   return (
-    <Placeholder
-      title="Users & roles"
-      description="Create officers and admins, change roles and deactivate accounts."
-      icon={Users}
-      message="User management will appear here."
-    />
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title="Users & roles"
+        description="Add officers and admins, change roles, deactivate accounts and set officer specialties."
+      />
+      <UsersManager currentUserId={me.id} />
+      <PermissionMatrix />
+    </div>
   );
 }

@@ -1,16 +1,18 @@
-import { MapPin } from "lucide-react";
+import type { Metadata } from "next";
 
-import { Placeholder } from "@/app/(main)/dashboard/_components/placeholder";
+import { PageHeader } from "../../_components/page-header";
+import { LocationsManager } from "./_components/locations-manager";
 
-export const metadata = { title: "Locations & QR codes | ZEGA" };
+export const metadata: Metadata = { title: "Locations & QR | ZEGA" };
 
 export default function AdminLocationsPage() {
   return (
-    <Placeholder
-      title="Locations & QR codes"
-      description="Campus locations and printable report-here QR stickers."
-      icon={MapPin}
-      message="The campus location tree will appear here."
-    />
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title="Locations & QR stickers"
+        description="The campus location tree. Print a QR sticker for any room: scanning it opens the report form with the room filled in."
+      />
+      <LocationsManager />
+    </div>
   );
 }

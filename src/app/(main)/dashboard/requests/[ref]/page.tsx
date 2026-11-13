@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import type { Metadata } from "next";
 
+import { AssignPanel } from "@/components/requests/assign-panel";
 import { RequestView } from "@/components/requests/request-view";
 import { Problem } from "@/server/api/problem";
 import { db } from "@/server/db";
@@ -28,5 +29,12 @@ export default async function RequestPage({ params }: Props) {
       : user.role === "officer"
         ? { href: "/dashboard/work", label: "My work orders" }
         : { href: "/dashboard/requests", label: "My requests" };
-  return <RequestView initial={request} backHref={back.href} backLabel={back.label} />;
+  return (
+    <RequestView
+      initial={request}
+      backHref={back.href}
+      backLabel={back.label}
+      sidebarTop={user.role === "admin" ? <AssignPanel initial={request} /> : undefined}
+    />
+  );
 }

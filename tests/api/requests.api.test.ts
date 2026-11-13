@@ -354,3 +354,17 @@ describe("officer tools", () => {
     expect((await api.call(student, "GET", `/requests/${mine.id}`)).data.can.upload).toEqual(["evidence"]);
   });
 });
+
+describe("PDF report", () => {
+  it("generates a real PDF for admins only", async () => {
+    const res = await api.app.request("/api/reports/summary.pdf?from=2026-08-01&to=2026-11-12", {
+      headers: { "x-test-user": admin },
+    });
+    expect(res.status).toBe(200);
+    expect(res.headers.get("content-type")).toBe("application/pdf");
+    const bytes = new Uint8Array(await res.arrayBuffer());
+    expect(new TextDecoder().decode(bytes.slice(0, 5))).toBe("%PDF-");
+    expect(bytes.byteLength).toBeGreaterThan(2000);
+    expect((await api.call(officer, "GET", "/reports/summary.pdf")).status).toBe(403);
+  }, 60_000);
+});

@@ -10,6 +10,8 @@ const nextConfig = {
   // Pin the workspace root: a stray lockfile in the home folder must not widen what Turbopack watches.
   turbopack: { root: projectRoot },
   outputFileTracingRoot: projectRoot,
+  // Server-only PDF renderer: load from node_modules instead of bundling.
+  serverExternalPackages: ["@react-pdf/renderer"],
   async headers() {
     return [
       {

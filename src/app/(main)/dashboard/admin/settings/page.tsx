@@ -1,16 +1,18 @@
-import { Settings2 } from "lucide-react";
+import type { Metadata } from "next";
 
-import { Placeholder } from "@/app/(main)/dashboard/_components/placeholder";
+import { PageHeader } from "../../_components/page-header";
+import { CategorySettings } from "./_components/category-settings";
 
-export const metadata = { title: "Categories & SLAs | ZEGA" };
+export const metadata: Metadata = { title: "Categories & SLAs | ZEGA" };
 
 export default function AdminSettingsPage() {
   return (
-    <Placeholder
-      title="Categories & SLAs"
-      description="Request categories and their response and resolution targets."
-      icon={Settings2}
-      message="Categories and SLA policies will appear here."
-    />
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title="Categories & SLAs"
+        description="Response and resolution targets per category and priority. New requests get due dates from these; breaches are flagged and escalated."
+      />
+      <CategorySettings />
+    </div>
   );
 }

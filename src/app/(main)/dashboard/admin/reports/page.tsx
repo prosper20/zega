@@ -1,16 +1,18 @@
-import { FileBarChart } from "lucide-react";
+import type { Metadata } from "next";
 
-import { Placeholder } from "@/app/(main)/dashboard/_components/placeholder";
+import { PageHeader } from "../../_components/page-header";
+import { ReportBuilder } from "./_components/report-builder";
 
-export const metadata = { title: "Reports | ZEGA" };
+export const metadata: Metadata = { title: "Reports | ZEGA" };
 
 export default function AdminReportsPage() {
   return (
-    <Placeholder
-      title="Reports"
-      description="Performance summaries with PDF and CSV export."
-      icon={FileBarChart}
-      message="Reports will appear here."
-    />
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title="Reports"
+        description="Performance over any period, as a printable PDF or a CSV of every request."
+      />
+      <ReportBuilder />
+    </div>
   );
 }

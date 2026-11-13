@@ -1,16 +1,15 @@
-import { ClipboardList } from "lucide-react";
+import type { Metadata } from "next";
 
-import { Placeholder } from "@/app/(main)/dashboard/_components/placeholder";
+import { PageHeader } from "../../_components/page-header";
+import { RequestsTable } from "./_components/requests-table";
 
-export const metadata = { title: "All requests | ZEGA" };
+export const metadata: Metadata = { title: "All requests | ZEGA" };
 
 export default function AdminRequestsPage() {
   return (
-    <Placeholder
-      title="All requests"
-      description="Search, filter, assign and manage every request."
-      icon={ClipboardList}
-      message="Every request on campus will be listed here."
-    />
+    <div className="flex flex-col gap-6">
+      <PageHeader title="All requests" description="Search, filter, assign and manage every request on campus." />
+      <RequestsTable />
+    </div>
   );
 }

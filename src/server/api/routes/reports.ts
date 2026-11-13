@@ -2,6 +2,7 @@ import { createRoute, type OpenAPIHono, z } from "@hono/zod-openapi";
 
 import { STATUS_LABELS } from "@/domain/constants";
 import { formatDuration } from "@/domain/sla";
+import { renderSummaryPdf } from "@/server/pdf/summary-report";
 import { officerSummary, summary, toCsv } from "@/server/services/reports";
 import { listRequests } from "@/server/services/requests";
 
@@ -16,7 +17,7 @@ const RangeQuery = z.object({
   to: z.coerce.date().optional().openapi({ description: "Defaults to now", example: "2026-11-12" }),
 });
 
-const SummarySchema = z
+export const SummarySchema = z
   .object({
     range: z.object({ from: z.string(), to: z.string() }),
     totals: z.object({
@@ -79,6 +80,37 @@ export function reportRoutes(app: OpenAPIHono<AppEnv>) {
       const to = q.to ? new Date(q.to.getTime() + DAY - 1) : new Date();
       const from = q.from ?? new Date(to.getTime() - 30 * DAY);
       return c.json(await summary(c.get("db"), { from, to }), 200);
+    },
+  );
+
+  app.openapi(
+    createRoute({
+      method: "get",
+      path: "/reports/summary.pdf",
+      tags: ["Reports"],
+      summary: "Download the summary as PDF (admin)",
+      description:
+        "A printable A4 report generated on the server: KPIs, daily volume chart, status and category breakdowns, officer performance and hotspots.",
+      security: authed,
+      request: { query: RangeQuery },
+      responses: {
+        200: {
+          description: "PDF document",
+          content: { "application/pdf": { schema: z.string().openapi({ format: "binary" }) } },
+        },
+        ...errorResponses,
+      },
+    }),
+    async (c) => {
+      const user = requirePermission(c, "report:view");
+      const q = c.req.valid("query");
+      const to = q.to ? new Date(q.to.getTime() + DAY - 1) : new Date();
+      const from = q.from ?? new Date(to.getTime() - 30 * DAY);
+      const pdf = await renderSummaryPdf(await summary(c.get("db"), { from, to }), user.name);
+      return c.body(new Uint8Array(pdf), 200, {
+        "Content-Type": "application/pdf",
+        "Content-Disposition": `attachment; filename="zega-report-${from.toISOString().slice(0, 10)}-to-${to.toISOString().slice(0, 10)}.pdf"`,
+      });
     },
   );
 

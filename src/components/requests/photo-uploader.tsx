@@ -65,7 +65,7 @@ export function PhotoUploader({ request }: { request: RequestDetail }) {
       )}
       <Button variant="outline" size="sm" onClick={() => input.current?.click()} disabled={busy !== null}>
         {busy ? <Loader2 className="animate-spin" data-icon="inline-start" /> : <Camera data-icon="inline-start" />}
-        {busy ?? `Add ${LABEL[kind].toLowerCase()} photo`}
+        {busy ?? (kind === "evidence" ? "Add photo" : `Add ${LABEL[kind].toLowerCase()} photo`)}
       </Button>
       <input
         ref={input}

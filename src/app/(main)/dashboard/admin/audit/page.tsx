@@ -1,16 +1,18 @@
-import { ShieldCheck } from "lucide-react";
+import type { Metadata } from "next";
 
-import { Placeholder } from "@/app/(main)/dashboard/_components/placeholder";
+import { PageHeader } from "../../_components/page-header";
+import { AuditLog } from "./_components/audit-log";
 
-export const metadata = { title: "Audit trail | ZEGA" };
+export const metadata: Metadata = { title: "Audit trail | ZEGA" };
 
 export default function AdminAuditPage() {
   return (
-    <Placeholder
-      title="Audit trail"
-      description="Every change on record, with integrity verification."
-      icon={ShieldCheck}
-      message="The audit trail will appear here."
-    />
+    <div className="flex flex-col gap-6">
+      <PageHeader
+        title="Audit trail"
+        description="Every change to requests, assignments, users and settings, recorded by the database itself. Each entry is hash-chained to the previous one, so tampering is detectable."
+      />
+      <AuditLog />
+    </div>
   );
 }
