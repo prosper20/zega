@@ -13,6 +13,8 @@ export default defineConfig({
           name: "unit",
           environment: "node",
           include: ["src/**/*.test.ts", "tests/api/**/*.test.ts"],
+          // Building a PGlite database from the migrations can exceed 10s under full coverage load.
+          hookTimeout: 60_000,
         },
       },
       {
@@ -22,6 +24,8 @@ export default defineConfig({
           environment: "jsdom",
           include: ["src/**/*.test.tsx"],
           setupFiles: ["./src/test/setup-dom.ts"],
+          // jsdom renders are slow under coverage instrumentation; the 5s default flakes on busy machines.
+          testTimeout: 15_000,
         },
       },
     ],
