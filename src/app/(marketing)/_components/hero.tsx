@@ -44,7 +44,7 @@ export function Hero() {
       <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1fr_1.2fr]">
         <div>
           <h1 className="text-4xl font-bold tracking-tight text-balance sm:text-5xl xl:text-6xl">
-            Campus maintenance, reported, tracked and resolved.
+            Reported, tracked and resolved.
           </h1>
           <p className="mt-6 max-w-xl text-lg text-pretty text-white/85">
             No more phone calls, paper forms or lost WhatsApp messages. ZEGA gives students, staff, maintenance officers
