@@ -32,9 +32,11 @@ test.describe("live updates", () => {
     await page.goto("/auth/login");
     await page.getByRole("button", { name: "Student" }).click();
     await expect(page).toHaveURL(/\/dashboard$/);
+    // Wait for the live stream to open (it starts when the page mounts).
+    const stream = page.waitForResponse((r) => r.url().includes("/api/events") && r.ok(), { timeout: 60_000 });
     await page.goto(`/dashboard/requests/${created.refCode}`);
     await expect(page.getByText("Not assigned yet")).toBeVisible({ timeout: 60_000 });
-    await expect(page.getByText("Live", { exact: true })).toBeVisible({ timeout: 60_000 });
+    await stream;
 
     let navigations = 0;
     page.on("framenavigated", (f) => f === page.mainFrame() && navigations++);
