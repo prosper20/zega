@@ -123,8 +123,9 @@ flowchart LR
 The interface starts from the open-source Studio Admin shell (MIT) and was restyled with
 MaintainX as the visual reference: neutral surfaces, one blue accent and dense, readable tables.
 On phones the dashboard follows Apple's Human Interface Guidelines: a top bar with the sidebar
-button, a wide search field and the notifications bell; a bottom tab bar per role; tables become
-cards; filters and dialogs open as bottom sheets.
+button and a wide search field; a bottom tab bar per role with notifications (and, for requesters,
+the Report action in the centre); tables become cards; filters and dialogs open as bottom sheets;
+and the request progress steps collapse into a segmented bar that names the current and next stage.
 
 # 5. Backend technologies used
 

@@ -114,7 +114,7 @@ function screenshots() {
         .join("")}`,
   ).join("");
   const mobileFiles = SHOTS.flatMap((g) => g.items).filter(([f]) => existsSync(`docs/screenshots/${f}-mobile.png`));
-  const mobile = `<h3>8.5 Phone layouts</h3><p>Below 768px the dashboard switches to a phone layout: a top bar with the sidebar button, search and notifications, a bottom tab bar for each role, and cards instead of tables.</p><div class="phones">${mobileFiles
+  const mobile = `<h3>8.5 Phone layouts</h3><p>Below 768px the dashboard switches to a phone layout: a top bar with the sidebar button and search, a bottom tab bar for each role (with notifications, and Report in the centre for requesters), and cards instead of tables.</p><div class="phones">${mobileFiles
     .map(
       ([f, c]) =>
         `<figure><img src="${img(`${f}-mobile`)}" alt=""><figcaption>${esc(c.split(/[:(]/)[0].trim())}</figcaption></figure>`,
