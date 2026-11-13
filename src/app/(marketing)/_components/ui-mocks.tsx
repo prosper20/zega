@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { cn } from "cn";
-import { Camera, Check, CheckCircle2, Clock, MapPin, QrCode, Star, Wrench, Zap } from "lucide-react";
+import { Check, Clock, MapPin, Star, Wrench } from "lucide-react";
 
 import { AppLogo } from "@/components/app-logo";
 
@@ -126,111 +126,6 @@ export function HeroMock() {
 }
 
 /* ---------------------------------------------------------------- step: report */
-
-export function ReportMock() {
-  const t = useTick(5, 1300);
-  return (
-    <Shell className="bg-muted/40 items-center justify-center p-4">
-      <div className="bg-card w-full max-w-[260px] space-y-2.5 rounded-xl border p-3 shadow-sm">
-        <div className="flex items-center gap-2 text-[11px] font-semibold">
-          <QrCode className="text-primary size-3.5" /> Report an issue
-        </div>
-        <div
-          className={cn(
-            "flex items-center gap-1.5 rounded-md border px-2 py-1.5 text-[10px] transition-all",
-            t >= 1 ? "border-primary/40 bg-accent" : "opacity-40",
-          )}
-        >
-          <MapPin className="size-3" /> Hostel B › Floor 2 › Shower block
-          {t >= 1 && <Check className="text-primary ml-auto size-3" />}
-        </div>
-        <div className="grid grid-cols-3 gap-1.5">
-          {["Plumbing", "Electrical", "Furniture"].map((c, i) => (
-            <div
-              key={c}
-              className={cn(
-                "rounded-md border px-1 py-1.5 text-center text-[9px] transition-all",
-                t >= 2 && i === 0 ? "border-primary bg-primary text-primary-foreground" : "",
-              )}
-            >
-              {c}
-            </div>
-          ))}
-        </div>
-        <div className="flex items-center gap-2">
-          <div
-            className={cn(
-              "bg-muted flex size-10 items-center justify-center rounded-md transition-all",
-              t >= 3 && "bg-secondary",
-            )}
-          >
-            <Camera className={cn("size-4", t >= 3 ? "text-primary" : "text-muted-foreground")} />
-          </div>
-          <div className="text-muted-foreground text-[9px]">
-            {t >= 3 ? "1 photo attached" : "Add a photo of the fault"}
-          </div>
-        </div>
-        <div
-          className={cn(
-            "rounded-md py-1.5 text-center text-[10px] font-medium transition-all",
-            t >= 4 ? "bg-success text-success-foreground" : "bg-primary text-primary-foreground",
-          )}
-        >
-          {t >= 4 ? "Submitted · ZG-26-000412" : "Submit request"}
-        </div>
-      </div>
-    </Shell>
-  );
-}
-
-/* ---------------------------------------------------------------- step: assign */
-
-const OFFICERS = [
-  { name: "Chinedu O.", skill: "Plumbing", load: 2, match: 96 },
-  { name: "Amaka N.", skill: "Plumbing, Hostel", load: 4, match: 81 },
-  { name: "Tunde A.", skill: "Electrical", load: 1, match: 42 },
-];
-
-export function AssignMock() {
-  const t = useTick(4, 1400);
-  return (
-    <Shell className="flex-col gap-2 p-4">
-      <div className="bg-card flex items-center justify-between rounded-lg border px-3 py-2">
-        <div>
-          <div className="text-[11px] font-medium">Leaking pipe in shower block</div>
-          <div className="text-muted-foreground text-[9px]">Plumbing · High priority</div>
-        </div>
-        <StatusPill status={t >= 3 ? "Assigned" : "Submitted"} />
-      </div>
-      <div className="text-muted-foreground flex items-center gap-1 text-[10px] font-medium">
-        <Zap className="text-primary size-3" /> Suggested officers
-      </div>
-      {OFFICERS.map((o, i) => (
-        <div
-          key={o.name}
-          className={cn(
-            "bg-card flex items-center gap-2 rounded-lg border px-3 py-2 transition-all",
-            i === 0 && t >= 1 && "border-primary",
-          )}
-        >
-          <div className="bg-secondary text-secondary-foreground flex size-6 items-center justify-center rounded-full text-[9px] font-semibold">
-            {o.name.slice(0, 2)}
-          </div>
-          <div className="min-w-0 flex-1">
-            <div className="text-[10px] font-medium">{o.name}</div>
-            <div className="text-muted-foreground text-[9px]">
-              {o.skill} · {o.load} open jobs
-            </div>
-          </div>
-          <div className="text-primary text-[10px] font-semibold tabular-nums">{o.match}%</div>
-          {i === 0 && t >= 2 && <CheckCircle2 className="text-success size-3.5" />}
-        </div>
-      ))}
-    </Shell>
-  );
-}
-
-/* ---------------------------------------------------------------- step: resolve */
 
 const TIMELINE = [
   "Submitted",

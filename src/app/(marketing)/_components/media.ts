@@ -13,9 +13,6 @@ export type MediaSlot = {
 
 export const MEDIA = {
   hero: { id: "hero", label: "ZEGA request lifecycle from report to resolution" },
-  stepReport: { id: "step-report", label: "Scanning a room QR code and reporting a leaking pipe with a photo" },
-  stepAssign: { id: "step-assign", label: "Administrator assigning a request using smart officer suggestions" },
-  stepResolve: { id: "step-resolve", label: "Officer resolving a job and the requester confirming with a rating" },
   roleRequester: { id: "role-requester", label: "Student tracking a request timeline live" },
   roleOfficer: { id: "role-officer", label: "Officer work-order board on mobile" },
   roleAdmin: { id: "role-admin", label: "Administrator operations dashboard and reports" },

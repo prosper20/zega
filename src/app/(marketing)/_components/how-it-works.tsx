@@ -2,38 +2,36 @@
 
 import { useEffect, useState } from "react";
 
+import Image from "next/image";
+
 import { cn } from "cn";
 
 import { Button } from "@/components/ui/button";
 
 import { FaultToFixedVideo } from "./fault-to-fixed-video";
-import { LandingVideo } from "./landing-video";
-import { MEDIA } from "./media";
-import { AssignMock, ReportMock, ResolveMock } from "./ui-mocks";
 
 const STEPS = [
   {
     title: "Report it in seconds",
     body: "Scan the QR sticker in any room or hostel. Location fills itself in, similar open reports are flagged, and a photo shows exactly what is wrong.",
-    slot: MEDIA.stepReport,
-    mock: <ReportMock />,
+    screen: "/images/phone-report.webp",
+    alt: "ZEGA on a phone: step 1 of the report form, choosing what kind of problem it is",
   },
   {
     title: "Track it live",
     body: "Admins assign the best officer in one click from suggestions ranked by skill and workload, and every change reaches you instantly.",
-    slot: MEDIA.stepAssign,
-    mock: <AssignMock />,
+    screen: "/images/phone-track.webp",
+    alt: "ZEGA on a phone: a request's tracking page with its status steps and details",
   },
   {
     title: "Resolve it for good",
     body: "Officers close jobs with notes and an after-photo. You confirm the fix and rate it, or reopen it if the problem comes back.",
-    slot: MEDIA.stepResolve,
-    mock: <ResolveMock />,
+    screen: "/images/phone-resolve.webp",
+    alt: "ZEGA on a phone: an officer's work orders with a Move button on each job",
   },
 ];
 
 const DURATION = 7000;
-const PHONE = { w: 320, h: 600 };
 
 /** MaintainX-style showcase: a looping video panel under the phone mock, and three auto-advancing steps. */
 export function HowItWorks() {
@@ -64,14 +62,19 @@ export function HowItWorks() {
         <div className="bg-sidebar relative mt-12 flex h-[360px] items-start justify-center overflow-hidden rounded-xl sm:h-[420px]">
           <FaultToFixedVideo />
           <div className="absolute inset-0 bg-black/25" aria-hidden="true" />
-          <LandingVideo
-            key={step.slot.id}
-            slot={step.slot}
-            fallback={step.mock}
-            chrome={false}
-            canvas={PHONE}
-            className="animate-in fade-in slide-in-from-bottom-4 relative mt-10 w-[220px] rounded-[2rem] border-[6px] border-white/80 shadow-lg duration-500 sm:w-[250px]"
-          />
+          <div
+            key={step.screen}
+            className="animate-in fade-in slide-in-from-bottom-4 relative mt-10 w-[220px] overflow-hidden rounded-[2rem] border-[6px] border-white/80 bg-white shadow-lg duration-500 sm:w-[250px]"
+          >
+            <Image
+              src={step.screen}
+              alt={step.alt}
+              width={520}
+              height={885}
+              sizes="250px"
+              className="block h-auto w-full"
+            />
+          </div>
         </div>
 
         <div
