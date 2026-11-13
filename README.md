@@ -103,6 +103,9 @@ All demo accounts use the password `Zega@2026!`. The login page also has one-cli
 | `npm run db:seed` | Seed demo data (refuses if already seeded) |
 | `npm run db:reset -- --yes` | Drop everything (destructive) |
 | `npm run docs:api` | Export `docs/api/openapi.json` and the Postman collection |
+| `npm run test:report` | Collect test results and coverage into `docs/testing` |
+| `npm run screenshots` | Capture every major screen per role into `docs/screenshots` (app must be running) |
+| `npm run submission` | Build the single submission PDF (report, screenshots, tests, code) into `submission/` |
 
 ## Testing
 

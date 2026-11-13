@@ -42,7 +42,7 @@ const BY_ROLE: Record<Role, Shot[]> = {
   student: [
     { name: "dashboard", path: "/dashboard", mobile: true },
     { name: "report-form", path: "/dashboard/requests/new", mobile: true },
-    { name: "my-requests", path: "/dashboard/requests", mobile: true },
+    { name: "my-requests", path: "/dashboard/requests?tab=all", mobile: true },
     { name: "tracking", path: (c) => firstRef(c, "status=resolved,closed"), full: true, mobile: true },
     { name: "notifications", path: "/dashboard/notifications" },
     { name: "profile", path: "/dashboard/profile" },
@@ -54,7 +54,7 @@ const BY_ROLE: Record<Role, Shot[]> = {
     { name: "job", path: (c) => firstRef(c, "status=in_progress,on_hold,assigned"), full: true },
   ],
   admin: [
-    { name: "dashboard", path: "/dashboard/admin", full: true, mobile: true },
+    { name: "dashboard", path: "/dashboard", full: true, mobile: true },
     { name: "requests", path: "/dashboard/admin/requests", mobile: true },
     { name: "request-detail", path: (c) => firstRef(c, "status=submitted"), full: true },
     { name: "users", path: "/dashboard/admin/users", full: true },

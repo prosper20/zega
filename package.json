@@ -23,6 +23,7 @@
     "db:reset": "tsx scripts/reset.mts",
     "docs:api": "tsx scripts/export-api-docs.mts",
     "screenshots": "tsx scripts/screenshots.mts",
+    "submission": "tsx scripts/submission.mts",
     "test:report": "tsx scripts/test-report.mts"
   },
   "lint-staged": {
@@ -92,6 +93,7 @@
     "husky": "^9.1.7",
     "jsdom": "^29.1.1",
     "lint-staged": "^17.6.0",
+    "marked": "15.0.12",
     "msw": "^2.15.0",
     "postcss": "^8.5.32",
     "sharp": "0.35.5",
