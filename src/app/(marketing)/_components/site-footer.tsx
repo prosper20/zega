@@ -68,7 +68,6 @@ export function SiteFooter() {
       <div className="border-t">
         <div className="text-muted-foreground mx-auto flex max-w-6xl flex-col justify-between gap-2 px-4 py-6 text-xs sm:flex-row sm:px-6">
           <p>{APP_CONFIG.copyright} All rights reserved.</p>
-          <p>Built for MIT 8333, Advanced Web Application Development.</p>
         </div>
       </div>
     </footer>
