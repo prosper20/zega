@@ -38,8 +38,8 @@ test.describe("authentication and role-based access", () => {
     if (isMobile) {
       // Phones: primary destinations in the bottom tab bar, everything else (and the account) in the sidebar.
       const tabs = page.getByRole("navigation", { name: "Main" });
-      await tabs.getByRole("link", { name: "Audit" }).click();
-      await expect(page).toHaveURL(/\/dashboard\/admin\/audit$/);
+      await tabs.getByRole("link", { name: "Reports" }).click();
+      await expect(page).toHaveURL(/\/dashboard\/admin\/reports$/);
       await page.getByRole("button", { name: "Toggle Sidebar" }).click();
       await page.getByRole("button", { name: /Administrator/ }).click();
     } else {
@@ -56,12 +56,17 @@ test.describe("authentication and role-based access", () => {
     await page.getByRole("button", { name: "Student" }).click();
     await expect(page).toHaveURL(/\/dashboard$/);
     const tabs = page.getByRole("navigation", { name: "Main" });
-    await tabs.getByRole("link", { name: "Report" }).click();
+    await tabs.getByRole("link", { name: "Report", exact: true }).click();
     await expect(page).toHaveURL(/\/dashboard\/requests\/new$/);
-    await expect(tabs.getByRole("link", { name: "Report" })).toHaveAttribute("aria-current", "page");
+    await expect(tabs.getByRole("link", { name: "Report", exact: true })).toHaveAttribute("aria-current", "page");
+    // Five tabs with Report in the centre; notifications moved here from the top bar.
+    await expect(tabs.getByRole("link")).toHaveCount(5);
+    await expect(tabs.getByRole("link").nth(2)).toHaveAccessibleName("Report");
     await expect(page.getByText(/Step 1 of 4/)).toBeVisible();
     await expect(page.getByRole("button", { name: "Continue" })).toBeInViewport();
     const width = await page.evaluate(() => document.documentElement.scrollWidth);
     expect(width).toBeLessThanOrEqual(page.viewportSize()?.width ?? 0);
+    await tabs.getByRole("link", { name: /Alerts/ }).click();
+    await expect(page).toHaveURL(/\/dashboard\/notifications$/);
   });
 });

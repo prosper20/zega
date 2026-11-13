@@ -78,7 +78,10 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                <NotificationBell />
+                {/* On phones notifications are a tab in the bottom bar; the bell stays mounted for live toasts. */}
+                <div className="hidden md:block">
+                  <NotificationBell />
+                </div>
                 <div className="hidden md:block">
                   <UserMenu user={user} />
                 </div>
