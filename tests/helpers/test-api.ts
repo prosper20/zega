@@ -13,6 +13,15 @@ import { createTestDb } from "./test-db";
 export const NOW = new Date("2026-11-12T12:00:00Z");
 
 /**
+ * Response bodies are asserted shape-by-shape with `expect()`, so the default body type is open.
+ * Pass a type argument (`call<RequestDetail>(...)`) where a test wants the compiler to check fields.
+ */
+// biome-ignore lint/suspicious/noExplicitAny: test-only default, narrowed per call with a type argument
+type OpenBody = any;
+
+export type ApiResult<T = OpenBody> = { status: number; data: T; headers: Headers };
+
+/**
  * The real API on a seeded PGlite database. Tests authenticate with an `x-test-user` header
  * (a user id); everything else (validation, RBAC, services, SQL, triggers) is production code.
  */
@@ -53,7 +62,12 @@ export async function createTestApi() {
   };
 
   /** Calls the API as a user (or anonymously) and returns status, parsed body and headers. */
-  const call = async (as: string | null, method: string, path: string, body?: unknown) => {
+  const call = async <T = OpenBody>(
+    as: string | null,
+    method: string,
+    path: string,
+    body?: unknown,
+  ): Promise<ApiResult<T>> => {
     const headers: Record<string, string> = {};
     if (as) headers["x-test-user"] = as;
     if (body !== undefined) headers["content-type"] = "application/json";
@@ -64,7 +78,7 @@ export async function createTestApi() {
     });
     const type = res.headers.get("content-type") ?? "";
     const data = type.includes("json") ? await res.json() : await res.text();
-    return { status: res.status, data: data as any, headers: res.headers };
+    return { status: res.status, data: data as T, headers: res.headers };
   };
 
   return { ...ctx, app, call, userByEmail, storage, db: ctx.db as Database };
