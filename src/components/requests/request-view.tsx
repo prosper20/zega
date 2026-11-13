@@ -129,7 +129,7 @@ export function RequestView({
               <div className="flex items-center gap-3">
                 <UserAvatar
                   id={request.requester.id}
-                  role={request.requester.role ?? "student"}
+                  userRole={request.requester.role ?? "student"}
                   name={request.requester.name}
                   size={32}
                 />
