@@ -102,8 +102,7 @@ calls the SQL function `audit_verify_chain()`, which recomputes the chain and re
 broken link, if any.
 
 Migration `0004` fixed a race where two concurrent writers could take ids in one order and the lock
-in the other; the id is now assigned while holding the lock. See
-[ADR 0004](decisions/0004-hash-chained-audit-trail.md).
+in the other; the id is now assigned while holding the lock.
 
 ## Indexes
 
@@ -128,8 +127,8 @@ Applied migrations are skipped.
 
 ## Environments and backups
 
-There is one shared Neon database for development and production (a deliberate trade-off for a
-course project with demo data; see [ADR 0006](decisions/0006-vercel-and-single-neon-database.md)).
+There is one shared Neon database for development and production (a trade-off that suits a
+demo deployment).
 Tests never touch it: they run against an in-process PGlite database built from the same
 migrations.
 

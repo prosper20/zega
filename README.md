@@ -9,8 +9,6 @@ and WhatsApp messages, which lose requests and leave no record of who did what.
 
 Live: <https://zega-ms.vercel.app> · API reference: [`/api/docs`](https://zega-ms.vercel.app/api/docs)
 
-Built for MIT 8333, Advanced Web Application Development.
-
 ## What it does
 
 | Role | Main screens |
@@ -47,8 +45,7 @@ Engineering highlights:
 | Tooling | TypeScript strict, Biome, Husky + lint-staged, GitHub Actions |
 
 See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for how the pieces fit and
-[docs/DATABASE.md](docs/DATABASE.md) for the data model. Key decisions are recorded in
-[docs/decisions](docs/decisions).
+[docs/DATABASE.md](docs/DATABASE.md) for the data model.
 
 ## Getting started
 
@@ -104,8 +101,6 @@ All demo accounts use the password `Zega@2026!`. The login page also has one-cli
 | `npm run db:reset -- --yes` | Drop everything (destructive) |
 | `npm run docs:api` | Export `docs/api/openapi.json` and the Postman collection |
 | `npm run test:report` | Collect test results and coverage into `docs/testing` |
-| `npm run screenshots` | Capture every major screen per role into `docs/screenshots` (app must be running) |
-| `npm run submission` | Build the single submission PDF (report, screenshots, tests, code) into `submission/` |
 
 ## Testing
 
@@ -140,12 +135,8 @@ src/
     realtime/          event bus (Postgres LISTEN/NOTIFY) and SSE fan-out
 drizzle/               SQL migrations (extensions, schema, triggers)
 tests/                 API, database and end-to-end tests
-docs/                  architecture, database, decisions, deployment, API exports
+docs/                  architecture, database, deployment, API exports
 ```
-
-## Contributing
-
-See [CONTRIBUTING.md](CONTRIBUTING.md). Changes are listed in [CHANGELOG.md](CHANGELOG.md).
 
 ## Licence
 

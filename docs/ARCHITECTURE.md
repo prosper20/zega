@@ -140,5 +140,4 @@ appears in the logs and in Problem Details bodies, so a user's error report can 
 There is no queue or worker. The maintenance sweep (`runMaintenance`) escalates SLA breaches,
 auto-closes old resolutions and purges expired data. It is triggered by the daily Vercel Cron and,
 at most every five minutes, by active live-update connections. A row in `system_jobs` is claimed
-atomically, so concurrent triggers never run it twice. See
-[ADR 0007](decisions/0007-opportunistic-scheduler.md).
+atomically, so concurrent triggers never run it twice.
