@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 
-import { useShallow } from "zustand/react/shallow";
-
 import { AppLogo } from "@/components/app-logo";
 import {
   Sidebar,
@@ -16,26 +14,14 @@ import {
 } from "@/components/ui/sidebar";
 import { APP_CONFIG } from "@/config/app-config";
 import { sidebarItemsForRole } from "@/navigation/sidebar/sidebar-items";
-import { usePreferencesStore } from "@/stores/preferences/preferences-provider";
 
 import type { ShellUser } from "../user-types";
 import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 
 export function AppSidebar({ user, ...props }: React.ComponentProps<typeof Sidebar> & { user: ShellUser }) {
-  const { sidebarVariant, sidebarCollapsible, isSynced } = usePreferencesStore(
-    useShallow((s) => ({
-      sidebarVariant: s.values.sidebar_variant,
-      sidebarCollapsible: s.values.sidebar_collapsible,
-      isSynced: s.isSynced,
-    })),
-  );
-
-  const variant = isSynced ? sidebarVariant : props.variant;
-  const collapsible = isSynced ? sidebarCollapsible : props.collapsible;
-
   return (
-    <Sidebar {...props} variant={variant} collapsible={collapsible}>
+    <Sidebar {...props}>
       <SidebarHeader>
         <SidebarMenu>
           <SidebarMenuItem>

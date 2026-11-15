@@ -51,12 +51,7 @@
   --font-sans: var(--font-sans);
 }
 
-/* ZEGA brand theme: palette taken from MaintainX's public stylesheet (getmaintainx.com):
-   blue #246cff · blue-2 #6996ff · blue-3 #bed2ff · blue-4 #e8efff · blue-5 #f5f8ff
-   dark-blue #001e40 · secondary-dark-blue #003161 · navy #021021 · dark-text #101828
-   grey-1 #4c6177 · grey-2 #b4bbc5 · grey-3 #e5e8ec · gray-bg #f4f9fd
-   green-1 #2ed888 · success #027a48 · orange #ffa945 · red-1 #f8523c · error #b42318
-   Font: Inter. Used as the default (no data-theme-preset) theme. */
+/* Brand theme */
 :root {
   --radius: 0.5rem;
   --background: #f4f9fd;
@@ -153,7 +148,7 @@
 }
 
 @layer utilities {
-  html[data-font="inter"] body {
+  body {
     --font-sans: var(--font-inter);
   }
 
@@ -238,7 +233,7 @@ html:has([data-landing-page]) {
   }
 }
 
-/* Faint blueprint grid for full-bleed brand bands (MaintainX-style hero). */
+/* Faint grid for the blue brand bands. */
 @utility bg-blueprint {
   background-image:
     linear-gradient(to right, color-mix(in oklab, white 9%, transparent) 1px, transparent 1px),
@@ -246,16 +241,11 @@ html:has([data-landing-page]) {
   background-size: 56px 56px;
 }
 
-/*
- * Touch targets on phones: at least 44pt (Apple HIG) for fields and standard buttons.
- * min-height only ever enlarges, so desktop sizing and explicit heights stay intact.
- * Extra-small and inline (link) buttons are left alone; they sit inside cards that are the target.
- */
+/* Larger touch targets and 16px inputs on phones (avoids iOS zoom on focus). */
 @media (max-width: 767px) {
   [data-slot="input"],
   [data-slot="native-select-wrapper"],
   [data-slot="native-select"],
-  [data-slot="select-trigger"],
   [data-slot="button"]:is([data-size="default"], [data-size="sm"], [data-size="lg"]):not([data-variant="link"]) {
     min-height: 2.75rem;
   }

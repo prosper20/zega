@@ -10,7 +10,6 @@ import { LiveUpdates } from "@/components/live/live-updates";
 import { NotificationBell } from "@/components/live/notification-bell";
 import { Separator } from "@/components/ui/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { getPreference } from "@/server/server-actions";
 import { requireUser } from "@/server/session";
 
 import { SearchDialog } from "./_components/header/search-dialog";
@@ -32,10 +31,6 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
   };
   const cookieStore = await cookies();
   const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
-  const [variant, collapsible] = await Promise.all([
-    getPreference("sidebar_variant"),
-    getPreference("sidebar_collapsible"),
-  ]);
 
   return (
     <LiveUpdates>
@@ -47,13 +42,10 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
           } as React.CSSProperties
         }
       >
-        <AppSidebar user={user} variant={variant} collapsible={collapsible} />
+        <AppSidebar user={user} variant="sidebar" collapsible="icon" />
         <SidebarInset
           className={cn(
-            "[html[data-content-layout=centered]_&>*]:mx-auto",
-            "[html[data-content-layout=centered]_&>*]:w-full",
-            "[html[data-content-layout=centered]_&>*]:max-w-screen-2xl",
-            "peer-data-[variant=inset]:border",
+            "[&>*]:mx-auto [&>*]:w-full [&>*]:max-w-screen-2xl",
             "[--dashboard-header-height:--spacing(12)]",
             "min-w-0 overflow-x-clip",
           )}
