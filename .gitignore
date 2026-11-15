@@ -47,3 +47,14 @@ next-env.d.ts
 /public/uploads/
 /reports/
 /docs/report/meta.json
+
+# local only (not part of the published repo)
+/CA - MIT 8333*.pdf
+/AGENTS.md
+/CONTRIBUTING.md
+/CHANGELOG.md
+/docs/decisions/
+/docs/report/
+/docs/screenshots/
+/scripts/submission.mts
+/scripts/screenshots.mts
