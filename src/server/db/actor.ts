@@ -11,21 +11,14 @@ export const SYSTEM_ACTOR = "system";
 type AfterCommit = () => Promise<unknown>;
 const afterCommitStore = new AsyncLocalStorage<AfterCommit[]>();
 
-/**
- * Schedules work (e.g. sending an email) to run only after the surrounding `withActor`
- * transaction commits. If the transaction rolls back, the work never happens.
- * Outside a transaction it runs immediately.
- */
+/** Runs after the surrounding withActor transaction commits; never if it rolls back. */
 export function afterCommit(fn: AfterCommit) {
   const queue = afterCommitStore.getStore();
   if (queue) queue.push(fn);
   else void fn().catch((err) => log.error("after_commit.failed", { err }));
 }
 
-/**
- * Runs `fn` in a transaction with `app.user_id` set, so the audit trigger attributes
- * every change made inside it to `actorId`. Work queued with `afterCommit` runs once it commits.
- */
+/** Transaction with app.user_id set so the audit trigger records who made each change. */
 export async function withActor<T>(db: Database, actorId: string, fn: (tx: Tx) => Promise<T>): Promise<T> {
   const queue: AfterCommit[] = [];
   const result = await afterCommitStore.run(queue, () =>

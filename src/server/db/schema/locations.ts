@@ -4,11 +4,7 @@ import { type AnyPgColumn, index, pgTable, text, timestamp, uuid } from "drizzle
 import { ltree } from "./_types";
 import { locationKind } from "./enums";
 
-/**
- * Self-referencing location tree (campus > building/hostel > floor > room).
- * `path` is an ltree maintained by a trigger, so "everything inside Hostel B" is a single
- * indexed `path <@ 'main.hostel_b'` query. `qrToken` is printed on room stickers.
- */
+// `path` is an ltree kept in sync by a trigger.
 export const locations = pgTable(
   "locations",
   {

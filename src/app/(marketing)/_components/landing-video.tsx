@@ -10,15 +10,7 @@ type Canvas = { w: number; h: number };
 
 const LANDSCAPE: Canvas = { w: 640, h: 360 };
 
-/**
- * Lazy, muted, looping product video.
- * - Loads only when scrolled into view (IntersectionObserver) and pauses when off-screen.
- * - Honours prefers-reduced-motion (shows poster or fallback instead of playing).
- * - Falls back to an animated UI mock while no recording exists.
- *
- * `chrome` adds a browser title bar. `canvas` sets the mock's design size (default 640x360);
- * pass a portrait canvas for phone frames.
- */
+/** Muted looping video that loads when in view, with a mock as fallback. */
 export function LandingVideo({
   slot,
   fallback,

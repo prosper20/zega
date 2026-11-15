@@ -24,10 +24,7 @@ const NOTE_PROMPT: Partial<Record<Option["to"], string>> = {
   cancelled: "Why is it being cancelled?",
 };
 
-/**
- * The next steps the viewer may take, straight from the API (which applies the lifecycle rules).
- * "Assign" is handled by the admin assignment panel, so it is not shown here.
- */
+// Assignment lives in the admin assignment panel, not here.
 export function ActionsPanel({ request, extra }: { request: RequestDetail; extra?: React.ReactNode }) {
   const transition = useTransition(request.id);
   const [open, setOpen] = useState<Option | null>(null);

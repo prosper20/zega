@@ -1,9 +1,3 @@
-/**
- * Landing-page video slots (MaintainX-style autoplaying product loops).
- * Each slot renders an animated product mock until a recording exists.
- * After seeding, `npm run record:demo` (Playwright) writes MP4/WebM files to /public/videos;
- * set `src` here to switch a slot from the mock to the real recording.
- */
 export type MediaSlot = {
   id: string;
   label: string;

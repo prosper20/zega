@@ -11,11 +11,7 @@ const LiveContext = createContext<Status>("connecting");
 /** Connection state of the live stream (available to components that want to show it). */
 export const useLiveStatus = () => useContext(LiveContext);
 
-/**
- * Subscribes to /api/events (Server-Sent Events backed by Postgres LISTEN/NOTIFY) and refreshes
- * exactly the cached data an event affects. EventSource reconnects on its own; after a reconnect
- * everything is refetched once so nothing missed while offline stays stale.
- */
+// After a reconnect everything is refetched once, since events may have been missed.
 export function LiveUpdates({ children }: { children: ReactNode }) {
   const qc = useQueryClient();
   const [status, setStatus] = useState<Status>("connecting");

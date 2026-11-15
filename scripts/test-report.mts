@@ -1,10 +1,4 @@
-/**
- * Collects testing evidence for the project report into docs/testing/:
- *   - Vitest JUnit XML and a JSON summary (unit, database and component suites)
- *   - the coverage summary
- *   - the Playwright HTML report and JSON results (when --e2e is passed)
- * Usage: npm run test:report [-- --e2e]
- */
+// Writes test results and coverage to docs/testing. Usage: npm run test:report [-- --e2e]
 import { execSync } from "node:child_process";
 import { cpSync, existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 

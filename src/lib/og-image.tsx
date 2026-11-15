@@ -47,10 +47,6 @@ function Step({ label, done, current }: { label: string; done: boolean; current?
   );
 }
 
-/**
- * Branded 1200x630 social card: wordmark and headline on the left, an example request on the right
- * (the product itself, not stock imagery).
- */
 /** Inter (the interface typeface) bundled with the app so social cards match the product. */
 async function loadFonts() {
   const dir = path.join(process.cwd(), "src/lib/og-fonts");

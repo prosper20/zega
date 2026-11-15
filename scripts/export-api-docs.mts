@@ -1,7 +1,4 @@
-/**
- * Writes the OpenAPI 3.1 document and a Postman v2.1 collection to docs/api/ for the report
- * and for importing into Postman. Usage: npm run docs:api
- */
+// Writes docs/api/openapi.json and the Postman collection.
 
 import { createApi } from "../src/server/api/app";
 import { OPENAPI_CONFIG, toPostman } from "../src/server/api/openapi";

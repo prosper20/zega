@@ -1,9 +1,6 @@
 "use client";
 
-/**
- * Prepares a photo for upload in the browser: resizes to at most 1600px, re-encodes as JPEG
- * (which drops EXIF data such as GPS location) and keeps it well under the 3 MB server limit.
- */
+// Resize to 1600px and re-encode as JPEG, which also strips EXIF (GPS) data.
 export async function preparePhoto(file: File): Promise<File> {
   const { default: imageCompression } = await import("browser-image-compression");
   const out = await imageCompression(file, {

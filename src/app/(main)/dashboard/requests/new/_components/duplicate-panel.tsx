@@ -7,10 +7,7 @@ import { StatusBadge } from "@/components/requests/badges";
 import { Button } from "@/components/ui/button";
 import { errorMessage, useSimilar, useVote } from "@/lib/queries";
 
-/**
- * Live duplicate detection: open requests in the same building with a similar title.
- * Instead of filing a duplicate, the reporter can add a "me too", which helps admins prioritise.
- */
+/** Similar open requests nearby, so the reporter can add a "me too" instead of a duplicate. */
 export function DuplicatePanel({
   title,
   locationId,

@@ -2,12 +2,6 @@ import type { SVGProps } from "react";
 
 import { cn } from "cn";
 
-/**
- * ZEGA "ZE" glyphs, drawn in the manner of printed Ge'ez fidel letterforms:
- * heavy stems with thin horizontals, flat slab terminals and small feet.
- * The ring at the foot of the E is the fidel vowel marker that turns
- * the letter "za" into "ze".
- */
 function zeGlyphs(color: string, scale = 1) {
   const thin = 3.2 * scale;
   const thick = 5.6 * scale;
@@ -69,11 +63,7 @@ const WORDMARK_VARIANTS = {
 
 export type WordmarkVariant = keyof typeof WORDMARK_VARIANTS;
 
-/**
- * Full "ZEGA" wordmark in the same fidel-inspired letterforms as the ZE mark.
- * The A follows the shape of the fidel letter "la": two heavy legs with small feet.
- * Use `compact` below ~28px tall to thicken the hairlines.
- */
+/** Use `compact` below ~28px tall to thicken the hairlines. */
 export function ZegaWordmark({
   variant = "ink",
   compact = false,
@@ -128,10 +118,7 @@ export function ZegaWordmark({
   );
 }
 
-/**
- * The ZEGA wordmark as plain SVG elements with explicit colours, for image renderers
- * (next/og Open Graph images) that cannot use React components or currentColor.
- */
+// Plain SVG with explicit colours for next/og, which cannot use currentColor.
 export function wordmarkSvg(color: string, ringColor: string, width: number) {
   const thin = 3.4;
   const thick = 5.8;

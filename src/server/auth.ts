@@ -13,14 +13,6 @@ import { env } from "@/env";
 import { db } from "./db";
 import * as s from "./db/schema";
 
-/**
- * Authentication:
- * - email + password, hashed with scrypt by Better Auth
- * - database sessions in an httpOnly cookie (7 days, refreshed daily, revocable per device)
- * - admin plugin: roles, banning (deactivation), session revocation, impersonation
- * - jwt plugin: short-lived signed JWTs (+ JWKS endpoint) for API clients
- * - database-backed rate limiting so limits hold across serverless instances
- */
 const isProd = process.env.NODE_ENV === "production";
 
 export const auth = betterAuth({

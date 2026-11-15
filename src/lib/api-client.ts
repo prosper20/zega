@@ -2,10 +2,6 @@ import { hc } from "hono/client";
 
 import type { ApiApp } from "@/server/api/app";
 
-/**
- * End-to-end typed REST client generated from the Hono route definitions (no codegen step):
- * `api.api.requests.$get({ query })` is checked against the same Zod schemas the server validates.
- */
 export const api = hc<ApiApp>(
   typeof window === "undefined" ? (process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000") : window.location.origin,
   {

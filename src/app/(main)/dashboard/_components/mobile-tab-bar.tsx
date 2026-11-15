@@ -31,11 +31,6 @@ type Tab = {
 
 const ALERTS: Tab = { href: "/dashboard/notifications", label: "Alerts", icon: Bell, badge: true };
 
-/**
- * Bottom tab bar for phones (Apple HIG: 3 to 5 top-level destinations, labelled icons, 44pt+
- * targets, clear of the home indicator). Notifications live here instead of the top bar, and the
- * report action sits in the centre for requesters. Everything else lives in the sidebar.
- */
 const TABS: Record<RoleSlug, Tab[]> = {
   student: [
     { href: "/dashboard", label: "Home", icon: House, exact: true },

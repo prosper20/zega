@@ -30,10 +30,6 @@ export function RequestStepper({ status }: { status: RequestStatus }) {
   );
 }
 
-/**
- * Phones: five labels do not fit side by side, and there is no hover to reveal them. Show a
- * segmented bar with the current stage spelled out and what comes next, all visible at once.
- */
 function CompactStepper({ status, stopped }: { status: RequestStatus; stopped: boolean }) {
   const reached = STEPS.filter((s) => s.reached.includes(status)).length;
   const current = STEPS[Math.max(reached - 1, 0)];

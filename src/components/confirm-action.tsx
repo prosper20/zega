@@ -22,14 +22,6 @@ export type ConfirmOptions = {
   destructive?: boolean;
 };
 
-/**
- * Asks before a consequential action. `confirm()` resolves true or false, so it works from
- * menu items and bulk toolbars without each caller managing dialog state:
- *
- *   const { confirm, dialog } = useConfirm();
- *   if (await confirm({ title, description, confirmLabel: "Deactivate", destructive: true })) ...
- *   return <>{...}{dialog}</>;
- */
 export function useConfirm() {
   const [options, setOptions] = useState<ConfirmOptions | null>(null);
   const resolver = useRef<((ok: boolean) => void) | null>(null);

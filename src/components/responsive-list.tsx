@@ -1,9 +1,5 @@
 import type { ReactNode } from "react";
 
-/**
- * Same rows, two layouts: a table from the `md` breakpoint up, and one card per row on phones
- * (no horizontal scrolling). Both renderers receive the same items, so logic is not duplicated.
- */
 export function ResponsiveList<T>({
   items,
   table,

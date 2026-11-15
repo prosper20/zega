@@ -11,11 +11,7 @@ import { createFanout, type EventBus, parseEvent } from "./events";
 relaxConnectTimeout();
 if (typeof WebSocket === "undefined") neonConfig.webSocketConstructor = ws;
 
-/**
- * One shared Postgres LISTEN connection per server instance, fanned out to every open SSE stream.
- * Uses the direct (unpooled) endpoint because PgBouncer transaction pooling cannot hold LISTEN.
- * Reconnects with backoff if the connection drops.
- */
+// LISTEN needs the unpooled connection; PgBouncer transaction pooling cannot hold it.
 function createNeonBus(): EventBus {
   const fanout = createFanout();
   let client: Client | null = null;

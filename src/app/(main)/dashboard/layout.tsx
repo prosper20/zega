@@ -17,7 +17,6 @@ import { UserMenu } from "./_components/header/user-menu";
 import { MobileTabBar } from "./_components/mobile-tab-bar";
 import type { ShellUser } from "./_components/user-types";
 
-/** The app behind sign-in is private: keep every dashboard page out of search engines. */
 export const metadata: Metadata = { robots: { index: false, follow: false } };
 
 export default async function Layout({ children }: Readonly<{ children: ReactNode }>) {
@@ -53,11 +52,9 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
           <header
             className={cn(
               "flex h-14 shrink-0 items-center gap-2 border-b transition-[width,height] ease-linear group-has-data-[collapsible=icon]/sidebar-wrapper:h-12 md:h-12",
-              // Solid sticky bar (no translucency or blur).
               "bg-background sticky top-0 z-50 rounded-t-[inherit]",
             )}
           >
-            {/* Phones: sidebar icon, a search field filling the width, then notifications. */}
             <div className="flex w-full items-center gap-2 px-3 md:justify-between md:px-4 lg:px-6">
               <div className="flex min-w-0 flex-1 items-center gap-2 md:flex-none lg:gap-2">
                 <SidebarTrigger className="-ml-1 size-10 md:size-7" />
@@ -70,7 +67,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
                 </div>
               </div>
               <div className="flex items-center gap-2">
-                {/* On phones notifications are a tab in the bottom bar; the bell stays mounted for live toasts. */}
+                {/* Hidden on phones (Alerts tab), but kept mounted for live toasts. */}
                 <div className="hidden md:block">
                   <NotificationBell />
                 </div>

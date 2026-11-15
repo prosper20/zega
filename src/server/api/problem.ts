@@ -7,10 +7,6 @@ import { log } from "@/server/log";
 
 import type { AppEnv } from "./context";
 
-/**
- * RFC 9457 "Problem Details for HTTP APIs". Every API error has the same machine-readable shape:
- * { type, title, status, detail, instance, requestId, errors? } with content type application/problem+json.
- */
 export type ProblemBody = {
   type: string;
   title: string;

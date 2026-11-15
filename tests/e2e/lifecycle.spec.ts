@@ -22,7 +22,7 @@ async function drag(page: Page, from: Locator, to: Locator) {
   const a = await from.boundingBox();
   const b = await to.boundingBox();
   if (!a || !b) throw new Error("element not visible");
-  // Grab the card footer (the title is a link and intentionally does not start a drag).
+  // Grab the card footer (the title is a link and does not start a drag).
   const startX = a.x + 24;
   const startY = a.y + a.height - 14;
   await page.mouse.move(startX, startY);

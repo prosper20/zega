@@ -13,10 +13,7 @@ export const AUTO_CLOSE_HOURS = 72;
 /** Read notifications older than this are deleted (unread ones are kept until read). */
 export const NOTIFICATION_RETENTION_DAYS = 180;
 
-/**
- * Atomically claims a job for this run window. Only one server instance wins, so the sweep can be
- * triggered from many places (Vercel Cron, live connections) without double-running.
- */
+// Only one instance wins the claim, so concurrent triggers never double-run.
 export async function claimJob(db: Database, name: string, everySeconds: number) {
   await db
     .insert(s.systemJobs)
@@ -147,11 +144,6 @@ export async function autoCloseResolved(db: Database, now = new Date()) {
 }
 
 /** The background sweep. Safe to call often: it runs at most once per window across all instances. */
-/**
- * Data retention: drops what is no longer needed. Read notifications after
- * NOTIFICATION_RETENTION_DAYS, plus expired sessions and verification tokens. Requests, their
- * history and the audit trail are kept (they are the institution's record).
- */
 export async function purgeExpiredData(db: Database, now = new Date()) {
   const cutoff = new Date(now.getTime() - NOTIFICATION_RETENTION_DAYS * 86_400_000);
   const notifications = await db

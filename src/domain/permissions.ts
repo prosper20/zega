@@ -1,9 +1,6 @@
 import type { RoleSlug } from "./constants";
 
-/**
- * Role-based permission matrix. The seed syncs it into the roles / permissions /
- * role_permissions tables (shown on the admin Users & roles page); the API checks it in code.
- */
+// The seed copies this into the roles tables; the API checks it in code.
 export const PERMISSIONS = {
   "request:create": "Submit new service requests",
   "request:read:own": "View requests you submitted",

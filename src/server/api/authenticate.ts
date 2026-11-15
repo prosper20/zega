@@ -28,12 +28,7 @@ async function loadUser(id: string): Promise<CurrentUser | null> {
   return { ...u, role: u.role as RoleSlug };
 }
 
-/**
- * Production authenticator for the REST API:
- * - `Authorization: Bearer <jwt>`: verified against the JWKS keys (EdDSA, 15 min), then the user
- *   is reloaded so role changes and deactivation take effect immediately.
- * - otherwise the Better Auth session cookie.
- */
+// Bearer JWT if present (user reloaded so role changes apply at once), otherwise the session cookie.
 export const authenticate: Authenticate = async (req) => {
   const header = req.headers.get("authorization");
   if (header?.toLowerCase().startsWith("bearer ")) {

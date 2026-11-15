@@ -1,8 +1,4 @@
-/**
- * Concurrency check for the tamper-evident audit chain: fires many simultaneous audited writes over
- * separate connections, then verifies every hash link created during the run.
- * Usage: npx tsx scripts/audit-race-check.mts <request-ref> [writers=30]
- */
+// Fires concurrent audited writes and verifies the hash chain. Usage: npx tsx scripts/audit-race-check.mts <ref> [writers]
 import { config } from "dotenv";
 
 config({ path: ".env.local", quiet: true });

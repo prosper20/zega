@@ -1,8 +1,4 @@
-/**
- * DESTRUCTIVE: drops every table in DATABASE_URL, then you can re-run db:migrate and db:seed.
- * The audit log blocks DELETE/TRUNCATE by design, so a full reset drops the schema instead.
- * Usage: npm run db:reset -- --yes
- */
+// Drops the whole schema (the audit log refuses DELETE/TRUNCATE). Usage: npm run db:reset -- --yes
 import { config } from "dotenv";
 
 config({ path: ".env.local", quiet: true });

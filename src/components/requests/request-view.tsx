@@ -22,10 +22,6 @@ import { SlaCard as SlaCardLazy } from "./sla-card";
 import { RequestStepper } from "./stepper";
 import { Timeline } from "./timeline";
 
-/**
- * Full request page shared by every role. What the viewer can do (edit, transitions, internal notes,
- * assignment via `sidebarExtra`) comes from the API, so the same component serves students, officers and admins.
- */
 export function RequestView({
   initial,
   backHref,

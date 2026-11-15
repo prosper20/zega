@@ -12,10 +12,6 @@ import { PrintButton } from "./print-button";
 
 export const metadata: Metadata = { title: "QR stickers", robots: { index: false, follow: false } };
 
-/**
- * Printable A4 sheet of "report a problem here" stickers. Each QR encodes the short /r/<token>
- * link, which opens the report form with the room pre-selected. Rendered as SVG for crisp printing.
- */
 export default async function QrStickersPage({ searchParams }: { searchParams: Promise<{ ids?: string }> }) {
   await requireRole("admin");
   const { ids = "" } = await searchParams;

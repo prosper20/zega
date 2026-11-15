@@ -5,10 +5,6 @@ import { useEffect, useRef } from "react";
 const SRC = "/videos/fault-to-fixed.mp4";
 const POSTER = "/videos/fault-to-fixed.jpg";
 
-/**
- * Decorative looping background for the "From fault to fixed" panel.
- * Loads only when near the viewport, pauses off-screen and stays on the poster for reduced motion.
- */
 export function FaultToFixedVideo() {
   const ref = useRef<HTMLVideoElement>(null);
 

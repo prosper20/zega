@@ -2,11 +2,7 @@ import { bigserial, index, jsonb, pgTable, text, timestamp } from "drizzle-orm/p
 
 import { auditAction } from "./enums";
 
-/**
- * Append-only audit trail written by a generic Postgres trigger on every audited table.
- * Each row stores sha256(prev_hash || row digest), forming a hash chain: editing or deleting
- * any historical row breaks every hash after it, which `audit_verify_chain()` detects.
- */
+// Written by a trigger; each row hashes the previous one, so edits break the chain.
 export const auditLogs = pgTable(
   "audit_logs",
   {

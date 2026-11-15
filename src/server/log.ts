@@ -1,12 +1,4 @@
-/**
- * Structured logging: one JSON object per line, so Vercel's log search and drains can filter by
- * field (`event`, `requestId`, `userId`, `security`) instead of grepping free text.
- *
- *   log.warn("auth.forbidden", { requestId, userId, route, security: true });
- *
- * Event names are dotted and stable (`area.what`). Never log secrets, passwords, tokens or full
- * request bodies; ids and counts are enough to investigate.
- */
+// JSON lines. Never log secrets, tokens or request bodies.
 
 type Level = "debug" | "info" | "warn" | "error";
 type Fields = Record<string, unknown>;

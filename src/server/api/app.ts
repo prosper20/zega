@@ -14,10 +14,6 @@ import { requestRoutes } from "./routes/requests";
 import { systemRoutes } from "./routes/system";
 import { userRoutes } from "./routes/users";
 
-/**
- * Builds the ZEGA REST API. Dependencies (database, authenticator) are injected so the exact
- * same app runs on Neon in production and on in-process PGlite in tests.
- */
 export function createApi(deps: ApiDeps) {
   const app = new OpenAPIHono<AppEnv>({
     // Turn request validation failures into RFC 9457 problems with per-field errors.

@@ -186,10 +186,6 @@ function exampleFor(schema: unknown, doc: OpenApiDoc, depth = 0): unknown {
   return "string";
 }
 
-/**
- * Converts the OpenAPI document into a Postman v2.1 collection (grouped by tag, with example bodies),
- * so the API can be imported into Postman without extra tooling.
- */
 export function toPostman(doc: OpenApiDoc, baseUrl: string) {
   const folders = new Map<string, unknown[]>();
   for (const [path, ops] of Object.entries(doc.paths)) {

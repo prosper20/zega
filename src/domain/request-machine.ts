@@ -1,12 +1,5 @@
 import type { RequestStatus, RoleSlug } from "./constants";
 
-/**
- * Who is acting on a request, relative to that request:
- * - requester: the user who reported it
- * - assignee: the officer currently assigned
- * - admin: any administrator
- * - system: automated jobs (SLA cron, auto-close)
- */
 export type Actor = "requester" | "assignee" | "admin" | "system";
 
 export type TransitionRule = {
@@ -20,10 +13,6 @@ export type TransitionRule = {
   requiresAssignee?: boolean;
 };
 
-/**
- * The single source of truth for the request lifecycle. The API enforces it and the UI
- * renders only the actions it allows, so the two can never disagree.
- */
 export const TRANSITIONS: Readonly<Record<RequestStatus, readonly TransitionRule[]>> = {
   submitted: [
     { to: "triaged", by: ["admin"], label: "Mark as triaged" },

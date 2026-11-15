@@ -2,11 +2,7 @@ import { bigint, boolean, index, integer, pgTable, text, timestamp } from "drizz
 
 import { roles } from "./rbac";
 
-/**
- * Better Auth core tables (user, session, account, verification) plus the admin plugin
- * fields (role, banned, ...), the JWT plugin's jwks table and database-backed rate limiting.
- * Property names must match Better Auth's field names; columns are snake_case via drizzle casing.
- */
+// Property names must match Better Auth's field names.
 export const users = pgTable(
   "users",
   {

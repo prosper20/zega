@@ -41,10 +41,6 @@ export async function listAttachments(db: DbOrTx, requestId: string) {
   }));
 }
 
-/**
- * Stores a photo for a request. Requesters add evidence while the request is open; the assigned
- * officer adds before/after photos while working; admins may add any kind.
- */
 export async function addAttachment(
   db: Database,
   storage: Storage,

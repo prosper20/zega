@@ -1,7 +1,4 @@
-/**
- * Seeds the database in DATABASE_URL with demo data. Usage: npm run db:seed
- * Demo logins (password Zega@2026!): admin@, officer@, staff@, student@zega.test
- */
+// Demo data. Logins use the password Zega@2026!: admin@, officer@, staff@, student@zega.test
 import { config } from "dotenv";
 
 config({ path: ".env.local", quiet: true });

@@ -58,7 +58,6 @@ const ROLES = [
   },
 ];
 
-/** MaintainX-style platform tabs on a full-bleed brand gradient. */
 export function Roles() {
   return (
     <section id="roles" className="bg-primary relative scroll-mt-16 overflow-hidden py-20 text-white sm:py-28">

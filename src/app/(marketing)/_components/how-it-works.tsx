@@ -33,7 +33,6 @@ const STEPS = [
 
 const DURATION = 7000;
 
-/** MaintainX-style showcase: a looping video panel under the phone mock, and three auto-advancing steps. */
 export function HowItWorks() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);

@@ -36,10 +36,6 @@ const CTA: Record<string, string> = {
   "sla.breach": "Review the request",
 };
 
-/**
- * Writes in-app notifications (an insert trigger NOTIFYs the realtime channel) and, for important
- * events, emails recipients who have not opted out. Emails are sent only after the transaction commits.
- */
 export async function notify(tx: DbOrTx, n: NotificationInput) {
   const recipients = [...new Set(n.userIds.filter((u): u is string => Boolean(u) && u !== n.exclude))];
   if (!recipients.length) return;

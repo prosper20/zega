@@ -4,10 +4,7 @@ import { render } from "@react-email/components";
 
 import { log } from "@/server/log";
 
-/**
- * Sends a transactional email through Resend when RESEND_API_KEY is set; otherwise logs it
- * (development and tests), so the rest of the app behaves identically without email credentials.
- */
+// Without RESEND_API_KEY emails are only logged.
 export async function sendEmail(msg: { to: string; subject: string; react: ReactElement }) {
   const key = process.env.RESEND_API_KEY;
   const from = process.env.EMAIL_FROM ?? "ZEGA <onboarding@resend.dev>";

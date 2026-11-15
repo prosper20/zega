@@ -13,10 +13,6 @@ import {
 import { Sheet, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle } from "@/components/ui/sheet";
 import { useIsMobile } from "@/hooks/use-mobile";
 
-/**
- * A dialog on desktop and a bottom sheet on phones (within thumb reach, per Apple HIG),
- * with one API so callers do not branch.
- */
 export function ResponsiveDialog({
   open,
   onOpenChange,

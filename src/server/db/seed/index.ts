@@ -78,10 +78,6 @@ export type SeedOptions = {
 
 export type SeedResult = { users: number; locations: number; requests: number; statusLogs: number };
 
-/**
- * Seeds a migrated, empty database with realistic campus data. Runs in one transaction with the
- * audit actor set to "system", so the audit trail records the seed like any other change.
- */
 export async function seedDatabase(db: Database, opts: SeedOptions = {}): Promise<SeedResult> {
   const { requests: requestCount = 160, students: studentCount = 30, days = 90, now = new Date() } = opts;
   const log = opts.log ?? (() => undefined);

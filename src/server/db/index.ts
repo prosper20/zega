@@ -20,10 +20,7 @@ const globalForDb = globalThis as unknown as { zegaPool?: Pool };
 /** Pooled connection (WebSocket) so interactive transactions work for audit actor tracking. */
 const isProd = process.env.NODE_ENV === "production";
 
-/**
- * Locally (far from the database region) new connections are slow, so keep a few warm for minutes.
- * In production, functions sit next to Neon and idle connections are released quickly.
- */
+// Keep connections warm locally where connecting is slow.
 const pool =
   globalForDb.zegaPool ??
   new Pool({

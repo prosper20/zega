@@ -1,7 +1,4 @@
-/**
- * Applies drizzle/ migrations to Neon over WebSockets (port 443), so it works where
- * port 5432 is blocked and inside the Vercel build. Usage: npm run db:migrate
- */
+// Runs migrations over WebSockets (port 443), which also works inside the Vercel build.
 import { config } from "dotenv";
 
 config({ path: ".env.local", quiet: true });

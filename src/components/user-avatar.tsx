@@ -2,10 +2,6 @@ import { cn } from "cn";
 
 import type { RoleSlug } from "@/domain/constants";
 
-/**
- * Colour families per role, so a person's role is recognisable at a glance while each user still
- * gets a distinct picture. Values are Tailwind palette colours (named alongside each hex).
- */
 export const AVATAR_PALETTES: Record<RoleSlug, readonly string[]> = {
   // blue-300, sky-500, blue-600, sky-300, blue-800
   student: ["#93c5fd", "#0ea5e9", "#2563eb", "#7dd3fc", "#1e40af"],
@@ -41,7 +37,6 @@ function random(seed: number) {
 
 export type AvatarShape = { cx: number; cy: number; r: number; fill: string; opacity: number };
 
-/** The avatar composition for an id and role: a background and three overlapping shapes. Pure and stable. */
 export function avatarComposition(id: string, role: RoleSlug) {
   const palette = AVATAR_PALETTES[role];
   const rnd = random(hash(`${role}:${id}`));
@@ -62,7 +57,7 @@ export function avatarComposition(id: string, role: RoleSlug) {
   return { background, shapes, rotation };
 }
 
-/** Circular abstract avatar used everywhere a person is shown (no initials, no photos). */
+/** Abstract avatar generated from the user id, coloured by role. */
 export function UserAvatar({
   id,
   userRole,

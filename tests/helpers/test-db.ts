@@ -9,10 +9,6 @@ import type { Database } from "@/server/db/types";
 
 import path from "node:path";
 
-/**
- * Fresh in-process Postgres (PGlite, WASM) with the real migrations applied.
- * No Docker and no network: each test file gets an isolated database in milliseconds.
- */
 export async function createTestDb() {
   const client = new PGlite({ extensions: { ltree, pg_trgm } });
   const db = drizzle({ client, schema, casing: "snake_case" }) as unknown as Database;

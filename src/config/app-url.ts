@@ -1,7 +1,4 @@
-/**
- * The public base URL of this deployment, resolved without code changes on Vercel:
- * explicit NEXT_PUBLIC_APP_URL, else Vercel's production domain, else the per-deployment URL.
- */
+// NEXT_PUBLIC_APP_URL, then Vercel's production domain, then the deployment URL.
 export function appUrl() {
   if (process.env.NEXT_PUBLIC_APP_URL) return process.env.NEXT_PUBLIC_APP_URL.replace(/\/$/, "");
   if (process.env.VERCEL_PROJECT_PRODUCTION_URL) return `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}`;
